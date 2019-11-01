@@ -1,20 +1,29 @@
 const { parsed: config } = require("dotenv").config();
 const Nightmare = require("nightmare");
+const electron = require("../node_modules/electron");
 
 class SiteValidate {
   constructor(url) {
     this.url = url;
+
     this.getDOM();
   }
 
   getDOM() {
-    const nightmare = Nightmare({ show: config.DEV_ENV });
+    const nightmare = Nightmare({
+      electronPath: electron,
+      show: config.DEV_ENV
+    });
+
     nightmare
       .goto(this.url)
-      .wait(2000)
+      .wait("body")
+      .evaluate(() => document.querySelector("body").innerHTML)
       .end()
       .then(res => console.log(res))
-      .catch(e => console.log(e));
+      .catch(error => {
+        throw Error(error);
+      });
   }
 }
 

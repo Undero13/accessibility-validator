@@ -1,9 +1,13 @@
 const { ipcRenderer } = require("electron");
-const serializeForm = require("../script/serialize");
+// eslint-disable-next-line import/no-dynamic-require
+const serializeForm = require(`${process.cwd()}/script/serialize`);
 
 const form = document.querySelector("#form_url");
 const { body } = document;
 
+/*
+ * If url correct turn on loading screen
+ */
 const appendSpinner = () => {
   body.innerHTML = "";
   const spinner = document.createElement("div");
@@ -19,6 +23,9 @@ const appendSpinner = () => {
   body.append(wrapper);
 };
 
+/*
+ * Validate data from form and send to electron class
+ */
 const getUrl = e => {
   e.preventDefault();
   const data = serializeForm(form);

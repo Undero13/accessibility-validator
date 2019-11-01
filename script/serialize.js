@@ -1,10 +1,14 @@
+/*
+ * get data from form inputs and make object
+ */
 function serializeForm(formElement) {
   const formData = {};
-  const inputs = formElement.elements;
+  const inputs = [...formElement.elements];
 
-  for (let i = 0; i < inputs.length; i++) {
-    if (inputs[i].name !== "") formData[inputs[i].name] = inputs[i].value;
-  }
+  inputs.forEach(input => {
+    if (input.name !== "") formData[input.name] = input.value;
+  });
+
   return formData;
 }
 

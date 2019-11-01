@@ -2,6 +2,11 @@ const { parsed: config } = require("dotenv").config();
 const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require("electron");
 const SiteValidate = require("./class/SiteValidate");
 
+/*
+ * @author Patryk Loter <patryk.loter@gmail.com>
+ * @version 1.0.0
+ * class for dynamic main window(create,close,menu,event)
+ */
 class Window {
   constructor() {
     this.window = null;
@@ -57,8 +62,8 @@ class Window {
 
   createMainWindow() {
     this.window = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: config.width,
+      height: config.height,
       webPreferences: {
         nodeIntegration: true
       }

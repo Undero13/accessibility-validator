@@ -9,5 +9,6 @@ module.exports = {
         'no-plusplus': 'off',
         'no-new':'off',
         'prettier/prettier': 'error',
+        'class-methods-use-this':'off'
     }
 };

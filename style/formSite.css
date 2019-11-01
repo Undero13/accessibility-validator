@@ -1,4 +1,5 @@
 .spinner {
+    color:#ffc107!important;
     display: inline-block;
     width: 2rem;
     height: 2rem;
@@ -15,3 +16,26 @@
         transform: rotate(360deg);
     }
 }
+
+body{
+    height: 100vh;
+    margin:0;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #34495E;
+}
+
+.form {
+    width:70%;
+}
+
+.title{
+    text-align:center;
+    position: absolute;
+    width: 100vw;
+    top:20%;
+}
+
+

@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "nodemon-lint": "nodemon --exec \"npm run lint\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix **/**.js"
+    "lint": "nodemon --exec \"npm run eslint\"",
+    "eslint": "eslint --fix **/**.js"
   },
   "author": "Patryk Loter",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
@@ -22,6 +21,10 @@
     "eslint-plugin-prettier": "^3.1.1"
   },
   "dependencies": {
+    "axios": "^0.19.0",
+    "color": "^3.1.2",
+    "css": "^2.2.4",
+    "dom-parser": "^0.1.6",
     "dotenv": "^8.2.0",
     "electron": "^7.0.0",
     "nightmare": "^3.0.2"

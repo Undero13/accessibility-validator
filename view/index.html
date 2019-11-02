@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Walidator Dostępności</title>
+    <title>Walidator Dostępności by Patyk "Undero" Loter</title>
+    <link rel="stylesheet" href="../style/bulma.min.css">
     <link rel="stylesheet" href="../style/formSite.css">
 </head>
 <body>
-    <form id="form_url">
-        <input type="text" name="url" value="http://bytom.pl">
-        <input type="submit" value="Analizuj">
+    <div id="alert" class="notification is-danger is-invisible">Nieprawidłowy URL. Proszę podać poprawny adres strony!</div>
+    <h1 class="title has-text-white">Walidator dostepności stron internetowych z wsparciem angulara</h1>
+    <form id="form_url" class="form">
+        <div class="field">
+            <label class="label has-text-white" for="url">Podaj adres strony</label>
+            <div class="control">
+                <input class="input" type="text" name="url" id="url" value="https://www.bytom.com.pl/" placeholder="https://google.pl/">
+            </div>
+        </div>
+        
+        <input class="button is-success" type="submit" value="Analizuj">
     </form>
 
     <script src="../script/baseForm.js"></script>

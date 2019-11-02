@@ -1,7 +1,5 @@
 class AbstractValidator {
   constructor() {
-    this.url = "https://google.pl";
-
     if (new.target === AbstractValidator) {
       throw new TypeError(
         'Abstract class "AbstractValidator" cannot be instantiated directly.'
@@ -23,6 +21,10 @@ class AbstractValidator {
 
   getUrl() {
     return this.url;
+  }
+
+  getRaport() {
+    return this.raport;
   }
 }
 

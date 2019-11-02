@@ -15,7 +15,8 @@ WAlidator dostępności html dostosowany do stron napisanych w angularze
 
 * Electron - Aplikacje desktopowe w JavaScript
 * Nightmare - Pozwala na zdalną pracę na wygenerowanym DOM
-* Cheerio - Zarządzanie wirtualnym DOM z poziomu node.js
+* dom-parser - Zarządzanie wirtualnym DOM z poziomu node.js
+* color - porównywanie kontraksu na stronie
 
 ### Todos
 

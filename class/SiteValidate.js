@@ -22,6 +22,11 @@ class SiteValidate extends AbstractValidator {
     nightmare
       .goto(this.url)
       .wait(5000)
+      .evaluate(() => {
+        const { body } = document;
+        body.scrollIntoView({ behavior: "smooth", block: "end" });
+      })
+      .wait(3000)
       .evaluate(() => document.querySelector("html").outerHTML)
       .end()
       .then(res => this.processDOM(res))
@@ -57,6 +62,7 @@ class SiteValidate extends AbstractValidator {
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
     this.checkImages(parser.getElements("img"));
+    this.checkFigure(parser.getElements("figure"));
     this.checkIcon(parser.getElements("i"));
 
     /*  
@@ -166,9 +172,47 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check image alt, if img is in figure and figcaption is declared image should not have alt
+   * Check image alt
    */
-  checkImages(images) {}
+  checkImages(images) {
+    if (images.length > 0) {
+      images.forEach(img => {
+        // console.log(img.parentNode);
+        const alt = img.getAttribute("alt") ? img.getAttribute("alt") : "";
+
+        if (alt.length < 1) {
+          this.setRaport({
+            what: "img_alt",
+            type: "error",
+            message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
+              "src"
+            )}`
+          });
+        }
+      });
+    }
+  }
+
+  /*
+   * Figure should have figcaption
+   */
+  checkFigure(figures) {
+    if (figures.length > 0) {
+      figures.forEach(figure => {
+        const caption = figure.getElementsByTagName("figcaption");
+
+        if (caption.length < 1) {
+          this.setRaport({
+            what: "figcaption",
+            type: "warning",
+            message: `Element figure o klasie ${figure.getAttribute(
+              "class"
+            )} nie ma figcaption`
+          });
+        }
+      });
+    }
+  }
 
   /*
    *Icon should not be in i tag

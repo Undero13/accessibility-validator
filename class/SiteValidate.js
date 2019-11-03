@@ -8,6 +8,7 @@ class SiteValidate extends AbstractValidator {
   constructor(url) {
     super();
     this.url = url;
+    this.finish = false;
     this.raport = [];
 
     this.getDOM();
@@ -73,6 +74,8 @@ class SiteValidate extends AbstractValidator {
     this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
     this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa
     this.checkLetters(parser.getElements("p"), parser.getElements("span")); // sprawdzenie wielkości liter */
+
+    this.finish = true;
   }
 
   /*
@@ -177,7 +180,6 @@ class SiteValidate extends AbstractValidator {
   checkImages(images) {
     if (images.length > 0) {
       images.forEach(img => {
-        // console.log(img.parentNode);
         const alt = img.getAttribute("alt") ? img.getAttribute("alt") : "";
 
         if (alt.length < 1) {
@@ -217,7 +219,32 @@ class SiteValidate extends AbstractValidator {
   /*
    *Icon should not be in i tag
    */
-  checkIcon(icons) {}
+  checkIcon(icons) {
+    if (icons.length > 0) {
+      icons.forEach(icon => {
+        const classIcon = icon.getAttribute("class")
+          ? icon.getAttribute("class")
+          : "";
+        const haveSVG = !!icon.getElementsByTagName("svg").length;
+
+        if (
+          classIcon.includes("icon") ||
+          classIcon.includes("fas") ||
+          classIcon.includes("far") ||
+          classIcon.includes("fal") ||
+          classIcon.includes("fad") ||
+          classIcon.includes("fab") ||
+          haveSVG
+        ) {
+          this.setRaport({
+            what: "icon",
+            type: "error",
+            message: `Znacznik <i> nie służy do osadzania ikon! Element o klasie ${classIcon}`
+          });
+        }
+      });
+    }
+  }
 }
 
 module.exports = SiteValidate;

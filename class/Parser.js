@@ -74,7 +74,13 @@ class Parser {
         const tag = link.outerHTML;
 
         if (tag.includes('rel="stylesheet"')) {
-          const url = `${this.url}/${link.getAttribute("href")}`;
+          let assetUrl = link.getAttribute("href");
+
+          if (assetUrl[0] === "/") {
+            assetUrl = assetUrl.substring(1, assetUrl.length);
+          }
+
+          const url = `${this.url}${assetUrl}`;
           this.fetchData(url, "css");
         }
       });
@@ -91,7 +97,11 @@ class Parser {
   fetchData(url, type = null) {
     axios
       .get(url)
-      .then(res => (type === "css" ? this.setCSS(res.data) : res))
+      .then(res => {
+        if (res.status === 200) {
+          return type === "css" ? this.setCSS(res.data) : res;
+        }
+      })
       .catch(e => {
         throw Error(e);
       });

@@ -40,6 +40,10 @@ const getURL = e => {
     data.url = `http://${data.url}`;
   }
 
+  if (data.url[data.url.length - 1] !== "/") {
+    data.url = `${data.url}/`;
+  }
+
   const validURL = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g.test(
     data.url
   );

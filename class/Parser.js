@@ -1,11 +1,12 @@
 const DomParser = require("dom-parser");
 const axios = require("axios");
 const cssParser = require("css");
+const fs = require("fs");
+const CSSInterface = require("./CSSInterface");
 
 class Parser {
   constructor(html, url) {
     const parser = new DomParser();
-
     this.url = url;
     this.DOM = parser.parseFromString(html);
     this.css = "";
@@ -23,8 +24,17 @@ class Parser {
   /*
    * Return this.css
    */
-  getCSS() {
-    return cssParser.parse(this.css);
+  getCSSInterface() {
+    const cssObject = cssParser.parse(this.css);
+
+    if (cssObject.stylesheet.parsingErrors.length > 0) {
+      const data = JSON.stringify(cssObject);
+
+      fs.writeFile("../logs/css", data);
+      throw Error("Błąd CSS");
+    }
+
+    return new CSSInterface(cssObject.stylesheet);
   }
 
   /*
@@ -37,52 +47,41 @@ class Parser {
   /*
    * Return element
    */
-  getElement(selector) {
+  getElements(selector) {
     const elements = this.DOM.getElementsByTagName(selector);
-
-    if (elements.length === 0) return null;
-    if (elements.length === 1) return elements[0];
-    return [...elements];
+    return elements.length > 0 ? elements : [];
   }
 
   /*
    * Return html title tag
    */
   getHeadTitle() {
-    const head = this.getElement("head");
-    let title = "";
+    const head = this.getElements("head");
+    const title = head[0].getElementsByTagName("title");
 
-    try {
-      title = head.getElementsByTagName("title");
-    } catch (e) {
-      title = head[0].getElementsByTagName("title");
-    }
-
-    return title[0];
+    return title.length > 0 ? title[0] : null;
   }
 
   /*
    * Get css from the dom
    */
   processCSS() {
-    const links = this.getElement("link");
-    const styles = this.getElement("style");
+    const links = this.getElements("link");
+    const styles = this.getElements("style");
 
-    links.forEach(link => {
-      const tag = link.outerHTML;
+    if (links.length > 0) {
+      links.forEach(link => {
+        const tag = link.outerHTML;
 
-      if (tag.includes('rel="stylesheet"')) {
-        const url = `${this.url}/${link.getAttribute("href")}`;
-        this.fetchData(url, "css");
-      }
-    });
+        if (tag.includes('rel="stylesheet"')) {
+          const url = `${this.url}/${link.getAttribute("href")}`;
+          this.fetchData(url, "css");
+        }
+      });
+    }
 
-    if (styles) {
-      if (Array.isArray(styles)) {
-        styles.forEach(style => this.setCSS(style.textContent));
-      } else {
-        this.setCSS(styles.textContent);
-      }
+    if (styles.length > 0) {
+      styles.forEach(({ textContent }) => this.setCSS(textContent));
     }
   }
 
@@ -92,14 +91,9 @@ class Parser {
   fetchData(url, type = null) {
     axios
       .get(url)
-      .then(res => {
-        if (type === "css") {
-          return this.setCSS(res.data);
-        }
-        return res;
-      })
+      .then(res => (type === "css" ? this.setCSS(res.data) : res))
       .catch(e => {
-        throw new Error(e);
+        throw Error(e);
       });
   }
 }

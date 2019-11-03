@@ -28,9 +28,13 @@ const appendSpinner = () => {
 /*
  * Validate data from form and send to electron class
  */
-const getUrl = e => {
+const getURL = e => {
   e.preventDefault();
   const data = serializeForm(form);
+
+  if (!data) {
+    return alert.classList.remove("is-invisible");
+  }
 
   if (!/(http(s?)):\/\//gi.test(data.url)) {
     data.url = `http://${data.url}`;
@@ -48,4 +52,4 @@ const getUrl = e => {
   }
 };
 
-form.addEventListener("submit", getUrl);
+form.addEventListener("submit", getURL);

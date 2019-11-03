@@ -41,32 +41,32 @@ class SiteValidate extends AbstractValidator {
     // title
 
     this.checkContrast(
-      parser.getCSS(),
-      parser.getElement("p"),
-      parser.getElement("span"),
-      parser.getElement("h1"),
-      parser.getElement("h2"),
-      parser.getElement("h3"),
-      parser.getElement("h4"),
-      parser.getElement("h5"),
-      parser.getElement("h6")
+      parser.getCSSInterface(),
+      parser.getElements("p"),
+      parser.getElements("span"),
+      parser.getElements("h1"),
+      parser.getElements("h2"),
+      parser.getElements("h3"),
+      parser.getElements("h4"),
+      parser.getElements("h5"),
+      parser.getElements("h6")
     );
-    this.checkLang(parser.getElement("html"));
+    this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
-    this.checkNav(parser.getElement("nav"));
-    this.checkFooter(parser.getElement("footer"));
-    this.checkSection(parser.getElement("section"));
-    this.checkImages(parser.getElement("img"));
-    this.checkIcon(parser.getElement("i"));
+    this.checkNav(parser.getElements("nav"));
+    this.checkFooter(parser.getElements("footer"));
+    this.checkSection(parser.getElements("section"));
+    this.checkImages(parser.getElements("img"));
+    this.checkIcon(parser.getElements("i"));
 
     /*  
-     this.checkHeaders(parser.getElement("h1"), parser.getElement("h2"), parser.getElement("h3"), parser.getElement("h4"), parser.getElement("h5"), parser.getElement("h6")); // sprawdzenie hierarchi i powtarzalności, wielkości liter
-    this.checkLinks(parser.getElement("a")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
-    this.checkButtons(parser.getElement("button")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
-    this.checkMain(parser.getElement("main")); // sprawdzenie czy występuje 1 main
-    this.checkInputs(parser.getElement("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
-    this.checkLabel(parser.getElement("label")); // sprawdzenie czy kazdy label ma inputa
-    this.checkLetters(parser.getElement("p"), parser.getElement("span")); // sprawdzenie wielkości liter */
+     this.checkHeaders(parser.getElements("h1"), parser.getElements("h2"), parser.getElements("h3"), parser.getElements("h4"), parser.getElements("h5"), parser.getElements("h6")); // sprawdzenie hierarchi i powtarzalności, wielkości liter
+    this.checkLinks(parser.getElements("a")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
+    this.checkButtons(parser.getElements("button")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
+    this.checkMain(parser.getElements("main")); // sprawdzenie czy występuje 1 main
+    this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
+    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa
+    this.checkLetters(parser.getElements("p"), parser.getElements("span")); // sprawdzenie wielkości liter */
   }
 
   /*
@@ -79,11 +79,11 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check html lang attribute
    */
-  checkLang(html) {
+  checkLang([html]) {
     const lang = html.getAttribute("lang");
 
     if (!lang) {
-      this.raport.push({
+      this.setRaport({
         what: "lang",
         type: "error",
         message: "Brak określonego atrybutu lang"
@@ -96,7 +96,7 @@ class SiteValidate extends AbstractValidator {
    */
   checkTitle(title) {
     if (!title.textContent) {
-      this.raport.push({
+      this.setRaport({
         what: "title",
         type: "error",
         message: "Pusty tag title"
@@ -108,17 +108,17 @@ class SiteValidate extends AbstractValidator {
    * Check semantic navbar and list in navbar
    */
   checkNav(nav) {
-    if (!nav) {
-      this.raport.push({
+    if (!nav.length > 0) {
+      this.setRaport({
         what: "navbar",
         type: "warning",
         message: "Brak semantycznego navbaru na stronie!"
       });
     } else {
-      const list = nav.getElementsByTagName("ul");
+      const list = nav[0].getElementsByTagName("ul");
 
       if (!list) {
-        this.raport.push({
+        this.setRaport({
           what: "navbar",
           type: "warning",
           message: "Elementy w navbarze powinny być listą"
@@ -131,8 +131,8 @@ class SiteValidate extends AbstractValidator {
    * Check semantic footer
    */
   checkFooter(footer) {
-    if (!footer) {
-      this.raport.push({
+    if (!footer.length > 0) {
+      this.setRaport({
         what: "footer",
         type: "warning",
         message: "Brak semantycznej stopki strony"
@@ -144,15 +144,15 @@ class SiteValidate extends AbstractValidator {
    * Each section must have header
    */
   checkSection(section) {
-    if (section.length > 1) {
+    if (section.length > 0) {
       section.forEach(item => {
         for (let i = 0; i < 6; i++) {
           const header = item.getElementsByTagName(`h${i + 1}`);
 
-          if (header) {
+          if (header.length > 0) {
             break;
-          } else if (!header && i === 5) {
-            this.raport.push({
+          } else if (!header < 1 && i === 5) {
+            this.setRaport({
               what: "section",
               type: "error",
               message: `Każda sekcja musi mieć header. Element class: ${item.getAttribute(
@@ -162,22 +162,6 @@ class SiteValidate extends AbstractValidator {
           }
         }
       });
-    } else if (section.length === 1) {
-      for (let i = 0; i < 6; i++) {
-        const header = section.getElementsByTagName(`h${i + 1}`);
-
-        if (header) {
-          break;
-        } else if (!header && i === 5) {
-          this.raport.push({
-            what: "section",
-            type: "error",
-            message: `Każda sekcja musi mieć header. Element class: ${section.getAttribute(
-              "class"
-            )}, element id: ${section.getAttribute("id")}`
-          });
-        }
-      }
     }
   }
 

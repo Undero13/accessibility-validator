@@ -39,12 +39,20 @@ class SiteValidate extends AbstractValidator {
   processDOM(html) {
     const parser = new Parser(html, this.url);
 
+    // category:general,semantic,image,contrast,letter,keybord,aria
+
     // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
     // skip linki
     // pauza anumacji
     // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
     // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
     // title
+    /*  
+    this.checkLinks(parser.getElements("a")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
+    this.checkButtons(parser.getElements("button")); // aria label i czy znacznik ma etykietę, tabindex, focus,hover
+    this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
+    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa
+    this.checkLetters(parser.getElements("p"), parser.getElements("span")); // sprawdzenie wielkości liter */
 
     this.checkContrast(
       parser.getCSSInterface(),
@@ -62,18 +70,18 @@ class SiteValidate extends AbstractValidator {
     this.checkNav(parser.getElements("nav"));
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
-    this.checkImages(parser.getElements("img"));
     this.checkFigure(parser.getElements("figure"));
     this.checkIcon(parser.getElements("i"));
-
-    /*  
-     this.checkHeaders(parser.getElements("h1"), parser.getElements("h2"), parser.getElements("h3"), parser.getElements("h4"), parser.getElements("h5"), parser.getElements("h6")); // sprawdzenie hierarchi i powtarzalności, wielkości liter
-    this.checkLinks(parser.getElements("a")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
-    this.checkButtons(parser.getElements("button")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
-    this.checkMain(parser.getElements("main")); // sprawdzenie czy występuje 1 main
-    this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
-    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa
-    this.checkLetters(parser.getElements("p"), parser.getElements("span")); // sprawdzenie wielkości liter */
+    this.checkMain(parser.getElements("main"));
+    this.checkImages(parser.getElements("img"));
+    this.checkHeaders(
+      parser.getElements("h1"),
+      parser.getElements("h2"),
+      parser.getElements("h3"),
+      parser.getElements("h4"),
+      parser.getElements("h5"),
+      parser.getElements("h6")
+    );
 
     this.finish = true;
   }
@@ -93,7 +101,8 @@ class SiteValidate extends AbstractValidator {
 
     if (!lang) {
       this.setRaport({
-        what: "lang",
+        what: "język",
+        category: "general",
         type: "error",
         message: "Brak określonego atrybutu lang"
       });
@@ -106,9 +115,10 @@ class SiteValidate extends AbstractValidator {
   checkTitle(title) {
     if (!title.textContent) {
       this.setRaport({
-        what: "title",
+        what: "tytuł",
+        category: "general",
         type: "error",
-        message: "Pusty tag title"
+        message: "Pusty tag <title>"
       });
     }
   }
@@ -119,16 +129,18 @@ class SiteValidate extends AbstractValidator {
   checkNav(nav) {
     if (!nav.length > 0) {
       this.setRaport({
-        what: "navbar",
+        what: "nawigacja",
+        category: "semantic",
         type: "warning",
-        message: "Brak semantycznego navbaru na stronie!"
+        message: "Brak semantycznego tagu <navbar> na stronie!"
       });
     } else {
       const list = nav[0].getElementsByTagName("ul");
 
       if (!list) {
         this.setRaport({
-          what: "navbar",
+          what: "nawigacja lista",
+          category: "semantic",
           type: "warning",
           message: "Elementy w navbarze powinny być listą"
         });
@@ -142,9 +154,10 @@ class SiteValidate extends AbstractValidator {
   checkFooter(footer) {
     if (!footer.length > 0) {
       this.setRaport({
-        what: "footer",
+        what: "stopka",
+        category: "semantic",
         type: "warning",
-        message: "Brak semantycznej stopki strony"
+        message: "Brak semantycznej tagu <footer>"
       });
     }
   }
@@ -162,34 +175,14 @@ class SiteValidate extends AbstractValidator {
             break;
           } else if (!header < 1 && i === 5) {
             this.setRaport({
-              what: "section",
-              type: "error",
-              message: `Każda sekcja musi mieć header. Element class: ${item.getAttribute(
+              what: `sekcja class:${item.getAttribute(
                 "class"
-              )}, element id: ${item.getAttribute("id")}`
+              )}, id: ${item.getAttribute("id")}`,
+              category: "semantic",
+              type: "error",
+              message: "Każda sekcja musi mieć header."
             });
           }
-        }
-      });
-    }
-  }
-
-  /*
-   * Check image alt
-   */
-  checkImages(images) {
-    if (images.length > 0) {
-      images.forEach(img => {
-        const alt = img.getAttribute("alt") ? img.getAttribute("alt") : "";
-
-        if (alt.length < 1) {
-          this.setRaport({
-            what: "img_alt",
-            type: "error",
-            message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
-              "src"
-            )}`
-          });
         }
       });
     }
@@ -206,10 +199,11 @@ class SiteValidate extends AbstractValidator {
         if (caption.length < 1) {
           this.setRaport({
             what: "figcaption",
+            category: "semantic",
             type: "warning",
-            message: `Element figure o klasie ${figure.getAttribute(
+            message: `Element <figure> o klasie ${figure.getAttribute(
               "class"
-            )} nie ma figcaption`
+            )} nie ma tagu <figcaption>`
           });
         }
       });
@@ -237,7 +231,8 @@ class SiteValidate extends AbstractValidator {
           haveSVG
         ) {
           this.setRaport({
-            what: "icon",
+            what: "ikony",
+            category: "semantic",
             type: "error",
             message: `Znacznik <i> nie służy do osadzania ikon! Element o klasie ${classIcon}`
           });
@@ -245,6 +240,47 @@ class SiteValidate extends AbstractValidator {
       });
     }
   }
+
+  /*
+   * Each site should have exactly 1 main tag
+   */
+  checkMain({ length }) {
+    if (length < 1 || length > 1) {
+      this.setRaport({
+        what: "main",
+        category: "semantic",
+        type: "error",
+        message: `Każda podstrona powinna mieć 1 znacznik <main>. Znaleziono:${length}`
+      });
+    }
+  }
+
+  /*
+   * Check image alt
+   */
+  checkImages(images) {
+    if (images.length > 0) {
+      images.forEach(img => {
+        const alt = img.getAttribute("alt") ? img.getAttribute("alt") : "";
+
+        if (alt.length < 1) {
+          this.setRaport({
+            what: "opis obrazka",
+            category: "image",
+            type: "error",
+            message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
+              "src"
+            )}`
+          });
+        }
+      });
+    }
+  }
+
+  /*
+   * Check headers hierarchy,repeatability       TODO WIELKOŚĆ LITER
+   */
+  checkHeaders(...headers) {}
 }
 
 module.exports = SiteValidate;

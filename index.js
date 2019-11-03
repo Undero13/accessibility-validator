@@ -32,6 +32,11 @@ class Window {
 
     ipcMain.on("url", (event, arg) => {
       const validator = new SiteValidate(arg);
+
+      if (validator.finish) {
+        this.window.loadFile("view/raport.html");
+        this.window.webContents.send("raport", validator.getRaport());
+      }
     });
   }
 

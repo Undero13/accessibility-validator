@@ -49,6 +49,21 @@ class Parser {
    */
   getElements(selector) {
     const elements = this.DOM.getElementsByTagName(selector);
+
+    // fix for dom-parser search
+    if (selector.length === 1) {
+      const newElements = [];
+      elements.forEach(element => {
+        const test = element.outerHTML.substring(0, 3).replace(" ", "");
+
+        if (test.length === 2) {
+          newElements.push(element);
+        }
+      });
+
+      return newElements;
+    }
+
     return elements.length > 0 ? elements : [];
   }
 

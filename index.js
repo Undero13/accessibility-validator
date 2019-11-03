@@ -18,25 +18,26 @@ class Window {
   setListeners() {
     app.on("ready", () => this.createMainWindow());
 
-    app.on("window-all-closed", () => {
-      if (process.platform !== "darwin") {
-        app.quit();
-      }
-    });
+    app.on("window-all-closed", () =>
+      process.platform !== "darwin" ? app.quit() : null
+    );
 
-    app.on("activate", () => {
-      if (this.window === null) {
-        this.createMainWindow();
-      }
-    });
+    app.on("activate", () =>
+      this.window === null ? this.createMainWindow() : null
+    );
 
     ipcMain.on("url", (event, arg) => {
       const validator = new SiteValidate(arg);
 
-      if (validator.finish) {
-        this.window.loadFile("view/raport.html");
-        this.window.webContents.send("raport", validator.getRaport());
-      }
+      const id = setInterval(() => {
+        if (validator.finish) {
+          this.window.loadFile("view/raport.html");
+          setTimeout(() => {
+            this.window.webContents.send("raport", validator.getRaport());
+          }, 500);
+          clearInterval(id);
+        }
+      }, 5000);
     });
   }
 

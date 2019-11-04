@@ -41,6 +41,8 @@ class SiteValidate extends AbstractValidator {
 
     // category:general,semantic,image,contrast,letter,keybord,aria
 
+    // UWAGI OGÓLNE elementy intereakywne są trudne do okodowania rozwiązaniem może być ponowne uzycie biblioteki nightmare - w ostateczności
+
     // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
     // skip linki
     // pauza anumacji
@@ -99,17 +101,6 @@ class SiteValidate extends AbstractValidator {
     if (headersArray.length > 0) {
       headersArray.forEach(header => this.elementContrast(css, header));
     }
-
-    // WERSJA POPRZEDNIA
-    /* if (headers.length > 0) {
-      headers.forEach(header => {
-        if (header.length > 0) {
-          header.forEach(item => {
-            console.log(item.outerHTML);
-          });
-        }
-      });
-    } */
   }
 
   elementContrast(css, element) {
@@ -129,6 +120,7 @@ class SiteValidate extends AbstractValidator {
       }
 
       // na tym etapie mamy kolor elementu ale potrzeba jeszcze koloru tła żeby je porównać. Jak go uzyskać?
+      // do tego chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi
     }
   }
 
@@ -149,7 +141,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check title tag.
+   * Check title tag
    */
   checkTitle(title) {
     if (!title.textContent) {
@@ -240,9 +232,7 @@ class SiteValidate extends AbstractValidator {
             what: "figcaption",
             category: "semantic",
             type: "warning",
-            message: `Element <figure> o klasie ${figure.getAttribute(
-              "class"
-            )} nie ma tagu <figcaption>`
+            message: `Element <figure> nie ma tagu <figcaption> ${figure.outerHTML} `
           });
         }
       });
@@ -375,7 +365,7 @@ class SiteValidate extends AbstractValidator {
               what: "uszkodzony href",
               category: "keybord",
               type: "error",
-              message: `Element ${link.outerHTML} ma uszkodzony atrybut href!`
+              message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
             });
           }
         });
@@ -383,7 +373,29 @@ class SiteValidate extends AbstractValidator {
 
       // links and buttons
       const flatArr = elementsArr.flat();
-      console.log(flatArr.length);
+      flatArr.forEach(element => {
+        if (element.getAttribute("aria-label") === "") {
+          this.setRaport({
+            what: "pusty aria-label",
+            category: "semantic",
+            type: "warning",
+            message: `Element ma pusty atrybut aria-label! Element: ${element.outerHTML}`
+          });
+        }
+
+        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany
+        if (element.getAttribute("tabindex") * 1 === 0) {
+          this.setRaport({
+            what: "tabindex",
+            category: "semantic",
+            type: "warning",
+            message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
+          });
+        }
+      });
+
+      // problem będzie też z labelami
+      // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi
     }
   }
 }

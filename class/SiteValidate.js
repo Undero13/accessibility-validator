@@ -260,7 +260,7 @@ class SiteValidate extends AbstractValidator {
           haveSVG
         ) {
           this.setRaport({
-            what: "ikony",
+            what: "ikona",
             category: "semantic",
             type: "error",
             message: `Znacznik <i> nie służy do osadzania ikon! Element ${icon.outerHTML}`
@@ -377,7 +377,7 @@ class SiteValidate extends AbstractValidator {
         if (element.getAttribute("aria-label") === "") {
           this.setRaport({
             what: "pusty aria-label",
-            category: "semantic",
+            category: "aria",
             type: "warning",
             message: `Element ma pusty atrybut aria-label! Element: ${element.outerHTML}`
           });

@@ -1,3 +1,4 @@
+// TODO napisać obsługę css klass
 class CSSInterface {
   constructor({ rules }) {
     this.css = rules;

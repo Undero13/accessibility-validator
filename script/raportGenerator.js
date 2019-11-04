@@ -31,6 +31,18 @@ class Raport {
     trArr.forEach(tr => tr.classList.remove("d-none"));
   }
 
+  escape(text) {
+    return text.replace(/</g, "&lt;");
+  }
+
+  shorten(text, limit = 100) {
+    if (text.length > limit) {
+      return `${text.substring(0, limit - 3)}...`;
+    }
+
+    return text;
+  }
+
   putDataOnTable(table, filter) {
     const data = this.filterRaportByCategory(filter);
     const tbody = document.createElement("tbody");
@@ -41,9 +53,12 @@ class Raport {
 
         if (index > 5) {
           tr.classList.add("d-none");
+          table.querySelector("button").classList.remove("is-invisible");
         }
 
-        tr.innerHTML = `<td>${row.what}</td><td>${row.type}</td><td>${row.message}</td>`;
+        tr.innerHTML = `<td>${row.what}</td><td>${
+          row.type
+        }</td><td>${this.shorten(this.escape(row.message))}</td>`;
         tbody.append(tr);
       });
     } else {

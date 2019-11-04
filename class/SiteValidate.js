@@ -158,7 +158,7 @@ class SiteValidate extends AbstractValidator {
    * Check semantic navbar and list in navbar
    */
   checkNav(nav) {
-    if (!nav.length > 0) {
+    if (nav.length < 1) {
       this.setRaport({
         what: "nawigacja",
         category: "semantic",
@@ -183,7 +183,7 @@ class SiteValidate extends AbstractValidator {
    * Check semantic footer
    */
   checkFooter(footer) {
-    if (!footer.length > 0) {
+    if (footer.length < 1) {
       this.setRaport({
         what: "stopka",
         category: "semantic",
@@ -204,7 +204,7 @@ class SiteValidate extends AbstractValidator {
 
           if (header.length > 0) {
             break;
-          } else if (!header < 1 && i === 5) {
+          } else if (header.length < 1 && i === 5) {
             this.setRaport({
               what: `sekcja class:${item.getAttribute(
                 "class"

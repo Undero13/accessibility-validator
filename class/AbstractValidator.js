@@ -15,16 +15,16 @@ class AbstractValidator {
     throw new Error("You have to implement the method processDOM");
   }
 
-  setUrl(newUrl) {
-    this.url = newUrl;
-  }
-
-  getUrl() {
+  getURL() {
     return this.url;
   }
 
   getRaport() {
     return this.raport;
+  }
+
+  setRaport(data) {
+    this.raport.push(data);
   }
 }
 

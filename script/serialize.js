@@ -1,12 +1,18 @@
 /*
- * get data from form inputs and make object
+ * Get data from form inputs and make object
  */
-function serializeForm(formElement) {
+function serializeForm(formElement = null) {
+  if (!formElement) {
+    return null;
+  }
+
   const formData = {};
   const inputs = [...formElement.elements];
 
   inputs.forEach(input => {
-    if (input.name !== "") formData[input.name] = input.value;
+    if (input.name !== "") {
+      formData[input.name] = input.value;
+    }
   });
 
   return formData;

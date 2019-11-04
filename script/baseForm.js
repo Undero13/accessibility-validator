@@ -28,12 +28,20 @@ const appendSpinner = () => {
 /*
  * Validate data from form and send to electron class
  */
-const getUrl = e => {
+const getURL = e => {
   e.preventDefault();
   const data = serializeForm(form);
 
+  if (!data) {
+    return alert.classList.remove("is-invisible");
+  }
+
   if (!/(http(s?)):\/\//gi.test(data.url)) {
     data.url = `http://${data.url}`;
+  }
+
+  if (data.url[data.url.length - 1] !== "/") {
+    data.url = `${data.url}/`;
   }
 
   const validURL = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g.test(
@@ -48,4 +56,4 @@ const getUrl = e => {
   }
 };
 
-form.addEventListener("submit", getUrl);
+form.addEventListener("submit", getURL);

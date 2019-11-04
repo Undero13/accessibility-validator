@@ -48,11 +48,8 @@ class SiteValidate extends AbstractValidator {
     // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
     // title
     /*  
-    this.checkLinks(parser.getElements("a")); // sprawdzenie hrefów,aria label i czy znacznik ma etykietę, tabindex, focus,hover
-    this.checkButtons(parser.getElements("button")); // aria label i czy znacznik ma etykietę, tabindex, focus,hover
     this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
-    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa
-    this.checkLetters(parser.getElements("p"), parser.getElements("span")); // sprawdzenie wielkości liter */
+    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa */
 
     this.checkContrast(
       parser.getCSSInterface(),
@@ -83,14 +80,56 @@ class SiteValidate extends AbstractValidator {
       parser.getElements("h6")
     );
 
+    this.checkLinksAndButtons([
+      parser.getElements("a"),
+      parser.getElements("button")
+    ]);
+
     this.finish = true;
   }
 
   /*
-   * Check element/backgroung contrast. Good contrast is greater than 8
+   * Check element/backgroung contrast. Good contrast is greater than 8. Also check font-size
    */
-  checkContrast(css, p, span, ...headers) {
-    // dużo logiki do napisania
+  checkContrast(css, paragraphs, spans, ...headers) {
+    paragraphs.forEach(p => this.elementContrast(css, p));
+    spans.forEach(span => this.elementContrast(css, span));
+    const headersArray = headers.flat(2);
+
+    if (headersArray.length > 0) {
+      headersArray.forEach(header => this.elementContrast(css, header));
+    }
+
+    // WERSJA POPRZEDNIA
+    /* if (headers.length > 0) {
+      headers.forEach(header => {
+        if (header.length > 0) {
+          header.forEach(item => {
+            console.log(item.outerHTML);
+          });
+        }
+      });
+    } */
+  }
+
+  elementContrast(css, element) {
+    return; // tymczasowo dopoki nie skończę funkcji
+    // eslint-disable-next-line no-unreachable
+    const style = element.getAttribute("style");
+    let pseudoClass = style ? css.textToObject(style) : "";
+
+    if (!pseudoClass || (!pseudoClass.color && pseudoClass["font-size"])) {
+      const classData = element.getAttribute("class");
+
+      if (classData) {
+        // jesli są jakieś klasy trzeba ponownie rozbić je na pojedyncze lementy i wyciągnąć z nich właściwość color
+      } else {
+        // domyslny kolor przegladarek
+        pseudoClass = { color: "black" };
+      }
+
+      // na tym etapie mamy kolor elementu ale potrzeba jeszcze koloru tła żeby je porównać. Jak go uzyskać?
+    }
   }
 
   /*
@@ -234,7 +273,7 @@ class SiteValidate extends AbstractValidator {
             what: "ikony",
             category: "semantic",
             type: "error",
-            message: `Znacznik <i> nie służy do osadzania ikon! Element o klasie ${classIcon}`
+            message: `Znacznik <i> nie służy do osadzania ikon! Element ${icon.outerHTML}`
           });
         }
       });
@@ -251,6 +290,52 @@ class SiteValidate extends AbstractValidator {
         category: "semantic",
         type: "error",
         message: `Każda podstrona powinna mieć 1 znacznik <main>. Znaleziono:${length}`
+      });
+    }
+  }
+
+  /*
+   * Check headers hierarchy,repeatability
+   */
+  checkHeaders(...headers) {
+    const headersArr = headers.flat(2);
+    let h1 = 0;
+    let h2 = 0;
+    let h3 = 0;
+    let h4 = 0;
+    let h5 = 0;
+    let h6 = 0;
+
+    headersArr.forEach(header => {
+      if (header.outerHTML.includes("<h1")) h1++;
+      if (header.outerHTML.includes("<h2")) h2++;
+      if (header.outerHTML.includes("<h3")) h3++;
+      if (header.outerHTML.includes("<h4")) h4++;
+      if (header.outerHTML.includes("<h5")) h5++;
+      if (header.outerHTML.includes("<h6")) h6++;
+    });
+
+    if (h1 > 1 || h1 < 1) {
+      this.setRaport({
+        what: "nagłówki",
+        category: "semantic",
+        type: "error",
+        message: `Każda podstrona powinna mieć 1 znacznik <h1>. Znaleziono:${h1}`
+      });
+    }
+
+    if (
+      (h2 > 0 && h1 < 1) ||
+      (h3 > 0 && h2 < 1) ||
+      (h4 > 0 && h3 < 1) ||
+      (h5 > 0 && h4 < 1) ||
+      (h6 > 0 || h5 < 1)
+    ) {
+      this.setRaport({
+        what: "nagłówki",
+        category: "semantic",
+        type: "error",
+        message: `Zachwiana hierarchia nagłówków na stronie`
       });
     }
   }
@@ -278,9 +363,29 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check headers hierarchy,repeatability       TODO WIELKOŚĆ LITER
+   * Check links hrefs,aria-label, label, tabindex, focus,hover
    */
-  checkHeaders(...headers) {}
+  checkLinksAndButtons(elementsArr) {
+    if (elementsArr.length > 0) {
+      // links href
+      if (elementsArr[0]) {
+        elementsArr[0].forEach(link => {
+          if (!link.getAttribute("href")) {
+            this.setRaport({
+              what: "uszkodzony href",
+              category: "keybord",
+              type: "error",
+              message: `Element ${link.outerHTML} ma uszkodzony atrybut href!`
+            });
+          }
+        });
+      }
+
+      // links and buttons
+      const flatArr = elementsArr.flat();
+      console.log(flatArr.length);
+    }
+  }
 }
 
 module.exports = SiteValidate;

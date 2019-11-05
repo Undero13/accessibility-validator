@@ -2,16 +2,12 @@ const DomParser = require("dom-parser");
 const axios = require("axios");
 const cssParser = require("css");
 const fs = require("fs");
-const CSSInterface = require("./CSSInterface");
 
 class Parser {
   constructor(html, url) {
     const parser = new DomParser();
     this.url = url;
     this.DOM = parser.parseFromString(html);
-    this.css = "";
-
-    this.processCSS();
   }
 
   /*
@@ -19,29 +15,6 @@ class Parser {
    */
   getDOM() {
     return this.DOM;
-  }
-
-  /*
-   * Return this.css
-   */
-  getCSSInterface() {
-    const cssObject = cssParser.parse(this.css);
-
-    if (cssObject.stylesheet.parsingErrors.length > 0) {
-      const data = JSON.stringify(cssObject);
-
-      fs.writeFile("../logs/css", data);
-      throw Error("Błąd CSS");
-    }
-
-    return new CSSInterface(cssObject.stylesheet);
-  }
-
-  /*
-   * Add more css to var
-   */
-  setCSS(css) {
-    this.css += css;
   }
 
   /*
@@ -78,43 +51,14 @@ class Parser {
   }
 
   /*
-   * Get css from the dom
-   */
-  processCSS() {
-    const links = this.getElements("link");
-    const styles = this.getElements("style");
-
-    if (links.length > 0) {
-      links.forEach(link => {
-        const tag = link.outerHTML;
-
-        if (tag.includes('rel="stylesheet"')) {
-          let assetUrl = link.getAttribute("href");
-
-          if (assetUrl[0] === "/") {
-            assetUrl = assetUrl.substring(1, assetUrl.length);
-          }
-
-          const url = `${this.url}${assetUrl}`;
-          this.fetchData(url, "css");
-        }
-      });
-    }
-
-    if (styles.length > 0) {
-      styles.forEach(({ textContent }) => this.setCSS(textContent));
-    }
-  }
-
-  /*
    * Download data from link
    */
-  fetchData(url, type = null) {
+  fetchData(url) {
     axios
       .get(url)
       .then(res => {
         if (res.status === 200) {
-          return type === "css" ? this.setCSS(res.data) : res;
+          return res;
         }
       })
       .catch(e => {

@@ -3,9 +3,11 @@ const axios = require("axios");
 const { parsed: config } = require("dotenv").config();
 const Nightmare = require("nightmare");
 const electron = require("../node_modules/electron");
+const AbstractParser = require("./AbstractParser");
 
-class Parser {
+class Parser extends AbstractParser {
   constructor(html) {
+    super();
     const parser = new DomParser();
     this.DOM = parser.parseFromString(html);
   }
@@ -13,7 +15,7 @@ class Parser {
   /*
    * Return DOM
    */
-  static async getDOM(url) {
+  static async getDOMFromURL(url = "") {
     const nightmare = Nightmare({
       electronPath: electron,
       show: config.DEV_ENV
@@ -40,6 +42,35 @@ class Parser {
           const h5 = document.querySelectorAll("h5");
           const h6 = document.querySelectorAll("h6");
 
+          /*
+           * Get backgroung from element
+           */
+          const getElementBackground = (element, attr) =>
+            window.getComputedStyle(element, null).getPropertyValue(attr);
+
+          /*
+           * If element don't have backgroung get this from parent
+           */
+          const getBackground = element => {
+            let res = getElementBackground(element, "background-color");
+            while (
+              !res ||
+              res === "transparent" ||
+              res === "#000000" ||
+              res === "rgba(0, 0, 0, 0)"
+            ) {
+              if (element === document.body) res = "#fff";
+              else {
+                element = element.parentNode;
+                res = getBackground(element, "background-color");
+              }
+            }
+            return res;
+          };
+
+          /*
+           * get background,color and font-size and few others
+           */
           function getStyle(elements, key, interactive = false) {
             const properties = [];
 
@@ -58,7 +89,8 @@ class Parser {
                 el: elm.outerHTML,
                 textContent: elm.textContent,
                 fontSize: styleFont,
-                color: styleColor
+                color: styleColor || "#000",
+                background: getBackground(elm)
               });
             });
             returnObj[key] = properties;

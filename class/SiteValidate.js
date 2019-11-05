@@ -1,3 +1,4 @@
+const Color = require("color");
 const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
 
@@ -8,9 +9,12 @@ class SiteValidate extends AbstractValidator {
     this.finish = false;
     this.raport = [];
 
-    Parser.getDOM(this.url).then(data => this.processDOM(data));
+    Parser.getDOMFromURL(this.url).then(data => this.processDOM(data));
   }
 
+  /*
+   * Trigger validate methods
+   */
   processDOM(html) {
     const parser = new Parser(html.DOM);
 
@@ -27,14 +31,8 @@ class SiteValidate extends AbstractValidator {
     this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa */
 
     this.checkContrast(
-      html.p,
-      html.span,
-      html.h1,
-      html.h2,
-      html.h3,
-      html.h4,
-      html.h5,
-      html.h6
+      [html.p, html.span, html.link, html.button],
+      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
@@ -46,7 +44,6 @@ class SiteValidate extends AbstractValidator {
     this.checkMain(parser.getElements("main"));
     this.checkImages(parser.getElements("img"));
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
-
     this.checkLinksAndButtons([html.link, html.button]);
 
     this.finish = true;
@@ -55,7 +52,28 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check element/backgroung contrast. Good contrast is greater than 8. Also check font-size
    */
-  checkContrast(css, paragraphs, spans, ...headers) {}
+  checkContrast(...elements) {
+    const elementsFlat = elements.flat(2);
+
+    elementsFlat.forEach(element => {
+      if (element) {
+        const { el, color, background } = element;
+        const colorFirst = Color(background);
+        const contrast = colorFirst.contrast(Color(color));
+
+        if (contrast < 8) {
+          this.setRaport({
+            what: "kontrast",
+            category: "contrast",
+            type: "warning",
+            message: `Zalecany kontrast dla elementów to powyżej 8. Wykryto ${contrast.toFixed(
+              2
+            )} dla ${el}`
+          });
+        }
+      }
+    });
+  }
 
   /*
    * Check html lang attribute
@@ -76,8 +94,8 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check title tag
    */
-  checkTitle(title) {
-    if (!title.textContent) {
+  checkTitle({ textContent }) {
+    if (!textContent) {
       this.setRaport({
         what: "tytuł",
         category: "general",
@@ -115,8 +133,8 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check semantic footer
    */
-  checkFooter(footer) {
-    if (footer.length < 1) {
+  checkFooter({ length }) {
+    if (length < 1) {
       this.setRaport({
         what: "stopka",
         category: "semantic",
@@ -139,12 +157,10 @@ class SiteValidate extends AbstractValidator {
             break;
           } else if (header.length < 1 && i === 5) {
             this.setRaport({
-              what: `sekcja class:${item.getAttribute(
-                "class"
-              )}, id: ${item.getAttribute("id")}`,
+              what: "sekcja nie ma headera",
               category: "semantic",
               type: "error",
-              message: "Każda sekcja musi mieć header."
+              message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
             });
           }
         }
@@ -301,7 +317,7 @@ class SiteValidate extends AbstractValidator {
         if (!link.getAttribute("href")) {
           this.setRaport({
             what: "uszkodzony href",
-            category: "keybord",
+            category: "general",
             type: "error",
             message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
           });
@@ -327,7 +343,7 @@ class SiteValidate extends AbstractValidator {
         });
       }
 
-      // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany
+      // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
       if (element.getAttribute("tabindex") * 1 === 0) {
         this.setRaport({
           what: "tabindex",
@@ -336,10 +352,18 @@ class SiteValidate extends AbstractValidator {
           message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
         });
       }
+
+      if (!item.textContent) {
+        this.setRaport({
+          what: "brak etykiety",
+          category: "general",
+          type: "error",
+          message: `Element nie ma etykiety! Element: ${element.outerHTML}`
+        });
+      }
     });
 
-    // problem będzie też z labelami
-    // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi
+    // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi TODO
   }
 }
 

@@ -6,7 +6,7 @@ const ariaTable = document.querySelector("#aria");
 const imageTable = document.querySelector("#image");
 const contrastTable = document.querySelector("#contrast");
 const letterTable = document.querySelector("#letter");
-const keybordTable = document.querySelector("#keybord");
+const devicesTable = document.querySelector("#devices");
 
 class Raport {
   constructor() {
@@ -57,7 +57,9 @@ class Raport {
         }
 
         tr.innerHTML = `<td>${row.what}</td><td>${
-          row.type
+          row.type === "error"
+            ? `<p class="has-text-weight-bold has-text-danger">${row.type}</p>`
+            : `<p class="has-text-weight-bold has-text-warning">${row.type}</p>`
         }</td><td>${this.shorten(this.escape(row.message))}</td>`;
         tbody.append(tr);
       });
@@ -91,9 +93,9 @@ contrastTable
 letterTable
   .querySelector("button")
   .addEventListener("click", () => raport.onClick(letterTable));
-keybordTable
+devicesTable
   .querySelector("button")
-  .addEventListener("click", () => raport.onClick(keybordTable));
+  .addEventListener("click", () => raport.onClick(devicesTable));
 
 setTimeout(() => {
   const categories = [
@@ -122,8 +124,8 @@ setTimeout(() => {
       filter: "letter"
     },
     {
-      table: keybordTable,
-      filter: "keybord"
+      table: devicesTable,
+      filter: "devices"
     }
   ];
 

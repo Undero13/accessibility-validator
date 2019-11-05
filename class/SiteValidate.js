@@ -1,7 +1,5 @@
-const { parsed: config } = require("dotenv").config();
-const Nightmare = require("nightmare");
+const Color = require("color");
 const AbstractValidator = require("./AbstractValidator");
-const electron = require("../node_modules/electron");
 const Parser = require("./Parser");
 
 class SiteValidate extends AbstractValidator {
@@ -11,58 +9,31 @@ class SiteValidate extends AbstractValidator {
     this.finish = false;
     this.raport = [];
 
-    this.getDOM();
+    Parser.getDOMFromURL(this.url).then(data => this.processDOM(data));
   }
 
-  getDOM() {
-    const nightmare = Nightmare({
-      electronPath: electron,
-      show: config.DEV_ENV
-    });
-
-    nightmare
-      .goto(this.url)
-      .wait(5000)
-      .evaluate(() => {
-        const { body } = document;
-        body.scrollIntoView({ behavior: "smooth", block: "end" });
-      })
-      .wait(3000)
-      .evaluate(() => document.querySelector("html").outerHTML)
-      .end()
-      .then(res => this.processDOM(res))
-      .catch(error => {
-        throw Error(error);
-      });
-  }
-
+  /*
+   * Trigger validate methods
+   */
   processDOM(html) {
-    const parser = new Parser(html, this.url);
+    const parser = new Parser(html.DOM);
 
-    // category:general,semantic,image,contrast,letter,keybord,aria
-
-    // UWAGI OGÓLNE elementy intereakywne są trudne do okodowania rozwiązaniem może być ponowne uzycie biblioteki nightmare - w ostateczności
+    // category:general,semantic,image,contrast,letter,devices,aria
 
     // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
     // skip linki
     // pauza anumacji
     // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
     // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
-    // title
+    // title na  linkach
     /*  
-    this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
-    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa */
+
+    this.checkLetter() //sprawdzanie wielkości litter
+    */
 
     this.checkContrast(
-      parser.getCSSInterface(),
-      parser.getElements("p"),
-      parser.getElements("span"),
-      parser.getElements("h1"),
-      parser.getElements("h2"),
-      parser.getElements("h3"),
-      parser.getElements("h4"),
-      parser.getElements("h5"),
-      parser.getElements("h6")
+      [html.p, html.span, html.link, html.button],
+      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
@@ -73,19 +44,9 @@ class SiteValidate extends AbstractValidator {
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
     this.checkImages(parser.getElements("img"));
-    this.checkHeaders(
-      parser.getElements("h1"),
-      parser.getElements("h2"),
-      parser.getElements("h3"),
-      parser.getElements("h4"),
-      parser.getElements("h5"),
-      parser.getElements("h6")
-    );
-
-    this.checkLinksAndButtons([
-      parser.getElements("a"),
-      parser.getElements("button")
-    ]);
+    this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
+    this.checkLinksAndButtons([html.link, html.button]);
+    this.checkInputs(html.input);
 
     this.finish = true;
   }
@@ -93,35 +54,27 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check element/backgroung contrast. Good contrast is greater than 8. Also check font-size
    */
-  checkContrast(css, paragraphs, spans, ...headers) {
-    paragraphs.forEach(p => this.elementContrast(css, p));
-    spans.forEach(span => this.elementContrast(css, span));
-    const headersArray = headers.flat(2);
+  checkContrast(...elements) {
+    const elementsFlat = elements.flat(2);
 
-    if (headersArray.length > 0) {
-      headersArray.forEach(header => this.elementContrast(css, header));
-    }
-  }
+    elementsFlat.forEach(element => {
+      if (element) {
+        const { el, color, background } = element;
+        const colorFirst = Color(background);
+        const contrast = colorFirst.contrast(Color(color));
 
-  elementContrast(css, element) {
-    return; // tymczasowo dopoki nie skończę funkcji
-    // eslint-disable-next-line no-unreachable
-    const style = element.getAttribute("style");
-    let pseudoClass = style ? css.textToObject(style) : "";
-
-    if (!pseudoClass || (!pseudoClass.color && pseudoClass["font-size"])) {
-      const classData = element.getAttribute("class");
-
-      if (classData) {
-        // jesli są jakieś klasy trzeba ponownie rozbić je na pojedyncze lementy i wyciągnąć z nich właściwość color
-      } else {
-        // domyslny kolor przegladarek
-        pseudoClass = { color: "black" };
+        if (contrast < 8) {
+          this.setRaport({
+            what: "kontrast",
+            category: "contrast",
+            type: "warning",
+            message: `Zalecany kontrast dla elementów to powyżej 8. Wykryto ${contrast.toFixed(
+              2
+            )} dla ${el}`
+          });
+        }
       }
-
-      // na tym etapie mamy kolor elementu ale potrzeba jeszcze koloru tła żeby je porównać. Jak go uzyskać?
-      // do tego chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi
-    }
+    });
   }
 
   /*
@@ -143,8 +96,8 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check title tag
    */
-  checkTitle(title) {
-    if (!title.textContent) {
+  checkTitle({ textContent }) {
+    if (!textContent) {
       this.setRaport({
         what: "tytuł",
         category: "general",
@@ -182,8 +135,8 @@ class SiteValidate extends AbstractValidator {
   /*
    * Check semantic footer
    */
-  checkFooter(footer) {
-    if (footer.length < 1) {
+  checkFooter({ length }) {
+    if (length < 1) {
       this.setRaport({
         what: "stopka",
         category: "semantic",
@@ -206,12 +159,10 @@ class SiteValidate extends AbstractValidator {
             break;
           } else if (header.length < 1 && i === 5) {
             this.setRaport({
-              what: `sekcja class:${item.getAttribute(
-                "class"
-              )}, id: ${item.getAttribute("id")}`,
+              what: "sekcja nie ma headera",
               category: "semantic",
               type: "error",
-              message: "Każda sekcja musi mieć header."
+              message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
             });
           }
         }
@@ -288,7 +239,7 @@ class SiteValidate extends AbstractValidator {
    * Check headers hierarchy,repeatability
    */
   checkHeaders(...headers) {
-    const headersArr = headers.flat(2);
+    const headersArr = headers.flat(3);
     let h1 = 0;
     let h2 = 0;
     let h3 = 0;
@@ -297,12 +248,15 @@ class SiteValidate extends AbstractValidator {
     let h6 = 0;
 
     headersArr.forEach(header => {
-      if (header.outerHTML.includes("<h1")) h1++;
-      if (header.outerHTML.includes("<h2")) h2++;
-      if (header.outerHTML.includes("<h3")) h3++;
-      if (header.outerHTML.includes("<h4")) h4++;
-      if (header.outerHTML.includes("<h5")) h5++;
-      if (header.outerHTML.includes("<h6")) h6++;
+      if (header && Object.entries(header.el).length !== 0) {
+        const { el } = header;
+        if (el.includes("<h1")) h1++;
+        if (el.includes("<h2")) h2++;
+        if (el.includes("<h3")) h3++;
+        if (el.includes("<h4")) h4++;
+        if (el.includes("<h5")) h5++;
+        if (el.includes("<h6")) h6++;
+      }
     });
 
     if (h1 > 1 || h1 < 1) {
@@ -356,25 +310,36 @@ class SiteValidate extends AbstractValidator {
    * Check links hrefs,aria-label, label, tabindex, focus,hover
    */
   checkLinksAndButtons(elementsArr) {
-    if (elementsArr.length > 0) {
-      // links href
-      if (elementsArr[0]) {
-        elementsArr[0].forEach(link => {
-          if (!link.getAttribute("href")) {
+    // links href
+    if (elementsArr[0].length > 0) {
+      elementsArr[0].forEach(element => {
+        if (element && element.el) {
+          const parser = new Parser(element.el);
+          const [link] = parser.getElements("a");
+
+          if (link && !link.getAttribute("href")) {
             this.setRaport({
               what: "uszkodzony href",
-              category: "keybord",
+              category: "general",
               type: "error",
               message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
             });
           }
-        });
-      }
+        }
+      });
+    }
 
-      // links and buttons
-      const flatArr = elementsArr.flat();
-      flatArr.forEach(element => {
-        if (element.getAttribute("aria-label") === "") {
+    // links and buttons
+    const flatArr = elementsArr.flat();
+    flatArr.forEach(item => {
+      if (item && item.el) {
+        const parser = new Parser(item.el);
+        const [element] =
+          parser.getElements("a").length > 0
+            ? parser.getElements("a")
+            : parser.getElements("button");
+
+        if (element && element.getAttribute("aria-label") === "") {
           this.setRaport({
             what: "pusty aria-label",
             category: "aria",
@@ -383,20 +348,47 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany
-        if (element.getAttribute("tabindex") * 1 === 0) {
+        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
+        if (element && element.getAttribute("tabindex") * 1 !== 0) {
           this.setRaport({
             what: "tabindex",
-            category: "semantic",
+            category: "devices",
             type: "warning",
             message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
           });
         }
-      });
 
-      // problem będzie też z labelami
-      // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi
-    }
+        // jeśli zdjęcie w linku to nie musi mieć eytkiety
+        if (!item.textContent && !element.getAttribute("title")) {
+          this.setRaport({
+            what: "brak etykiety",
+            category: "general",
+            type: "error",
+            message: `Element nie ma etykiety! Element: ${element.outerHTML}`
+          });
+        }
+      }
+    });
+
+    // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi TODO
+  }
+
+  /*
+   * Check inputs label, focus,hover
+   */
+  checkInputs(inputs) {
+    inputs.forEach(input => {
+      if (!input.inputLabel) {
+        this.setRaport({
+          what: "brak etykiety",
+          category: "devices",
+          type: "error",
+          message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
+        });
+      }
+
+      // TODO hover i focus
+    });
   }
 }
 

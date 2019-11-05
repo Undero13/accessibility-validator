@@ -68,8 +68,8 @@ class Window {
 
   createMainWindow() {
     this.window = new BrowserWindow({
-      width: config.width,
-      height: config.height,
+      width: config.WINDOW_WIDTH,
+      height: config.WINDOW_HEIGHT,
       webPreferences: {
         nodeIntegration: true
       }

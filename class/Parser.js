@@ -35,6 +35,9 @@ class Parser extends AbstractParser {
           const buttons = document.querySelectorAll("button");
           const paragraphs = document.querySelectorAll("p");
           const spans = document.querySelectorAll("span");
+          const inputs = document.querySelectorAll(
+            "input:not([type='submit']):not([type='hidden'])"
+          );
           const h1 = document.querySelectorAll("h1");
           const h2 = document.querySelectorAll("h2");
           const h3 = document.querySelectorAll("h3");
@@ -90,7 +93,9 @@ class Parser extends AbstractParser {
                 textContent: elm.textContent,
                 fontSize: styleFont,
                 color: styleColor || "#000",
-                background: getBackground(elm)
+                background: getBackground(elm),
+                inputLabel:
+                  elm.labels && elm.labels.length === 1 ? elm.labels[0] : ""
               });
             });
             returnObj[key] = properties;
@@ -100,6 +105,7 @@ class Parser extends AbstractParser {
           getStyle(buttons, "button");
           getStyle(paragraphs, "p");
           getStyle(spans, "span");
+          getStyle(inputs, "input");
           getStyle(h1, "h1");
           getStyle(h2, "h2");
           getStyle(h3, "h3");

@@ -18,17 +18,18 @@ class SiteValidate extends AbstractValidator {
   processDOM(html) {
     const parser = new Parser(html.DOM);
 
-    // category:general,semantic,image,contrast,letter,keybord,aria
+    // category:general,semantic,image,contrast,letter,devices,aria
 
     // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
     // skip linki
     // pauza anumacji
     // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
     // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
-    // title
+    // title na  linkach
     /*  
-    this.checkInputs(parser.getElements("input")); // sprawdzenie czy KAŻDY input mam label,focus,hover
-    this.checkLabel(parser.getElements("label")); // sprawdzenie czy kazdy label ma inputa */
+
+    this.checkLetter() //sprawdzanie wielkości litter
+    */
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
@@ -45,6 +46,7 @@ class SiteValidate extends AbstractValidator {
     this.checkImages(parser.getElements("img"));
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
+    this.checkInputs(html.input);
 
     this.finish = true;
   }
@@ -311,16 +313,18 @@ class SiteValidate extends AbstractValidator {
     // links href
     if (elementsArr[0].length > 0) {
       elementsArr[0].forEach(element => {
-        const parser = new Parser(element.el);
-        const [link] = parser.getElements("a");
+        if (element && element.el) {
+          const parser = new Parser(element.el);
+          const [link] = parser.getElements("a");
 
-        if (!link.getAttribute("href")) {
-          this.setRaport({
-            what: "uszkodzony href",
-            category: "general",
-            type: "error",
-            message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
-          });
+          if (link && !link.getAttribute("href")) {
+            this.setRaport({
+              what: "uszkodzony href",
+              category: "general",
+              type: "error",
+              message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
+            });
+          }
         }
       });
     }
@@ -328,42 +332,63 @@ class SiteValidate extends AbstractValidator {
     // links and buttons
     const flatArr = elementsArr.flat();
     flatArr.forEach(item => {
-      const parser = new Parser(item.el);
-      const [element] =
-        parser.getElements("a").length > 0
-          ? parser.getElements("a")
-          : parser.getElements("button");
+      if (item && item.el) {
+        const parser = new Parser(item.el);
+        const [element] =
+          parser.getElements("a").length > 0
+            ? parser.getElements("a")
+            : parser.getElements("button");
 
-      if (element.getAttribute("aria-label") === "") {
-        this.setRaport({
-          what: "pusty aria-label",
-          category: "aria",
-          type: "warning",
-          message: `Element ma pusty atrybut aria-label! Element: ${element.outerHTML}`
-        });
-      }
+        if (element && element.getAttribute("aria-label") === "") {
+          this.setRaport({
+            what: "pusty aria-label",
+            category: "aria",
+            type: "warning",
+            message: `Element ma pusty atrybut aria-label! Element: ${element.outerHTML}`
+          });
+        }
 
-      // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
-      if (element.getAttribute("tabindex") * 1 === 0) {
-        this.setRaport({
-          what: "tabindex",
-          category: "semantic",
-          type: "warning",
-          message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
-        });
-      }
+        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
+        if (element && element.getAttribute("tabindex") * 1 !== 0) {
+          this.setRaport({
+            what: "tabindex",
+            category: "devices",
+            type: "warning",
+            message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
+          });
+        }
 
-      if (!item.textContent) {
-        this.setRaport({
-          what: "brak etykiety",
-          category: "general",
-          type: "error",
-          message: `Element nie ma etykiety! Element: ${element.outerHTML}`
-        });
+        // jeśli zdjęcie w linku to nie musi mieć eytkiety
+        if (!item.textContent && !element.getAttribute("title")) {
+          this.setRaport({
+            what: "brak etykiety",
+            category: "general",
+            type: "error",
+            message: `Element nie ma etykiety! Element: ${element.outerHTML}`
+          });
+        }
       }
     });
 
     // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi TODO
+  }
+
+  /*
+   * Check inputs label, focus,hover
+   */
+  checkInputs(inputs) {
+    inputs.forEach(input => {
+      if (!input.inputLabel) {
+        this.setRaport({
+          what: "brak etykiety",
+          category: "devices",
+          type: "error",
+          message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
+        });
+      }
+
+      // TODO hover i focus
+    });
   }
 }
 

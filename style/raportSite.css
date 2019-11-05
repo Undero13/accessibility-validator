@@ -34,3 +34,7 @@ caption{
 .button{
     margin-left: 20px;
 }
+
+.has-text-warning {
+    color: #f3c307!important;
+}

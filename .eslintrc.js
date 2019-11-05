@@ -10,6 +10,7 @@ module.exports = {
         'no-new':'off',
         'prettier/prettier': 'error',
         'class-methods-use-this':'off',
-        'consistent-return':'off'
+        'consistent-return':'off',
+        'no-param-reassign':'off'
     }
 };

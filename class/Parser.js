@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 const DomParser = require("dom-parser");
 const axios = require("axios");
 const { parsed: config } = require("dotenv").config();
@@ -13,7 +14,7 @@ class Parser extends AbstractParser {
   }
 
   /*
-   * Return DOM
+   * Return DOM, and tags styles
    */
   static async getDOMFromURL(url = "") {
     const nightmare = Nightmare({
@@ -24,10 +25,9 @@ class Parser extends AbstractParser {
       const result = await nightmare
         .goto(url)
         .wait(config.SITE_LOADING_TIMEOUT * 1)
-        .evaluate(() => {
-          const { body } = document;
-          body.scrollIntoView({ behavior: "smooth", block: "end" });
-        })
+        .evaluate(() =>
+          document.body.scrollIntoView({ behavior: "smooth", block: "end" })
+        )
         .wait(config.SITE_SCROLLING_TIMEOUT * 1)
         .evaluate(() => {
           const returnObj = {};
@@ -48,14 +48,14 @@ class Parser extends AbstractParser {
           /*
            * Get backgroung from element
            */
-          const getElementBackground = (element, attr) =>
+          const getStyle = (element, attr) =>
             window.getComputedStyle(element, null).getPropertyValue(attr);
 
           /*
            * If element don't have backgroung get this from parent
            */
           const getBackground = element => {
-            let res = getElementBackground(element, "background-color");
+            let res = getStyle(element, "background-color");
             while (
               !res ||
               res === "transparent" ||
@@ -72,21 +72,61 @@ class Parser extends AbstractParser {
           };
 
           /*
-           * get background,color and font-size and few others
+           * Return array of css style
            */
-          function getStyle(elements, key, interactive = false) {
-            const properties = [];
+          const getAllStyles = elm => {
+            const styles = getComputedStyle(elm, null);
 
+            return Array.from(styles).map(style => {
+              const obj = {};
+              obj[style] = styles.getPropertyValue(style);
+              return obj;
+            });
+          };
+
+          /*
+           * Compare to object
+           */
+          const obiectsAreSame = (x, y) => {
+            // eslint-disable-next-line guard-for-in
+            for (const keyX in x) {
+              for (const keyY in y) {
+                if (keyY === keyX) {
+                  if (x[keyX] !== y[keyY]) {
+                    return y;
+                  }
+                }
+              }
+            }
+          };
+
+          /*
+           * Get background,color and font-size and few others
+           */
+          function getStyleFormDom(elements, key, interactive = false) {
             if (elements.length < 1) return;
 
+            const properties = [];
+
             elements.forEach(elm => {
-              const styleFont = window
-                .getComputedStyle(elm, null)
-                .getPropertyValue("font-size");
-              const styleColor = window
-                .getComputedStyle(elm, null)
-                .getPropertyValue("color");
-              // tu focus i hover
+              const styleFont = getStyle(elm, "font-size");
+              const styleColor = getStyle(elm, "color");
+              const inspection = [];
+
+              if (interactive) {
+                const styleBefore = getAllStyles(elm);
+                elm.focus();
+                const styleAfterFocus = getAllStyles(document.activeElement);
+
+                styleBefore.forEach(x => {
+                  styleAfterFocus.forEach(y => {
+                    const value = obiectsAreSame(x, y);
+                    if (value) {
+                      inspection.push(value);
+                    }
+                  });
+                });
+              }
 
               properties.push({
                 el: elm.outerHTML,
@@ -94,24 +134,24 @@ class Parser extends AbstractParser {
                 fontSize: styleFont,
                 color: styleColor || "#000",
                 background: getBackground(elm),
-                inputLabel:
-                  elm.labels && elm.labels.length === 1 ? elm.labels[0] : ""
+                inputLabel: !!(elm.labels && elm.labels.length > 0),
+                correctFocus: !!(inspection.length > 0)
               });
             });
             returnObj[key] = properties;
           }
 
-          getStyle(links, "link");
-          getStyle(buttons, "button");
-          getStyle(paragraphs, "p");
-          getStyle(spans, "span");
-          getStyle(inputs, "input");
-          getStyle(h1, "h1");
-          getStyle(h2, "h2");
-          getStyle(h3, "h3");
-          getStyle(h4, "h4");
-          getStyle(h5, "h5");
-          getStyle(h6, "h6");
+          getStyleFormDom(links, "link", true);
+          getStyleFormDom(buttons, "button", true);
+          getStyleFormDom(inputs, "input", true);
+          getStyleFormDom(paragraphs, "p");
+          getStyleFormDom(spans, "span");
+          getStyleFormDom(h1, "h1");
+          getStyleFormDom(h2, "h2");
+          getStyleFormDom(h3, "h3");
+          getStyleFormDom(h4, "h4");
+          getStyleFormDom(h5, "h5");
+          getStyleFormDom(h6, "h6");
 
           returnObj.DOM = document.querySelector("html").outerHTML;
           return returnObj;
@@ -129,7 +169,7 @@ class Parser extends AbstractParser {
   getElements(selector) {
     const elements = this.DOM.getElementsByTagName(selector);
 
-    // fix for dom-parser search
+    // fix bug form dom-parser search
     if (selector.length === 1) {
       const newElements = [];
       elements.forEach(element => {

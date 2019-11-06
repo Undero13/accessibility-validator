@@ -28,10 +28,14 @@ class SiteValidate extends AbstractValidator {
     // title na  linkach
     /*  
 
-    this.checkLetter() //sprawdzanie wielkości litter
+     //sprawdzanie wielkości litter
     */
 
     this.checkContrast(
+      [html.p, html.span, html.link, html.button],
+      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
+    );
+    this.checkLetter(
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
@@ -63,16 +67,29 @@ class SiteValidate extends AbstractValidator {
         const colorFirst = Color(background);
         const contrast = colorFirst.contrast(Color(color));
 
-        if (contrast < 8) {
+        if (contrast < 4.5) {
           this.setRaport({
             what: "kontrast",
             category: "contrast",
             type: "warning",
-            message: `Zalecany kontrast dla elementów to powyżej 8. Wykryto ${contrast.toFixed(
+            message: `Zalecany kontrast dla elementów to powyżej 4.5. Wykryto ${contrast.toFixed(
               2
             )} dla ${el}`
           });
         }
+      }
+    });
+  }
+
+  /*
+   * Check font-size
+   */
+  checkLetter(...elements) {
+    const elementsFlat = elements.flat(2);
+
+    elementsFlat.forEach(element => {
+      if (element) {
+        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną oid wielu czynników nie tylko technologicznych ale i personalnych
       }
     });
   }
@@ -180,7 +197,7 @@ class SiteValidate extends AbstractValidator {
 
         if (caption.length < 1) {
           this.setRaport({
-            what: "figcaption",
+            what: "brak figcaption",
             category: "semantic",
             type: "warning",
             message: `Element <figure> nie ma tagu <figcaption> ${figure.outerHTML} `
@@ -331,6 +348,7 @@ class SiteValidate extends AbstractValidator {
 
     // links and buttons
     const flatArr = elementsArr.flat();
+
     flatArr.forEach(item => {
       if (item && item.el) {
         const parser = new Parser(item.el);
@@ -349,7 +367,11 @@ class SiteValidate extends AbstractValidator {
         }
 
         // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
-        if (element && element.getAttribute("tabindex") * 1 !== 0) {
+        if (
+          element &&
+          element.getAttribute("tabindex") &&
+          element.getAttribute("tabindex") * 1 !== 0
+        ) {
           this.setRaport({
             what: "tabindex",
             category: "devices",
@@ -358,8 +380,12 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        // jeśli zdjęcie w linku to nie musi mieć eytkiety
-        if (!item.textContent && !element.getAttribute("title")) {
+        const image =
+          parser.getElements("img").length > 0
+            ? parser.getElements("img")[0]
+            : null;
+
+        if (!item.textContent && !element.getAttribute("title") && !image) {
           this.setRaport({
             what: "brak etykiety",
             category: "general",
@@ -367,10 +393,17 @@ class SiteValidate extends AbstractValidator {
             message: `Element nie ma etykiety! Element: ${element.outerHTML}`
           });
         }
+
+        if (!item.correctFocus) {
+          this.setRaport({
+            what: "brak focusa",
+            category: "devices",
+            type: "warning",
+            message: `Element nie ma widocznego focusa! Element: ${element.outerHTML}`
+          });
+        }
       }
     });
-
-    // do hovera i focusa chyba będzie trzeba ponownie wykorzystać nightmara dom-parser sobie z tym nie poradzi TODO
   }
 
   /*
@@ -378,16 +411,23 @@ class SiteValidate extends AbstractValidator {
    */
   checkInputs(inputs) {
     inputs.forEach(input => {
-      if (!input.inputLabel) {
+      if (input && !input.inputLabel) {
         this.setRaport({
           what: "brak etykiety",
           category: "devices",
           type: "error",
           message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
         });
-      }
 
-      // TODO hover i focus
+        if (!input.correctFocus) {
+          this.setRaport({
+            what: "brak focusa",
+            category: "devices",
+            type: "warning",
+            message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+          });
+        }
+      }
     });
   }
 }

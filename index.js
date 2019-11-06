@@ -1,5 +1,12 @@
 const { parsed: config } = require("dotenv").config();
-const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  ipcMain,
+  dialog
+} = require("electron");
 const SiteValidate = require("./class/SiteValidate");
 
 /*
@@ -26,18 +33,33 @@ class Window {
       this.window === null ? this.createMainWindow() : null
     );
 
+    // make raport
     ipcMain.on("url", (event, arg) => {
       const validator = new SiteValidate(arg);
 
       const id = setInterval(() => {
-        if (validator.finish) {
+        if (validator.finish && !validator.error) {
           this.window.loadFile("view/raport.html");
           setTimeout(() => {
             this.window.webContents.send("raport", validator.getRaport());
           }, 500);
-          clearInterval(id);
+        } else if (validator.error) {
+          this.window.loadFile("view/index.html");
+          const response = dialog.showMessageBox({
+            message: `Podałeś błedny URL: ${arg}`,
+            buttons: ["OK"]
+          });
+          // eslint-disable-next-line no-console
+          console.log(response);
         }
+
+        clearInterval(id);
       }, 5000);
+    });
+
+    // next analize
+    ipcMain.on("return", () => {
+      this.window.loadFile("view/index.html");
     });
   }
 

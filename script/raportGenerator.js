@@ -7,6 +7,7 @@ const imageTable = document.querySelector("#image");
 const contrastTable = document.querySelector("#contrast");
 const letterTable = document.querySelector("#letter");
 const devicesTable = document.querySelector("#devices");
+const returnButton = document.querySelector("#return-btn");
 
 class Raport {
   constructor() {
@@ -35,7 +36,7 @@ class Raport {
     return text.replace(/</g, "&lt;");
   }
 
-  shorten(text, limit = 100) {
+  shorten(text, limit = 160) {
     if (text.length > limit) {
       return `${text.substring(0, limit - 3)}...`;
     }
@@ -53,7 +54,7 @@ class Raport {
 
         if (index > 5) {
           tr.classList.add("d-none");
-          table.querySelector("button").classList.remove("is-invisible");
+          table.querySelector("button").classList.remove("d-none");
         }
 
         tr.innerHTML = `<td>${row.what}</td><td>${
@@ -133,3 +134,7 @@ setTimeout(() => {
     raport.putDataOnTable(category.table, category.filter)
   );
 }, 1000);
+
+returnButton.addEventListener("click", function() {
+  ipcRenderer.send("return", null);
+});

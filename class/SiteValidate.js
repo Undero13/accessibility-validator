@@ -7,9 +7,15 @@ class SiteValidate extends AbstractValidator {
     super();
     this.url = url;
     this.finish = false;
+    this.error = false;
     this.raport = [];
 
-    Parser.getDOMFromURL(this.url).then(data => this.processDOM(data));
+    Parser.getDOMFromURL(this.url)
+      .then(data => this.processDOM(data))
+      .catch(() => {
+        this.error = true;
+        this.finish = true;
+      });
   }
 
   /*
@@ -25,11 +31,6 @@ class SiteValidate extends AbstractValidator {
     // pauza anumacji
     // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
     // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
-    // title na  linkach
-    /*  
-
-     //sprawdzanie wielkości litter
-    */
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
@@ -407,7 +408,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check inputs label, focus,hover
+   * Check inputs label, focus,hover TODO HOVER
    */
   checkInputs(inputs) {
     inputs.forEach(input => {

@@ -35,15 +35,15 @@ class Parser extends AbstractParser {
           const buttons = document.querySelectorAll("button");
           const paragraphs = document.querySelectorAll("p");
           const spans = document.querySelectorAll("span");
-          const inputs = document.querySelectorAll(
-            "input:not([type='submit']):not([type='hidden'])"
-          );
           const h1 = document.querySelectorAll("h1");
           const h2 = document.querySelectorAll("h2");
           const h3 = document.querySelectorAll("h3");
           const h4 = document.querySelectorAll("h4");
           const h5 = document.querySelectorAll("h5");
           const h6 = document.querySelectorAll("h6");
+          const inputs = document.querySelectorAll(
+            "input:not([type='submit']):not([type='hidden'])"
+          );
 
           /*
            * Get backgroung from element
@@ -63,10 +63,7 @@ class Parser extends AbstractParser {
               res === "rgba(0, 0, 0, 0)"
             ) {
               if (element === document.body) res = "#fff";
-              else {
-                element = element.parentNode;
-                res = getBackground(element, "background-color");
-              }
+              else res = getBackground(element.parentNode, "background-color");
             }
             return res;
           };

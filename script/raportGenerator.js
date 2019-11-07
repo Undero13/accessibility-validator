@@ -6,7 +6,8 @@ const ariaTable = document.querySelector("#aria");
 const imageTable = document.querySelector("#image");
 const contrastTable = document.querySelector("#contrast");
 const letterTable = document.querySelector("#letter");
-const keybordTable = document.querySelector("#keybord");
+const devicesTable = document.querySelector("#devices");
+const returnButton = document.querySelector("#return-btn");
 
 class Raport {
   constructor() {
@@ -35,7 +36,7 @@ class Raport {
     return text.replace(/</g, "&lt;");
   }
 
-  shorten(text, limit = 100) {
+  shorten(text, limit = 160) {
     if (text.length > limit) {
       return `${text.substring(0, limit - 3)}...`;
     }
@@ -53,11 +54,13 @@ class Raport {
 
         if (index > 5) {
           tr.classList.add("d-none");
-          table.querySelector("button").classList.remove("is-invisible");
+          table.querySelector("button").classList.remove("d-none");
         }
 
         tr.innerHTML = `<td>${row.what}</td><td>${
-          row.type
+          row.type === "error"
+            ? `<p class="has-text-weight-bold has-text-danger">${row.type}</p>`
+            : `<p class="has-text-weight-bold has-text-warning">${row.type}</p>`
         }</td><td>${this.shorten(this.escape(row.message))}</td>`;
         tbody.append(tr);
       });
@@ -91,9 +94,9 @@ contrastTable
 letterTable
   .querySelector("button")
   .addEventListener("click", () => raport.onClick(letterTable));
-keybordTable
+devicesTable
   .querySelector("button")
-  .addEventListener("click", () => raport.onClick(keybordTable));
+  .addEventListener("click", () => raport.onClick(devicesTable));
 
 setTimeout(() => {
   const categories = [
@@ -122,8 +125,8 @@ setTimeout(() => {
       filter: "letter"
     },
     {
-      table: keybordTable,
-      filter: "keybord"
+      table: devicesTable,
+      filter: "devices"
     }
   ];
 
@@ -131,3 +134,7 @@ setTimeout(() => {
     raport.putDataOnTable(category.table, category.filter)
   );
 }, 1000);
+
+returnButton.addEventListener("click", function() {
+  ipcRenderer.send("return", null);
+});

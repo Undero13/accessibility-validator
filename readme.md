@@ -1,9 +1,9 @@
 # Walidator Dostępności
 
-WAlidator dostępności html dostosowany do stron napisanych w angularze
+Walidator dostępności html dostosowany do stron napisanych w angularze
 
 # Start
-- Pobierz projekt git clone
+- pobierz projekt git clone
 - w konsoli wpisz npm install
 - wpisz npm start
 

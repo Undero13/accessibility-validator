@@ -1,12 +1,20 @@
-const { parsed: config } = require("dotenv").config();
-const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require("electron");
-const SiteValidate = require("./class/SiteValidate");
-
 /*
  * @author Patryk Loter <patryk.loter@gmail.com>
  * @version 1.0.0
  * class for dynamic main window(create,close,menu,event)
  */
+
+const { parsed: config } = require("dotenv").config();
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  ipcMain,
+  dialog
+} = require("electron");
+const SiteValidate = require("./class/SiteValidate");
+
 class Window {
   constructor() {
     this.window = null;
@@ -26,21 +34,40 @@ class Window {
       this.window === null ? this.createMainWindow() : null
     );
 
+    // make raport
     ipcMain.on("url", (event, arg) => {
       const validator = new SiteValidate(arg);
 
       const id = setInterval(() => {
-        if (validator.finish) {
+        if (validator.finish && !validator.error) {
           this.window.loadFile("view/raport.html");
+
           setTimeout(() => {
             this.window.webContents.send("raport", validator.getRaport());
           }, 500);
+
+          clearInterval(id);
+        } else if (validator.error) {
+          this.window.loadFile("view/index.html");
+
+          const response = dialog.showMessageBox({
+            message: `Podałeś błedny URL: ${arg}`,
+            buttons: ["OK"]
+          });
+
+          console.log(response);
           clearInterval(id);
         }
       }, 5000);
     });
+
+    // next analize
+    ipcMain.on("return", () => this.window.loadFile("view/index.html"));
   }
 
+  /*
+   * Menu for developers.
+   */
   setMenu() {
     const menu = new Menu();
 
@@ -68,8 +95,8 @@ class Window {
 
   createMainWindow() {
     this.window = new BrowserWindow({
-      width: config.width,
-      height: config.height,
+      width: config.WINDOW_WIDTH,
+      height: config.WINDOW_HEIGHT,
       webPreferences: {
         nodeIntegration: true
       }

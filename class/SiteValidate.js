@@ -23,7 +23,6 @@ class SiteValidate extends AbstractValidator {
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
-
     // category:general,semantic,image,contrast,letter,devices,aria
 
     // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
@@ -57,7 +56,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check element/backgroung contrast. Good contrast is greater than 8. Also check font-size
+   * Check element/backgroung contrast. Good contrast is greater than 4.5.
    */
   checkContrast(...elements) {
     const elementsFlat = elements.flat(2);
@@ -134,7 +133,7 @@ class SiteValidate extends AbstractValidator {
         what: "nawigacja",
         category: "semantic",
         type: "warning",
-        message: "Brak semantycznego tagu <navbar> na stronie!"
+        message: "Brak semantycznego tagu <nav> na stronie!"
       });
     } else {
       const list = nav[0].getElementsByTagName("ul");
@@ -386,6 +385,7 @@ class SiteValidate extends AbstractValidator {
             ? parser.getElements("img")[0]
             : null;
 
+        // TODO bug wyłapuje z svg znacznik style i twierdzi że to text content
         if (!item.textContent && !element.getAttribute("title") && !image) {
           this.setRaport({
             what: "brak etykiety",

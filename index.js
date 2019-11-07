@@ -1,3 +1,9 @@
+/*
+ * @author Patryk Loter <patryk.loter@gmail.com>
+ * @version 1.0.0
+ * class for dynamic main window(create,close,menu,event)
+ */
+
 const { parsed: config } = require("dotenv").config();
 const {
   app,
@@ -9,11 +15,6 @@ const {
 } = require("electron");
 const SiteValidate = require("./class/SiteValidate");
 
-/*
- * @author Patryk Loter <patryk.loter@gmail.com>
- * @version 1.0.0
- * class for dynamic main window(create,close,menu,event)
- */
 class Window {
   constructor() {
     this.window = null;
@@ -40,29 +41,33 @@ class Window {
       const id = setInterval(() => {
         if (validator.finish && !validator.error) {
           this.window.loadFile("view/raport.html");
+
           setTimeout(() => {
             this.window.webContents.send("raport", validator.getRaport());
           }, 500);
+
+          clearInterval(id);
         } else if (validator.error) {
           this.window.loadFile("view/index.html");
+
           const response = dialog.showMessageBox({
             message: `Podałeś błedny URL: ${arg}`,
             buttons: ["OK"]
           });
-          // eslint-disable-next-line no-console
-          console.log(response);
-        }
 
-        clearInterval(id);
+          console.log(response);
+          clearInterval(id);
+        }
       }, 5000);
     });
 
     // next analize
-    ipcMain.on("return", () => {
-      this.window.loadFile("view/index.html");
-    });
+    ipcMain.on("return", () => this.window.loadFile("view/index.html"));
   }
 
+  /*
+   * Menu for developers.
+   */
   setMenu() {
     const menu = new Menu();
 

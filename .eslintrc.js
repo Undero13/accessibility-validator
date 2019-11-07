@@ -11,6 +11,7 @@ module.exports = {
         'prettier/prettier': 'error',
         'class-methods-use-this':'off',
         'consistent-return':'off',
-        'no-param-reassign':'off'
+        'no-param-reassign':'off',
+        'no-console':'off'
     }
 };

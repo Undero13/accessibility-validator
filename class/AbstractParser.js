@@ -23,10 +23,6 @@ class AbstractParser {
   getHeadTitle() {
     throw new Error("You have to implement the method getHeadTitle");
   }
-
-  fetchData() {
-    throw new Error("You have to implement the method fetchData");
-  }
 }
 
 module.exports = AbstractParser;

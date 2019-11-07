@@ -7,10 +7,6 @@ class AbstractValidator {
     }
   }
 
-  getDOM() {
-    throw new Error("You have to implement the method getDOM");
-  }
-
   processDOM() {
     throw new Error("You have to implement the method processDOM");
   }

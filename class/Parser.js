@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 const DomParser = require("dom-parser");
-const axios = require("axios");
 const { parsed: config } = require("dotenv").config();
 const Nightmare = require("nightmare");
 const electron = require("../node_modules/electron");
@@ -11,6 +10,39 @@ class Parser extends AbstractParser {
     super();
     const parser = new DomParser();
     this.DOM = parser.parseFromString(html);
+  }
+
+  /*
+   * Return element
+   */
+  getElements(selector) {
+    const elements = this.DOM.getElementsByTagName(selector);
+
+    // fix bug form dom-parser search
+    if (selector.length === 1) {
+      const newElements = [];
+      elements.forEach(element => {
+        const test = element.outerHTML.substring(0, 3).replace(" ", "");
+
+        if (test.length === 2) {
+          newElements.push(element);
+        }
+      });
+
+      return newElements.length > 0 ? newElements : [];
+    }
+
+    return elements.length > 0 ? elements : [];
+  }
+
+  /*
+   * Return html title tag
+   */
+  getHeadTitle() {
+    const head = this.getElements("head");
+    const title = head[0].getElementsByTagName("title");
+
+    return title.length > 0 ? title[0] : null;
   }
 
   /*
@@ -158,55 +190,6 @@ class Parser extends AbstractParser {
     } catch (e) {
       throw Error(e);
     }
-  }
-
-  /*
-   * Return element
-   */
-  getElements(selector) {
-    const elements = this.DOM.getElementsByTagName(selector);
-
-    // fix bug form dom-parser search
-    if (selector.length === 1) {
-      const newElements = [];
-      elements.forEach(element => {
-        const test = element.outerHTML.substring(0, 3).replace(" ", "");
-
-        if (test.length === 2) {
-          newElements.push(element);
-        }
-      });
-
-      return newElements.length > 0 ? newElements : [];
-    }
-
-    return elements.length > 0 ? elements : [];
-  }
-
-  /*
-   * Return html title tag
-   */
-  getHeadTitle() {
-    const head = this.getElements("head");
-    const title = head[0].getElementsByTagName("title");
-
-    return title.length > 0 ? title[0] : null;
-  }
-
-  /*
-   * Download data from link DEPRECATED
-   */
-  fetchData(url) {
-    axios
-      .get(url)
-      .then(res => {
-        if (res.status === 200) {
-          return res;
-        }
-      })
-      .catch(e => {
-        throw Error(e);
-      });
   }
 }
 

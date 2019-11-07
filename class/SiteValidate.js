@@ -25,12 +25,6 @@ class SiteValidate extends AbstractValidator {
     const parser = new Parser(html.DOM);
     // category:general,semantic,image,contrast,letter,devices,aria
 
-    // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
-    // skip linki
-    // pauza anumacji
-    // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
-    // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
-
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
@@ -89,7 +83,9 @@ class SiteValidate extends AbstractValidator {
 
     elementsFlat.forEach(element => {
       if (element) {
-        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną oid wielu czynników nie tylko technologicznych ale i personalnych
+        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
+
+        // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
       }
     });
   }

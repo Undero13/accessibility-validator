@@ -84,7 +84,6 @@ class SiteValidate extends AbstractValidator {
     elementsFlat.forEach(element => {
       if (element) {
         // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
-
         // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
       }
     });
@@ -103,7 +102,11 @@ class SiteValidate extends AbstractValidator {
         type: "error",
         message: "Brak określonego atrybutu lang"
       });
+
+      return false;
     }
+
+    return true;
   }
 
   /*
@@ -117,7 +120,11 @@ class SiteValidate extends AbstractValidator {
         type: "error",
         message: "Pusty tag <title>"
       });
+
+      return false;
     }
+
+    return true;
   }
 
   /*
@@ -131,18 +138,23 @@ class SiteValidate extends AbstractValidator {
         type: "warning",
         message: "Brak semantycznego tagu <nav> na stronie!"
       });
-    } else {
-      const list = nav[0].getElementsByTagName("ul");
 
-      if (!list) {
-        this.setRaport({
-          what: "nawigacja lista",
-          category: "semantic",
-          type: "warning",
-          message: "Elementy w navbarze powinny być listą"
-        });
-      }
+      return false;
     }
+
+    const list = nav[0].getElementsByTagName("ul");
+
+    if (list.length < 1) {
+      this.setRaport({
+        what: "nawigacja lista",
+        category: "semantic",
+        type: "warning",
+        message: "Elementy w navbarze powinny być listą"
+      });
+      return false;
+    }
+
+    return true;
   }
 
   /*
@@ -156,7 +168,11 @@ class SiteValidate extends AbstractValidator {
         type: "warning",
         message: "Brak semantycznej tagu <footer>"
       });
+
+      return false;
     }
+
+    return true;
   }
 
   /*

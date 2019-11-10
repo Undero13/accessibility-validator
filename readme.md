@@ -20,10 +20,22 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
 ### Todos
 
- - Dostosowanie walidatora zgodnie z wytycznymi WAI-ARIA
-
+ * Sprawdzenie migotania animacji (nie więcej niż 3 razy na sekundę)
+ * Każdy <svg> musi mieć <title>
+ * Każdy <iframe> musi mieć atrybut title
+ * Cytaty powinny sięznajmować w <blockquote> lub <q>
+ * Tytuły stron
+ * Kwestia dzięków - znacznik <video> powinien zawierać alternatywne napisy
+ * Wielkośc czcionek ???
+ * Skip linki
+ * Walidacja modali
+ * Walidacja aria (Sztuczna inteligencja ???)
+ * Pokrycie walidatora testami
+ 
 ### Test
-WIP
+* title test
+* lang test
+* nav test
 
 ### License
 

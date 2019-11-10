@@ -9,6 +9,7 @@
 9. Tytuły stron powinny być [Tytuł podstrony] – [Nazwa Instytucji]. Ale Jan się na to nie zgodzi bo SEO
 10. Cytaty powinny się znajdować w blokach <blockquote> lub <q> - jak wykrywać co jest cytatem ?
 11. <iframe> ZAWSZE powinien mieć title ! - Ale to akurat łatwe do sprawdzenia
+12. Każdy <svg> powinien zawierać <title>
 
 //Potencjalne rozwiązania
 1. Ciekawa biblioteka która mogła by potencjalnie pomóc z aria https://github.com/xi/aria-api, natomiast muszę po czymś "łapać" elementy które potencjalnie mogą być np popupem

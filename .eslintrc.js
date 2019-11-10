@@ -3,7 +3,8 @@ module.exports = {
     "plugins":["prettier"],
     "env": {
         "browser": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     rules:{
         'no-plusplus': 'off',

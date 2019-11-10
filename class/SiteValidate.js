@@ -102,11 +102,7 @@ class SiteValidate extends AbstractValidator {
         type: "error",
         message: "Brak określonego atrybutu lang"
       });
-
-      return false;
     }
-
-    return true;
   }
 
   /*
@@ -120,11 +116,7 @@ class SiteValidate extends AbstractValidator {
         type: "error",
         message: "Pusty tag <title>"
       });
-
-      return false;
     }
-
-    return true;
   }
 
   /*
@@ -151,10 +143,7 @@ class SiteValidate extends AbstractValidator {
         type: "warning",
         message: "Elementy w navbarze powinny być listą"
       });
-      return false;
     }
-
-    return true;
   }
 
   /*
@@ -168,11 +157,7 @@ class SiteValidate extends AbstractValidator {
         type: "warning",
         message: "Brak semantycznej tagu <footer>"
       });
-
-      return false;
     }
-
-    return true;
   }
 
   /*
@@ -302,7 +287,7 @@ class SiteValidate extends AbstractValidator {
       (h3 > 0 && h2 < 1) ||
       (h4 > 0 && h3 < 1) ||
       (h5 > 0 && h4 < 1) ||
-      (h6 > 0 || h5 < 1)
+      (h6 > 0 && h5 < 1)
     ) {
       this.setRaport({
         what: "nagłówki",

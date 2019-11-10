@@ -10,6 +10,7 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 ## Script
   - npm start - uruchamianie projektu
   - npm run lint - eslinter(airbnb) + prettier
+  - npm run test - uruchamianie testów
 
 ### Tech
 
@@ -32,11 +33,6 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
  * Walidacja aria (Sztuczna inteligencja ???)
  * Pokrycie walidatora testami
  
-### Test
-* title test
-* lang test
-* nav test
-
 ### License
 
 MIT

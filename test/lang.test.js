@@ -1,16 +1,31 @@
 const SiteValidate = require("../class/SiteValidate");
 const Parser = require("../class/Parser");
 
-const validator = new SiteValidate("www.fakesite.com");
+describe("lang", () => {
+  test("not valid lang", () => {
+    const validator = new SiteValidate("www.fakesite.com");
+    const html = new Parser("<html><head><title>Title</title></head></html>");
 
-test("not valid lang", () => {
-  const html = new Parser("<html><head><title>Title</title></head></html>");
-  expect(validator.checkLang(html.getElements("html"))).not.toBeTruthy();
-});
+    const expectObj = [
+      {
+        what: "język",
+        category: "general",
+        type: "error",
+        message: "Brak określonego atrybutu lang"
+      }
+    ];
 
-test("valid lang", () => {
-  const html = new Parser(
-    "<html lang='es'><head><title>Title</title></head></html>"
-  );
-  expect(validator.checkLang(html.getElements("html"))).toBeTruthy();
+    validator.checkLang(html.getElements("html"));
+    expect(validator.raport).toEqual(expectObj);
+  });
+
+  test("valid lang", () => {
+    const validator = new SiteValidate("www.fakesite.com");
+    const html = new Parser(
+      "<html lang='es'><head><title>Title</title></head></html>"
+    );
+
+    validator.checkLang(html.getElements("html"));
+    expect(validator.raport).toHaveLength(0);
+  });
 });

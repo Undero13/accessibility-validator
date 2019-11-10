@@ -7,5 +7,6 @@ test("valid title", () => {
   const html = new Parser(
     "<html lang='es'><head><title>title</title></head></html>"
   );
-  expect(validator.checkTitle(html.getHeadTitle())).toBeTruthy();
+  validator.checkTitle(html.getHeadTitle());
+  expect(validator.raport).toHaveLength(0);
 });

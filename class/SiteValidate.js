@@ -42,6 +42,8 @@ class SiteValidate extends AbstractValidator {
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
     this.checkImages(parser.getElements("img"));
+    this.checkSVG(parser.getElements("svg"));
+    this.checkIframe(parser.getElements("iframe"));
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
     this.checkInputs(html.input);
@@ -299,6 +301,25 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
+   * Iframe must have title attr
+   */
+  checkIframe(iframeArr) {
+    if (iframeArr.length > 0) {
+      iframeArr.forEach(iframe => {
+        if (iframe && !iframe.getAttribute("title")) {
+          console.log(iframe.outerHTML);
+          this.setRaport({
+            what: "title w iframe",
+            category: "semantic",
+            type: "error",
+            message: `Brak atrybutu title dla <iframe>. Element: ${iframe.outerHTML}`
+          });
+        }
+      });
+    }
+  }
+
+  /*
    * Check image alt
    */
   checkImages(images) {
@@ -314,6 +335,27 @@ class SiteValidate extends AbstractValidator {
             message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
               "src"
             )}`
+          });
+        }
+      });
+    }
+  }
+
+  /*
+   * Each svg must have title tag
+   */
+  checkSVG(svgArr) {
+    if (svgArr.length > 0) {
+      svgArr.forEach(svg => {
+        const parser = new Parser(svg.outerHTML);
+        const title = parser.getElements("title");
+
+        if (title.length < 1) {
+          this.setRaport({
+            what: "title w svg",
+            category: "image",
+            type: "error",
+            message: `Pusty <title> dla <svg>. Element: ${svg.outerHTML}`
           });
         }
       });

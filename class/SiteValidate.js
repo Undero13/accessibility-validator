@@ -382,7 +382,7 @@ class SiteValidate extends AbstractValidator {
             ? parser.getElements("img")[0]
             : null;
 
-        // TODO bug wyłapuje z svg znacznik style i twierdzi że to text content
+        // TODO bug wyłapuje z svg znacznik style i twierdzi że to textContent
         if (!item.textContent && !element.getAttribute("title") && !image) {
           this.setRaport({
             what: "brak etykiety",

@@ -14,5 +14,10 @@ module.exports = {
         'consistent-return':'off',
         'no-param-reassign':'off',
         'no-console':'off'
+    },
+
+    "globals": {
+        "getStyleFormDom": true,
+        "getAnimationElement":true
     }
 };

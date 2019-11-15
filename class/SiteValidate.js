@@ -1,4 +1,5 @@
 const Color = require("color");
+const { parsed: config } = require("dotenv").config();
 const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
 
@@ -12,7 +13,11 @@ class SiteValidate extends AbstractValidator {
 
     Parser.getDOMFromURL(this.url)
       .then(data => this.processDOM(data))
-      .catch(() => {
+      .catch(e => {
+        if (config.DEV_ENV) {
+          return console.log(e);
+        }
+
         this.error = true;
         this.finish = true;
       });
@@ -23,6 +28,8 @@ class SiteValidate extends AbstractValidator {
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
+
+    // TODO metoda do sprawdzania animacji
     // category:general,semantic,image,contrast,letter,devices,aria
 
     this.checkContrast(
@@ -307,7 +314,6 @@ class SiteValidate extends AbstractValidator {
     if (iframeArr.length > 0) {
       iframeArr.forEach(iframe => {
         if (iframe && !iframe.getAttribute("title")) {
-          console.log(iframe.outerHTML);
           this.setRaport({
             what: "title w iframe",
             category: "semantic",

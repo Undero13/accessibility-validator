@@ -20,6 +20,7 @@
 - jeśli coś się zmieniło to potencjalnie może to być popup/wysuwany element, dla bezpieczeństwa można by było sprawdzać np jak bardzo taki blok jest rozbudowany i chociaż typować go na potencjalnego kandydata - dużo roboty, czy da się prościej?
 3.Wysywane menu/hamburger menu można wyrywać tak że klikamy w każdy element intereaktywny i patrzymy czy zmieniły się np z-index/właścwości pozycji lub display jakiegos elementu - po za kolejny dużo obliczeń i dużo roboty
 
+4. https://www.geeksforgeeks.org/how-to-center-a-popup-window-on-screen/ Niby KTO ROBI popupy poprzez window.open(), takie było by łatwo wykryć ale popupy robimy przeważnie css 
 
 //Przydatne
 http://52.91.29.68/foundations/aria/

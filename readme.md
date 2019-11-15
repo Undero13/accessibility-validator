@@ -30,7 +30,8 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
  * Walidacja modali
  * Walidacja aria (Sztuczna inteligencja ???)
  * Pokrycie walidatora testami
- 
+ * Znalazłem buga w focusie - elementy niewidoczne na stronie, nie mogę złapać focusa przez do ich style były zestawiane z stylami document.body, naprawiłem to ograniczając sprawdzanie focusa na tylko widoczne elementy ale trzeba przemyśleć co zrobić z resztą.
+
 ### License
 
 MIT

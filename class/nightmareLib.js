@@ -123,6 +123,7 @@ function getStyleFormDom(elements, interactive = false) {
     let styleAfterFocus;
 
     if (interactive && checkVisible(elm)) {
+      // BUG#1
       styleBefore = getAllStyles(elm);
       elm.focus();
       styleAfterFocus = getAllStyles(document.activeElement);

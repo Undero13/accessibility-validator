@@ -1,15 +1,11 @@
-1. Bardzo trudno będzie mi zwalidować kwestie dostępności wyglądu (wyskakujące modale, migające animacje itd) - może uda się znaleźć jakąś bibliotekę która choć cześciowo to ogarnie
-2.ciężko będzie też ogarniać czy atrybuty aria są na odpowiednich elementach bo validator musiałby "rozumieć" czemu dany element służy
+1. Bardzo trudno będzie mi zwalidować kwestie dostępności wyglądu (wyskakujące modale itd) - może uda się znaleźć jakąś bibliotekę która choć cześciowo to ogarnie
+2.Ciężko będzie też ogarniać czy atrybuty aria są na odpowiednich elementach bo validator musiałby "rozumieć" czemu dany element służy
 3.Wiele kwesti opisanych w specyfikacji jest mocno subiektywnych choć na pewno da się je jakoś uogolnić.
 4.Niestety ze wględu na to że dostępność mimo wszystko jest tematem dość niszowym napisanie walidatora może być niemożliwe dla jednej osoby, już teraz mam wrażenie że ten kod wyglada jak bagno. Co się stanie jeśli będę kombinował z testowaniem kolejnych rzeczy ?
-5. Niebezpieczne dla wydajności może być przerzucanie wszystkiego do nightmara bo choć jest bardzo rozbudowany i działa fantastycznie to dociążanie go kolejnymi funkcjami może znacząco spowolnić działanie programu.
-6. Dalej nie mam pojęcia jak wykrywać skip linki
-7. Dalej nie wiem czy testowanie wielkości czcionki ma sens, to już nie te czasy teraz każdy może powiększyć okno przeklądarki crtl+ 
-8. Dalej nie zająłem się kwestią dzwięków na stronie a powinienem
-9. Tytuły stron powinny być [Tytuł podstrony] – [Nazwa Instytucji]. Ale Jan się na to nie zgodzi bo SEO
-10. Cytaty powinny się znajdować w blokach <blockquote> lub <q> - jak wykrywać co jest cytatem ?
-11. <iframe> ZAWSZE powinien mieć title ! - Ale to akurat łatwe do sprawdzenia
-12. Każdy <svg> powinien zawierać <title>
+5. Dalej nie mam pojęcia jak wykrywać skip linki
+6. Dalej nie wiem czy testowanie wielkości czcionki ma sens, to już nie te czasy teraz każdy może powiększyć okno przeklądarki crtl+ 
+7. Tytuły stron powinny być [Tytuł podstrony] – [Nazwa Instytucji]. Ale Jan się na to nie zgodzi bo SEO
+8. Cytaty powinny się znajdować w blokach <blockquote> lub <q> - jak wykrywać co jest cytatem ?
 
 //Potencjalne rozwiązania
 1. Ciekawa biblioteka która mogła by potencjalnie pomóc z aria https://github.com/xi/aria-api, natomiast muszę po czymś "łapać" elementy które potencjalnie mogą być np popupem

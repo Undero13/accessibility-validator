@@ -2,7 +2,7 @@ const SiteValidate = require("../class/SiteValidate");
 
 describe("input", () => {
   test("button aria and tabindex", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const elements = [
       [
         {
@@ -25,7 +25,7 @@ describe("input", () => {
   });
 
   test("Empty textContent", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const elements = [
       [
         {
@@ -48,7 +48,7 @@ describe("input", () => {
   });
 
   test("Not valid focus", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const elements = [
       [
         {
@@ -71,7 +71,7 @@ describe("input", () => {
   });
 
   test("button valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const elements = [
       [
         {

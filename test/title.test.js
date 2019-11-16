@@ -1,7 +1,7 @@
 const SiteValidate = require("../class/SiteValidate");
 const Parser = require("../class/Parser");
 
-const validator = new SiteValidate("www.fakesite.com");
+const validator = new SiteValidate("www.fakesite.com", true);
 
 test("valid title", () => {
   const html = new Parser(

@@ -433,7 +433,7 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
+        //  BUG#3
         if (
           element &&
           element.getAttribute("tabindex") &&
@@ -452,7 +452,7 @@ class SiteValidate extends AbstractValidator {
             ? parser.getElements("img")[0]
             : null;
 
-        // TODO bug wyłapuje z svg znacznik style i twierdzi że to textContent
+        // BUG #2
         if (!item.textContent && !element.getAttribute("title") && !image) {
           this.setRaport({
             what: "brak etykiety",
@@ -500,7 +500,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check video and audio subtitles
+   * Check video and audio subtitles and check autoplay
    */
   checkVideoAndAudio(...elements) {
     const flatArr = elements.flat();
@@ -509,6 +509,7 @@ class SiteValidate extends AbstractValidator {
       flatArr.forEach(element => {
         const track = element.outerHTML.includes("track");
         const kindValid = element.outerHTML.includes('kind="subtitles"');
+        const autoplay = element.outerHTML.includes("autoplay");
 
         if (!track) {
           this.setRaport({
@@ -523,6 +524,15 @@ class SiteValidate extends AbstractValidator {
             category: "devices",
             type: "error",
             message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+          });
+        }
+
+        if (autoplay) {
+          this.setRaport({
+            what: "video autoplay",
+            category: "devices",
+            type: "warning",
+            message: `Autoplay nie powinien być właczony. Element: ${element.outerHTML}`
           });
         }
       });

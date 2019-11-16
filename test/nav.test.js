@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("navbar", () => {
   test("semantic nav not exist", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body></body></html>"
     );
@@ -22,7 +22,7 @@ describe("navbar", () => {
   });
 
   test("nav exist but elements is not list", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body><nav></nav></body></html>"
     );
@@ -41,7 +41,7 @@ describe("navbar", () => {
   });
 
   test("nav valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><nav><ul><li>item1</li></ul></nav></body></html>"
     );

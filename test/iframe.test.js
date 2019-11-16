@@ -6,7 +6,7 @@ test("iframe not valid", () => {
     "<html lang='es'><head></head><iframe></iframe></html>"
   );
 
-  const validator = new SiteValidate("www.fakesite.com");
+  const validator = new SiteValidate("www.fakesite.com", true);
 
   validator.checkIframe(html.getElements("iframe"));
   expect(validator.raport).toHaveLength(1);
@@ -17,7 +17,7 @@ test("iframe title valid", () => {
     "<html lang='es'><head></head><iframe title='test'></iframe></html>"
   );
 
-  const validator = new SiteValidate("www.fakesite.com");
+  const validator = new SiteValidate("www.fakesite.com", true);
 
   validator.checkIframe(html.getElements("iframe"));
   expect(validator.raport).toHaveLength(0);

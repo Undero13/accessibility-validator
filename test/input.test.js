@@ -2,7 +2,7 @@ const SiteValidate = require("../class/SiteValidate");
 
 describe("input", () => {
   test("missing input label and missing focus", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const input = {
       inputLabel: false,
       correctFocus: false
@@ -13,7 +13,7 @@ describe("input", () => {
   });
 
   test("input valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const input = {
       inputLabel: true,
       correctFocus: true

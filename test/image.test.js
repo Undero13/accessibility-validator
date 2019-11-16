@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("image", () => {
   test("missing alt", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body><img src='image.jpg'></body></html>"
     );
@@ -13,7 +13,7 @@ describe("image", () => {
   });
 
   test("image valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><img src='image.jpg' alt='image'></body></html>"
     );

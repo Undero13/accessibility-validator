@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("lang", () => {
   test("not valid lang", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser("<html><head><title>Title</title></head></html>");
 
     const expectObj = [
@@ -20,7 +20,7 @@ describe("lang", () => {
   });
 
   test("valid lang", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head></html>"
     );

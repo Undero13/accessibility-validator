@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("figure", () => {
   test("figure dont have figcaption", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body><figure></figue></body></html>"
     );
@@ -13,7 +13,7 @@ describe("figure", () => {
   });
 
   test("figure valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><figure><figcaption>dada</figcaption></figue></body></html>"
     );

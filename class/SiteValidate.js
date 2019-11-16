@@ -4,23 +4,25 @@ const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
 
 class SiteValidate extends AbstractValidator {
-  constructor(url) {
+  constructor(url, test = false) {
     super();
     this.url = url;
     this.finish = false;
     this.error = false;
     this.raport = [];
 
-    Parser.getDOMFromURL(this.url)
-      .then(data => this.processDOM(data))
-      .catch(e => {
-        if (config.DEV_ENV) {
-          return console.log(e);
-        }
+    if (!test) {
+      Parser.getDOMFromURL(this.url)
+        .then(data => this.processDOM(data))
+        .catch(e => {
+          if (config.DEV_ENV) {
+            return console.log(e);
+          }
 
-        this.error = true;
-        this.finish = true;
-      });
+          this.error = true;
+          this.finish = true;
+        });
+    }
   }
 
   /*
@@ -54,6 +56,10 @@ class SiteValidate extends AbstractValidator {
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
     this.checkInputs(html.input);
+    this.checkVideoAndAudio(
+      parser.getElements("video"),
+      parser.getElements("audio")
+    );
 
     this.finish = true;
   }
@@ -469,7 +475,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check inputs label, focus,hover TODO HOVER
+   * Check inputs label, focus,hover
    */
   checkInputs(inputs) {
     inputs.forEach(input => {
@@ -491,6 +497,36 @@ class SiteValidate extends AbstractValidator {
         }
       }
     });
+  }
+
+  /*
+   * Check video and audio subtitles
+   */
+  checkVideoAndAudio(...elements) {
+    const flatArr = elements.flat();
+
+    if (flatArr.length > 0) {
+      flatArr.forEach(element => {
+        const track = element.outerHTML.includes("track");
+        const kindValid = element.outerHTML.includes('kind="subtitles"');
+
+        if (!track) {
+          this.setRaport({
+            what: "brak transkrypcji",
+            category: "devices",
+            type: "error",
+            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+          });
+        } else if (track && !kindValid) {
+          this.setRaport({
+            what: "brak transkrypcji",
+            category: "devices",
+            type: "error",
+            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+          });
+        }
+      });
+    }
   }
 }
 

@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("section", () => {
   test("section dont have header", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body><section></section></body></html>"
     );
@@ -13,7 +13,7 @@ describe("section", () => {
   });
 
   test("section valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><section><h2>aaaa</h2></section></body></html>"
     );

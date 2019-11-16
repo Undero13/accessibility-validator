@@ -3,7 +3,7 @@ const Parser = require("../class/Parser");
 
 describe("main", () => {
   test("main not exist", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html><head><title>Title</title></head><body></body></html>"
     );
@@ -13,7 +13,7 @@ describe("main", () => {
   });
 
   test("main valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><main>aaa</main></body></html>"
     );

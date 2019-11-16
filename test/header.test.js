@@ -2,7 +2,7 @@ const SiteValidate = require("../class/SiteValidate");
 
 describe("header", () => {
   test("hierarchy and repeatability", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const headers = {
       h1: {
         el: ""
@@ -36,7 +36,7 @@ describe("header", () => {
   });
 
   test("hierarchy valid", () => {
-    const validator = new SiteValidate("www.fakesite.com");
+    const validator = new SiteValidate("www.fakesite.com", true);
     const headers = {
       h1: {
         el: "<h1>header1</h1>"

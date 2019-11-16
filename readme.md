@@ -17,13 +17,14 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 * Electron - Aplikacje desktopowe w JavaScript
 * Nightmare - Pozwala na zdalną pracę na wygenerowanym DOM
 * dom-parser - Zarządzanie wirtualnym DOM z poziomu node.js
-* color - porównywanie kontraksu na stronie
+* color - Porównywanie kontraksu na stronie
 
 ### Todos
 
  * Cytaty powinny się znajmować w <blockquote> lub <q>
- * Tytuły stron
- * Wielkośc czcionek ???
+ * Tytuły stron (nazwa podstrony - nazwa serwisu)
+ * Wielkość czcionek ???
+ * Ikony powinny mieć aria-label lub title
  * Skip linki
  * Walidacja modali
  * Walidacja aria (Sztuczna inteligencja ???)

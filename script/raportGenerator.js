@@ -8,6 +8,7 @@ const contrastTable = document.querySelector("#contrast");
 const animationTable = document.querySelector("#animation");
 const devicesTable = document.querySelector("#devices");
 const returnButton = document.querySelector("#return-btn");
+const footer = document.querySelector(".footer");
 
 class Raport {
   constructor() {
@@ -138,3 +139,5 @@ setTimeout(() => {
 returnButton.addEventListener("click", function() {
   ipcRenderer.send("return", null);
 });
+
+footer.addEventListener("click", () => ipcRenderer.send("info", null));

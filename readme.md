@@ -21,7 +21,6 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
 ### Todos
 
- * Sprawdzenie migotania animacji (nie więcej niż 3 razy na sekundę)
  * Cytaty powinny się znajmować w <blockquote> lub <q>
  * Tytuły stron
  * Kwestia dzięków - znacznik <video> powinien zawierać alternatywne napisy

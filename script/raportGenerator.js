@@ -5,7 +5,7 @@ const semanticTable = document.querySelector("#semantic");
 const ariaTable = document.querySelector("#aria");
 const imageTable = document.querySelector("#image");
 const contrastTable = document.querySelector("#contrast");
-const letterTable = document.querySelector("#letter");
+const animationTable = document.querySelector("#animation");
 const devicesTable = document.querySelector("#devices");
 const returnButton = document.querySelector("#return-btn");
 
@@ -91,9 +91,9 @@ imageTable
 contrastTable
   .querySelector("button")
   .addEventListener("click", () => raport.onClick(contrastTable));
-letterTable
+animationTable
   .querySelector("button")
-  .addEventListener("click", () => raport.onClick(letterTable));
+  .addEventListener("click", () => raport.onClick(animationTable));
 devicesTable
   .querySelector("button")
   .addEventListener("click", () => raport.onClick(devicesTable));
@@ -121,8 +121,8 @@ setTimeout(() => {
       filter: "contrast"
     },
     {
-      table: letterTable,
-      filter: "letter"
+      table: animationTable,
+      filter: "animation"
     },
     {
       table: devicesTable,

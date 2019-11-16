@@ -29,8 +29,7 @@ class SiteValidate extends AbstractValidator {
   processDOM(html) {
     const parser = new Parser(html.DOM);
 
-    // TODO metoda do sprawdzania animacji
-    // category:general,semantic,image,contrast,letter,devices,aria
+    // category:general,semantic,image,contrast,animation,devices,aria
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
@@ -40,6 +39,7 @@ class SiteValidate extends AbstractValidator {
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
+    this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
     this.checkNav(parser.getElements("nav"));
@@ -96,6 +96,22 @@ class SiteValidate extends AbstractValidator {
         // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
       }
     });
+  }
+
+  /*
+   * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
+   */
+  checkAnimation(elements) {
+    if (elements.length > 0) {
+      elements.forEach(element =>
+        this.setRaport({
+          what: "animacja",
+          category: "animation",
+          type: "error",
+          message: `Nieprawidłowa animacja dla elementu: ${element}`
+        })
+      );
+    }
   }
 
   /*

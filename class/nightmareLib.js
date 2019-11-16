@@ -152,6 +152,9 @@ function getStyleFormDom(elements, interactive = false) {
   return properties;
 }
 
+/*
+ * Return invalid animated element
+ */
 function getAnimationElement() {
   const elements = [...document.body.getElementsByTagName("*")];
   const notValidElements = [];
@@ -169,7 +172,7 @@ function getAnimationElement() {
       const isValid = checkAnimation(rule, animationTime, animationCount);
 
       if (!isValid) {
-        notValidElements.push(element);
+        notValidElements.push(element.outerHTML);
       }
     }
   });

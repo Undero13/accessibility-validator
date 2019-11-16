@@ -1,21 +1,28 @@
 const Color = require("color");
+const { parsed: config } = require("dotenv").config();
 const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
 
 class SiteValidate extends AbstractValidator {
-  constructor(url) {
+  constructor(url, test = false) {
     super();
     this.url = url;
     this.finish = false;
     this.error = false;
     this.raport = [];
 
-    Parser.getDOMFromURL(this.url)
-      .then(data => this.processDOM(data))
-      .catch(() => {
-        this.error = true;
-        this.finish = true;
-      });
+    if (!test) {
+      Parser.getDOMFromURL(this.url)
+        .then(data => this.processDOM(data))
+        .catch(e => {
+          if (config.DEV_ENV) {
+            return console.log(e);
+          }
+
+          this.error = true;
+          this.finish = true;
+        });
+    }
   }
 
   /*
@@ -23,13 +30,8 @@ class SiteValidate extends AbstractValidator {
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
-    // category:general,semantic,image,contrast,letter,devices,aria
 
-    // trzeba by było dodać jakoś do wysywanych okien znaczniki aria
-    // skip linki
-    // pauza anumacji
-    // mechanizm validacji błędów powinien mieć odpowiednie tagi aria
-    // sprawdzenie czy atrybuty role nie są nakładane na semantycznyczny html
+    // category:general,semantic,image,contrast,animation,devices,aria
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
@@ -39,6 +41,7 @@ class SiteValidate extends AbstractValidator {
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
+    this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
     this.checkNav(parser.getElements("nav"));
@@ -48,9 +51,15 @@ class SiteValidate extends AbstractValidator {
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
     this.checkImages(parser.getElements("img"));
+    this.checkSVG(parser.getElements("svg"));
+    this.checkIframe(parser.getElements("iframe"));
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
     this.checkInputs(html.input);
+    this.checkVideoAndAudio(
+      parser.getElements("video"),
+      parser.getElements("audio")
+    );
 
     this.finish = true;
   }
@@ -89,9 +98,26 @@ class SiteValidate extends AbstractValidator {
 
     elementsFlat.forEach(element => {
       if (element) {
-        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną oid wielu czynników nie tylko technologicznych ale i personalnych
+        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
+        // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
       }
     });
+  }
+
+  /*
+   * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
+   */
+  checkAnimation(elements) {
+    if (elements.length > 0) {
+      elements.forEach(element =>
+        this.setRaport({
+          what: "animacja",
+          category: "animation",
+          type: "error",
+          message: `Nieprawidłowa animacja dla elementu: ${element}`
+        })
+      );
+    }
   }
 
   /*
@@ -135,17 +161,19 @@ class SiteValidate extends AbstractValidator {
         type: "warning",
         message: "Brak semantycznego tagu <nav> na stronie!"
       });
-    } else {
-      const list = nav[0].getElementsByTagName("ul");
 
-      if (!list) {
-        this.setRaport({
-          what: "nawigacja lista",
-          category: "semantic",
-          type: "warning",
-          message: "Elementy w navbarze powinny być listą"
-        });
-      }
+      return false;
+    }
+
+    const list = nav[0].getElementsByTagName("ul");
+
+    if (list.length < 1) {
+      this.setRaport({
+        what: "nawigacja lista",
+        category: "semantic",
+        type: "warning",
+        message: "Elementy w navbarze powinny być listą"
+      });
     }
   }
 
@@ -290,13 +318,31 @@ class SiteValidate extends AbstractValidator {
       (h3 > 0 && h2 < 1) ||
       (h4 > 0 && h3 < 1) ||
       (h5 > 0 && h4 < 1) ||
-      (h6 > 0 || h5 < 1)
+      (h6 > 0 && h5 < 1)
     ) {
       this.setRaport({
         what: "nagłówki",
         category: "semantic",
         type: "error",
         message: `Zachwiana hierarchia nagłówków na stronie`
+      });
+    }
+  }
+
+  /*
+   * Iframe must have title attr
+   */
+  checkIframe(iframeArr) {
+    if (iframeArr.length > 0) {
+      iframeArr.forEach(iframe => {
+        if (iframe && !iframe.getAttribute("title")) {
+          this.setRaport({
+            what: "title w iframe",
+            category: "semantic",
+            type: "error",
+            message: `Brak atrybutu title dla <iframe>. Element: ${iframe.outerHTML}`
+          });
+        }
       });
     }
   }
@@ -317,6 +363,27 @@ class SiteValidate extends AbstractValidator {
             message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
               "src"
             )}`
+          });
+        }
+      });
+    }
+  }
+
+  /*
+   * Each svg must have title tag
+   */
+  checkSVG(svgArr) {
+    if (svgArr.length > 0) {
+      svgArr.forEach(svg => {
+        const parser = new Parser(svg.outerHTML);
+        const title = parser.getElements("title");
+
+        if (title.length < 1) {
+          this.setRaport({
+            what: "title w svg",
+            category: "image",
+            type: "error",
+            message: `Pusty <title> dla <svg>. Element: ${svg.outerHTML}`
           });
         }
       });
@@ -366,7 +433,7 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        // to trzeba poprawić bo są sytuacje kiedy tabindex może być zmieniany (np. modale) TODO
+        //  BUG#3
         if (
           element &&
           element.getAttribute("tabindex") &&
@@ -385,7 +452,7 @@ class SiteValidate extends AbstractValidator {
             ? parser.getElements("img")[0]
             : null;
 
-        // TODO bug wyłapuje z svg znacznik style i twierdzi że to text content
+        // BUG #2
         if (!item.textContent && !element.getAttribute("title") && !image) {
           this.setRaport({
             what: "brak etykiety",
@@ -408,7 +475,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   /*
-   * Check inputs label, focus,hover TODO HOVER
+   * Check inputs label, focus,hover
    */
   checkInputs(inputs) {
     inputs.forEach(input => {
@@ -430,6 +497,46 @@ class SiteValidate extends AbstractValidator {
         }
       }
     });
+  }
+
+  /*
+   * Check video and audio subtitles and check autoplay
+   */
+  checkVideoAndAudio(...elements) {
+    const flatArr = elements.flat();
+
+    if (flatArr.length > 0) {
+      flatArr.forEach(element => {
+        const track = element.outerHTML.includes("track");
+        const kindValid = element.outerHTML.includes('kind="subtitles"');
+        const autoplay = element.outerHTML.includes("autoplay");
+
+        if (!track) {
+          this.setRaport({
+            what: "brak transkrypcji",
+            category: "devices",
+            type: "error",
+            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+          });
+        } else if (track && !kindValid) {
+          this.setRaport({
+            what: "brak transkrypcji",
+            category: "devices",
+            type: "error",
+            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+          });
+        }
+
+        if (autoplay) {
+          this.setRaport({
+            what: "video autoplay",
+            category: "devices",
+            type: "warning",
+            message: `Autoplay nie powinien być właczony. Element: ${element.outerHTML}`
+          });
+        }
+      });
+    }
   }
 }
 

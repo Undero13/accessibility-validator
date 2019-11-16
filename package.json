@@ -6,19 +6,21 @@
   "scripts": {
     "start": "electron .",
     "lint": "nodemon --exec \"npm run eslint\"",
-    "eslint": "eslint --fix **/**.js"
+    "eslint": "eslint --fix **/**.js",
+    "test": "jest"
   },
   "author": "Patryk Loter",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.4",
-    "prettier-eslint": "^9.0.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-prettier": "^3.1.1"
+    "prettier-eslint": "^9.0.0"
   },
   "dependencies": {
     "color": "^3.1.2",

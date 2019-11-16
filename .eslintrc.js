@@ -3,7 +3,8 @@ module.exports = {
     "plugins":["prettier"],
     "env": {
         "browser": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     rules:{
         'no-plusplus': 'off',
@@ -13,5 +14,10 @@ module.exports = {
         'consistent-return':'off',
         'no-param-reassign':'off',
         'no-console':'off'
+    },
+
+    "globals": {
+        "getStyleFormDom": true,
+        "getAnimationElement":true
     }
 };

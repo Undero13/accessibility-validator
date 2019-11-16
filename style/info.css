@@ -1,0 +1,25 @@
+body{
+    margin: 20px 10%;
+}
+
+.title.is-1{
+    margin-bottom: 40px;
+}
+
+.title.is-4{
+    margin:20px 0;
+}
+
+.title.is-5{
+    margin:20px 0;
+}
+
+ul{
+    list-style-type: disc;
+    padding-left:60px;
+    margin:30px 0;
+}
+
+.header-list{
+    margin: 15px 0;
+}

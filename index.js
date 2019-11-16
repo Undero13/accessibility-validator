@@ -18,6 +18,7 @@ const SiteValidate = require("./class/SiteValidate");
 class Window {
   constructor() {
     this.window = null;
+    this.windowInfo = null;
 
     this.setListeners();
     this.setMenu();
@@ -63,6 +64,7 @@ class Window {
 
     // next analize
     ipcMain.on("return", () => this.window.loadFile("view/index.html"));
+    ipcMain.on("info", () => this.createInfoWindow());
   }
 
   /*
@@ -105,6 +107,22 @@ class Window {
     this.window.loadFile("view/index.html");
     this.window.on("close", () => {
       this.window = null;
+      app.quit();
+    });
+  }
+
+  createInfoWindow() {
+    this.windowInfo = new BrowserWindow({
+      width: config.WINDOW_WIDTH,
+      height: config.WINDOW_HEIGHT,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+
+    this.windowInfo.loadFile("view/info.html");
+    this.windowInfo.on("close", () => {
+      this.windowInfo = null;
     });
   }
 }

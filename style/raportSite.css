@@ -38,3 +38,15 @@ caption{
 .has-text-warning {
     color: #f3c307!important;
 }
+
+.footer{
+    background: #34495E;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color:#fff;
+    cursor: pointer;
+}

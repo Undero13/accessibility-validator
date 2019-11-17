@@ -7,6 +7,7 @@
     "start": "electron .",
     "lint": "nodemon --exec \"npm run eslint\"",
     "eslint": "eslint --fix **/**.js",
+    "eslint-nofix":"eslint **/**.js",
     "test": "jest"
   },
   "author": "Patryk Loter",

@@ -100,6 +100,7 @@ class SiteValidate extends AbstractValidator {
       if (element) {
         // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
         // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
+        // ponadto na różnych urządeniach (desktopy, mobilki i tablety) wielkość fontów powinna być różna
       }
     });
   }

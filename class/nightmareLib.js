@@ -160,23 +160,27 @@ function getAnimationElement() {
   const elements = [...document.body.getElementsByTagName("*")];
   const notValidElements = [];
 
-  elements.forEach(element => {
-    const animatedStyle = getStyle(element, "animation-name");
-    const animationTime = parseFloat(getStyle(element, "animation-duration"));
-    const animationCount =
-      getStyle(element, "animation-iteration-count") === "infinite"
-        ? 999
-        : parseInt(getStyle(element, "animation-iteration-count"), 10);
-    const animationName = animatedStyle !== "none" ? animatedStyle : false;
-    if (animationName) {
-      const rule = getAnimation(animationName);
-      const isValid = checkAnimation(rule, animationTime, animationCount);
+  try {
+    elements.forEach(element => {
+      const animatedStyle = getStyle(element, "animation-name");
+      const animationTime = parseFloat(getStyle(element, "animation-duration"));
+      const animationCount =
+        getStyle(element, "animation-iteration-count") === "infinite"
+          ? 999
+          : parseInt(getStyle(element, "animation-iteration-count"), 10);
+      const animationName = animatedStyle !== "none" ? animatedStyle : false;
+      if (animationName) {
+        const rule = getAnimation(animationName);
+        const isValid = checkAnimation(rule, animationTime, animationCount);
 
-      if (!isValid) {
-        notValidElements.push(element.outerHTML);
+        if (!isValid) {
+          notValidElements.push(element.outerHTML);
+        }
       }
-    }
-  });
+    });
+  } catch (e) {
+    notValidElements.push("blocker");
+  }
 
   return notValidElements;
 }

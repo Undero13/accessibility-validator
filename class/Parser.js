@@ -91,8 +91,8 @@ class Parser extends AbstractParser {
           returnObj.h6 = getStyleFormDom(h6);
 
           returnObj.animate = getAnimationElement();
-
           returnObj.DOM = document.querySelector("html").outerHTML;
+
           return returnObj;
         })
         .end();

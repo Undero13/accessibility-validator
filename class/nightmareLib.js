@@ -11,7 +11,7 @@ const checkVisible = element =>
   element.offsetWidth > 0 && element.offsetHeight > 0;
 
 /*
- * If element don't have backgroung get this from parent
+ * If element don't have backgroung get it from parent
  */
 const getBackground = element => {
   let res = getStyle(element, "background-color");

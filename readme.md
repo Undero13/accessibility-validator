@@ -29,6 +29,7 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
  * Walidacja modali
  * Walidacja aria (Sztuczna inteligencja ???)
  * Pokrycie walidatora testami
+ * Dodanie tłumaczenia na język angielski
 
 ### Bugs
 

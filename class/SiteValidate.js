@@ -109,7 +109,14 @@ class SiteValidate extends AbstractValidator {
    * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
    */
   checkAnimation(elements) {
-    if (elements.length > 0) {
+    if (elements[0] === "blocker") {
+      this.setRaport({
+        what: "animacja",
+        category: "animation",
+        type: "error",
+        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić autytu.`
+      });
+    } else if (elements.length > 0) {
       elements.forEach(element =>
         this.setRaport({
           what: "animacja",
@@ -453,13 +460,15 @@ class SiteValidate extends AbstractValidator {
             ? parser.getElements("img")[0]
             : null;
 
+        const title = element ? element.getAttribute("title") : null;
+
         // BUG #2
-        if (!item.textContent && !element.getAttribute("title") && !image) {
+        if (!item.textContent && !title && !image) {
           this.setRaport({
             what: "brak etykiety",
             category: "general",
             type: "error",
-            message: `Element nie ma etykiety! Element: ${element.outerHTML}`
+            message: `Element nie ma etykiety! Element: ${item.el}`
           });
         }
 
@@ -468,7 +477,7 @@ class SiteValidate extends AbstractValidator {
             what: "brak focusa",
             category: "devices",
             type: "warning",
-            message: `Element nie ma widocznego focusa! Element: ${element.outerHTML}`
+            message: `Element nie ma widocznego focusa! Element: ${item.el}`
           });
         }
       }

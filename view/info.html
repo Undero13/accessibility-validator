@@ -37,16 +37,16 @@
 
     <h3 class="title is-4">Podział grup niepełnosprawności</h3>
     <h4 class="title is-5" id="par1">§1.Niesłyszący/Niedosłyszący</h4>
-    <p>Przy wdrażaniu standardów dla tej grupy niepełnosprawności ważne jest aby teksty na stronie były pisane w sposób logiczny i zwięzły. Należy przy tym zachować odpowiedni kontrast koloru czcionki do koloru tła, wielkość liter czy pogrubienia czcionki. Warto zastosować dla mniejszych ekranów(mobilki,tablety) powiększoną czcionkę aby zwiększyć jej czytelność. Dobrą praktyką jest też wykorzystanie własciwości line-height i letter-spacing aby jeszcze bardziej poprawić czytelność tekstu.</p>
+    <p>Przy wdrażaniu standardów dla tej grupy niepełnosprawności ważne jest aby teksty na stronie były pisane w sposób logiczny i zwięzły. Należy przy tym zachować odpowiedni kontrast koloru czcionki do koloru tła, wielkość liter czy pogrubienia czcionki. Warto zastosować dla mniejszych ekranów (mobilki, tablety) powiększoną czcionkę aby zwiększyć jej czytelność. Dobrą praktyką jest też wykorzystanie własciwości line-height i letter-spacing aby jeszcze bardziej poprawić czytelność tekstu.</p>
     <h4 class="title is-5" id="par2">§2.Niewidzący/Niedowidzący</h4>
-    <p>Dla osób niedowidzących przy projektowaniu stron należy zwrócić szczególną uwagę na kontrast wszystkich elementów na stronie, ważne jest też aby osoby te mogły powiększać tekst na stronie (ctr+) przy zachowaniu jak najlepszego wyglądu strony. Osoby niedowidzące także mogę korzystać z technologi asystujących dlatego należy spełniać również takie wymagania jak dla niewidomych.</p>
+    <p>Dla osób niedowidzących przy projektowaniu stron należy zwrócić szczególną uwagę na kontrast wszystkich elementów na stronie. Ważne jest też aby osoby te mogły powiększać tekst na stronie (ctrl+) przy zachowaniu jak najlepszego wyglądu strony. Osoby niedowidzące także mogą korzystać z technologi asystujących dlatego należy spełniać również takie wymagania jak dla niewidomych.</p>
 
-    <p class="mt-10">Osoby niewidome używają screen readerów, które na podstawie semantyki HTML oraz znaczników aria tłumaczą(opisują) użytkownikowi przeznaczenie danego elementu. Ważne więc jest aby zachować semantykę języka, używać semantycznych znaczników zgodnie z ich przeznaczeniem a tam gdzie nie jest możliwe wykorzystywanie semantycznych tagów używać standardu aria. Częstym błędem dostępności w tym wypadku są: <ul>
+    <p class="mt-10">Osoby niewidome używają screen readerów, które na podstawie semantyki HTML oraz znaczników aria tłumaczą (opisują) użytkownikowi przeznaczenie danego elementu. Ważne więc jest aby zachować semantykę języka, używać semantycznych znaczników zgodnie z ich przeznaczeniem a tam gdzie nie jest możliwe wykorzystywanie semantycznych tagów używać standardu aria. Częstymi błędami dostępności w tym wypadku są: <ul>
         <li>braki znacznika &#60;label> dla inputów w formularzach</li>
         <li>brak ustawionego atrybytu alt dla obrazków lub atrybuty alt są robione pod SEO</li>
         <li>brak ustawionych atrybutów title w zamian za etykiety</li>
-        <li>brak etykiet znaczników interaktywnych np &#60;button> lub zastąpienie etykiet obrazkiem</li>
-        <li>złe wykorzystanie standardu aria.</li></ul> Poprawnie ustalone alty dla obrazków to takie, które faktycznie opisują co dany obrazek zawiera, przy czym należy unikać używania w nich sformułowań typu "obrazek, zdjęcie" gdyż technologia asystująca doda je za nas. W przypadku obrazków wykresów, diagramów czy grafów można opisać takie elementy przy pomocy znacznika <strong>&#60;p></strong>, jeśli nie chcemy wyświetlać wizualnie dodatkowych informacji należy ukryć je przy pomocy <strong>position absolute</strong> a nie display:none.</p>
+        <li>brak etykiet znaczników interaktywnych np. &#60;button> lub zastąpienie etykiery obrazkiem</li>
+        <li>złe wykorzystanie standardu aria</li></ul> Poprawnie ustalone alty dla obrazków to takie, które faktycznie opisują co dany obrazek zawiera, przy czym należy unikać używania w nich sformułowań typu "obrazek, zdjęcie" gdyż technologia asystująca doda je za nas. W przypadku wykresów, diagramów czy grafów można opisać takie elementy przy pomocy znacznika <strong>&#60;p></strong>. Jeśli nie chcemy wyświetlać wizualnie dodatkowych informacji należy ukryć je przy pomocy <strong>position: absolute</strong> a nie display:none.</p>
     <p class="header-list"><strong>Informacje o ukrywaniu elementów:</strong></p>
     <ul>
         <li>display:none - ukrycie wizualne oraz ukrycie przed technologiami asystującymi</li>
@@ -55,14 +55,14 @@
         <li>position: absolute - ukrycie tylko wizualne</li>
     </ul>
 
-    <p><strong>UWAGA!</strong> Nie należy nakładać aria-hidden elementą, które mogą łapać focusa od klawiatury np. &#60;a>, &#60;button>, &#60;input>. </p>
+    <p><strong>UWAGA!</strong> Nie należy nakładać aria-hidden elementom, które mogą łapać focusa od klawiatury np. &#60;a>, &#60;button>, &#60;input>. </p>
 
     <h4 class="title is-5" id="par3">§3.Osoby sparaliżowane</h4>
     <p>Osoby znajdujące się w tej grupie niepełnosprawności wykorzystują różne technologie asystujące w zależności od stopnia sparaliżowania np. osoby które potrafią poruszać tylko stopami wykorzystują specjalne klawiatury służące do nawigowania po stronie, z kolei osoby całkowicie sparaliżowane często wykorzystują specjalnie stelaże z "joystickiem" na ich końcu i nawigują po stronie przy pomocy ust/języka. </p>
-    <p class="mt-10">Dostosowanie strony dla tej grupy osób wymaga poprawnego ostylowania zdarzeń focus i hover na elementach interaktywnych. Ostylowanie to powinno być łatwo dostrzegalne i mocno wyróżniać się z pozostałej częsci strony. Efekt ten można uzyskać poprzez nadanie w CSS elementą interaktywnym widocznego bordera czy bolda (należy w taki wypadku wyłączyć <strong>domyślny outline!</strong>).</p>
-    <p class="mt-10">Ważny jest także atrybut tabindex, ustawienie jego wartości na 0 (domyślnie) powoduje że używanie klawisza tab przeskakuje po elementach interaktywnych zgodznie z kolejnościa ich zadeklarowania w HTML. Ustawienie tabindexu na -1 powoduje pomijanie elementu przy nawigacji klawiszem tab. Wykorzystanie dodatniej liczby tabindexu wynosi taki element wyżej w hierarchi(element jest focusowany przez elementami które mają tabindex na 0).</p>
+    <p class="mt-10">Dostosowanie strony dla tej grupy osób wymaga poprawnego ostylowania zdarzeń focus i hover na elementach interaktywnych. Ostylowanie to powinno być łatwo dostrzegalne i mocno wyróżniać się z pozostałej części strony. Efekt ten można uzyskać poprzez nadanie w CSS elementom interaktywnym widocznego bordera czy bolda (należy w takim wypadku wyłączyć <strong>domyślny outline!</strong>).</p>
+    <p class="mt-10">Ważny jest także atrybut tabindex, ustawienie jego wartości na 0 (domyślnie) powoduje że używanie klawisza tab przeskakuje po elementach interaktywnych zgodnie z kolejnością ich zadeklarowania w HTML. Ustawienie tabindexu na -1 powoduje pomijanie elementu przy nawigacji klawiszem tab. Wykorzystanie dodatniej liczby tabindexu wynosi taki element wyżej w hierarchi (element jest focusowany przed elementami które mają tabindex na 0).</p>
     <h4 class="title is-5" id="par4">§4.Migrenicy/Epileptycy</h4>
-    <p>Dostosowanie strony polega na mądrym projektowaniu animacji/efektów na stronie. Według norm przyjmuje się że dany element na stronie w ciągu sekundy nie powinien migać więcej niż 3 razy. Animacje powinno dać się w prosty sposób <stron>wyłączać.</stron> Ważna jest też szybkości i płynność przesuwania sliderów czy rozijanie list.</p>
+    <p>Dostosowanie strony polega na mądrym projektowaniu animacji/efektów na stronie. Według norm przyjmuje się, że dany element na stronie w ciągu sekundy nie powinien migać więcej niż 3 razy. Animacje powinno dać się w prosty sposób <stron>wyłączać.</stron> Ważna jest też szybkość i płynność przesuwania sliderów czy rozwijanych list.</p>
     <h3 class="title is-4">Standardy tworzenia dostępnych stron</h3>
     <h4 class="title is-5" id="par5"><a href="http://fdc.org.pl/wcag2/">WCAG 2.0</a></h4>
     <p>Dokument ten opisuje jak należy tworzyć aplikacje (nie tylko strony internetowe) w sposób pozwalający korzystać z nich jak największej grupie odbiorców. WCAG wyróżnia cztery zasady: postrzegalność, funkcjonalność, zrozumiałość, solidność. Standard nie podaje konkretnych rozwiązań technicznych a jedynie pomocne wytyczne, które mogę zostać zaimplementowane na różne sposoby. Dokument określa również stopnie zgodności ze standardem:
@@ -74,10 +74,10 @@
     </p>
 
     <h4 class="title is-5" id="par6"><a href="https://www.w3.org/TR/aria-in-html/#first-rule-of-aria-use">WAI-ARIA</a></h4>
-    <p>Jest to standard poprzedzający semantyczny HTML. Powstał w celu wprowadzenia komunikacji między technologią asystującą a kodem strony. Obecnie standard stanowi uzupełnienie HTMLa i poprawia aspekty dostępności tam gdzie HTML nie potrafi tego zrobić. Przy wukorzystaniu tego standardu należy się <a href="#par12">trzymać 5 zasad aria.</a></p>
+    <p>Jest to standard poprzedzający semantyczny HTML. Powstał w celu wprowadzenia komunikacji między technologią asystującą a kodem strony. Obecnie standard stanowi uzupełnienie HTMLa i poprawia aspekty dostępności tam gdzie HTML nie potrafi tego zrobić. Przy wykorzystaniu tego standardu należy się <a href="#par12">trzymać 5 zasad aria.</a></p>
 
     <h4 class="title is-5" id="par7"><a href="https://html.spec.whatwg.org/multipage/">WHATWG/W3C</a></h4>
-    <p>Organizacja WHATWG zajmuję się tworzeniem obecnie obowiązującego standardu HTML zwanego <strong>Living Standard</strong>. Organizacja W3C stała się wewnetrzną komórką WHATWG i jest odpowiedzialna za semantykę elementow określonych w standardzie HTML LS. Warto zauważyć że od kwietnia 2019 roku standard HTML5 przestał istnieć i nie jest zalecane posługiwanie się jego dokumentacją. </p>
+    <p>Organizacja WHATWG zajmuję się tworzeniem obecnie obowiązującego standardu HTML zwanego <strong>Living Standard</strong>. Organizacja W3C stała się wewnetrzną komórką WHATWG i jest odpowiedzialna za semantykę elementów określonych w standardzie HTML LS. Warto zauważyć że od kwietnia 2019 roku standard HTML5 przestał istnieć i nie jest zalecane posługiwanie się jego dokumentacją. </p>
 
     <h3 class="title is-4">Zasady dostępności według WCAG</h3>
     <h4 class="title is-5" id="par8">Postrzegalność</h4>
@@ -85,7 +85,7 @@
     <h4 class="title is-5" id="par9">Funkcjonalność</h4>
     <p>Oznacza to, że serwis musi być na tyle sprawny żeby móc być interpretowany przez różne urządzenia i róznych użytkowników tak samo dobrze.</p>
     <h4 class="title is-5" id="par10">Zrozumiałość</h4>
-    <p>Każdy komponent UI powinien mieć swoje semantycznie znacznie, zaimplementowane w taki sposób aby każda technologia mogła zrozumieć to znaczenie.</p>
+    <p>Każdy komponent UI powinien mieć swoje semantyczne znaczenie, zaimplementowane w taki sposób aby każda technologia mogła zrozumieć to znaczenie.</p>
     <h4 class="title is-5" id="par11">Solidność</h4>
     <p>Wszystkie akcje muszą mieć możliwość wykonywania z różnych urządzeń uwzględniając kompatybilność z obecnymi oraz przyszłymi rozwiązaniami.</p>
     <h3 class="title is-4" id="par12">Zasady aria</h3>

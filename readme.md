@@ -21,7 +21,7 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
 ### Todos
 
- * Cytaty powinny się znajmować w <blockquote> lub <q>
+ * Cytaty powinny się znajdować w <blockquote> lub <q>
  * Tytuły stron (nazwa podstrony - nazwa serwisu)
  * Wielkość czcionek ???
  * Ikony powinny mieć aria-label lub title
@@ -33,7 +33,7 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
 ### Bugs
 
- * Znalazłem buga w focusie - elementy niewidoczne na stronie, nie mogę złapać focusa przez do ich style były zestawiane z stylami document.body, naprawiłem to ograniczając sprawdzanie focusa na tylko widoczne elementy ale trzeba przemyśleć co zrobić z resztą. BUG#1
+ * Znalazłem buga w focusie - elementy niewidoczne na stronie, nie mogę złapać focusa przez co ich style były zestawiane z stylami document.body, naprawiłem to ograniczając sprawdzanie focusa na tylko widoczne elementy ale trzeba przemyśleć co zrobić z resztą. BUG#1
  * checkLinksAndButtons - bug wyłapuje z svg znacznik style i twierdzi że to textContent BUG#2
  * checkLinksAndButtons - są sytuacje kiedy tabindex może być zmieniany (np. modale) BUG#3
 

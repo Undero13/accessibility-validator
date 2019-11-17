@@ -136,7 +136,7 @@ setTimeout(() => {
   );
 }, 1000);
 
-returnButton.addEventListener("click", function() {
+returnButton.addEventListener("click", () => {
   ipcRenderer.send("return", null);
 });
 

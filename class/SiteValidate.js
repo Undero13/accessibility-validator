@@ -2,7 +2,12 @@ const Color = require("color");
 const { parsed: config } = require("dotenv").config();
 const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
-
+/**
+ * SiteValidator class
+ * @module SiteValidate
+ * @constructor @param {string} url
+ * @constructor @param {boolean} test - only for jest tests
+ */
 class SiteValidate extends AbstractValidator {
   constructor(url, test = false) {
     super();
@@ -25,8 +30,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Trigger validate methods
+   * @param {string} html
+   * @returns {void}
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
@@ -64,8 +71,10 @@ class SiteValidate extends AbstractValidator {
     this.finish = true;
   }
 
-  /*
+  /**
    * Check element/backgroung contrast. Good contrast is greater than 4.5.
+   * @param {Array<Node>} elements
+   * @returns {void}
    */
   checkContrast(...elements) {
     const elementsFlat = elements.flat(2);
@@ -90,8 +99,10 @@ class SiteValidate extends AbstractValidator {
     });
   }
 
-  /*
+  /**
    * Check font-size
+   * @param {Array<Node>} elements
+   * @todo
    */
   checkLetter(...elements) {
     const elementsFlat = elements.flat(2);
@@ -105,8 +116,10 @@ class SiteValidate extends AbstractValidator {
     });
   }
 
-  /*
+  /**
    * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
+   * @param {Array<Node>} elements
+   * @returns {void}
    */
   checkAnimation(elements) {
     if (elements[0] === "blocker") {
@@ -128,8 +141,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check html lang attribute
+   * @param {Node} html
+   * @returns {void}
    */
   checkLang([html]) {
     const lang = html.getAttribute("lang");
@@ -144,8 +159,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check title tag
+   * @param {string} textContent
+   * @returns {void}
    */
   checkTitle({ textContent }) {
     if (!textContent) {
@@ -158,8 +175,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check semantic navbar and list in navbar
+   * @param {Array<Node>} nav
+   * @returns {void|boolean}
    */
   checkNav(nav) {
     if (nav.length < 1) {
@@ -185,8 +204,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check semantic footer
+   * @param {number} length
+   * @returns {void}
    */
   checkFooter({ length }) {
     if (length < 1) {
@@ -199,8 +220,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Each section must have header
+   * @param {Array<Node>} section
+   * @returns {void}
    */
   checkSection(section) {
     if (section.length > 0) {
@@ -223,8 +246,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Figure should have figcaption
+   * @param {Array<Node>} figures
+   * @returns {void}
    */
   checkFigure(figures) {
     if (figures.length > 0) {
@@ -243,8 +268,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    *Icon should not be in i tag
+   * @param {Array<Node>} icons
+   * @returns {void}
    */
   checkIcon(icons) {
     if (icons.length > 0) {
@@ -274,8 +301,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Each site should have exactly 1 main tag
+   * @param {number} length
+   * @returns {void}
    */
   checkMain({ length }) {
     if (length < 1 || length > 1) {
@@ -288,8 +317,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check headers hierarchy,repeatability
+   * @param {Array<Node>} headers
+   * @returns {void}
    */
   checkHeaders(...headers) {
     const headersArr = headers.flat(3);
@@ -337,8 +368,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Iframe must have title attr
+   * @param {Array<Node>} iframeArr
+   * @returns {void}
    */
   checkIframe(iframeArr) {
     if (iframeArr.length > 0) {
@@ -355,8 +388,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check image alt
+   * @param {Array<Node>} images
+   * @returns {void}
    */
   checkImages(images) {
     if (images.length > 0) {
@@ -377,8 +412,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Each svg must have title tag
+   * @param {Array<Node>} svgArr
+   * @returns {void}
    */
   checkSVG(svgArr) {
     if (svgArr.length > 0) {
@@ -398,8 +435,10 @@ class SiteValidate extends AbstractValidator {
     }
   }
 
-  /*
+  /**
    * Check links hrefs,aria-label, label, tabindex, focus,hover
+   * @param {Array<Node>} elementsArr
+   * @returns {void}
    */
   checkLinksAndButtons(elementsArr) {
     // links href
@@ -484,8 +523,10 @@ class SiteValidate extends AbstractValidator {
     });
   }
 
-  /*
+  /**
    * Check inputs label, focus,hover
+   * @param {Array<Node>} inputs
+   * @returns {void}
    */
   checkInputs(inputs) {
     inputs.forEach(input => {
@@ -509,8 +550,10 @@ class SiteValidate extends AbstractValidator {
     });
   }
 
-  /*
+  /**
    * Check video and audio subtitles and check autoplay
+   * @param {Array<Node>} elements
+   * @returns {void}
    */
   checkVideoAndAudio(...elements) {
     const flatArr = elements.flat();

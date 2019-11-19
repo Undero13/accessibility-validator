@@ -1,6 +1,6 @@
-/*
- * @author Patryk Loter <patryk.loter@gmail.com>
- * @version 1.0.0
+/**
+ * @author Patryk Undero Loter <patryk.loter@gmail.com>
+ * @version 1.5.0
  * class for dynamic main window(create,close,menu,event)
  */
 
@@ -15,6 +15,11 @@ const {
 } = require("electron");
 const SiteValidate = require("./class/SiteValidate");
 
+/**
+ * Elecron window
+ * @constructor @var {object|null} window
+ * @constructor @var {object|null} windowInfo
+ */
 class Window {
   constructor() {
     this.window = null;
@@ -24,18 +29,25 @@ class Window {
     this.setMenu();
   }
 
+  /**
+   * set listeners for event from view
+   * @returns {void}
+   */
   setListeners() {
+    // electron start event
     app.on("ready", () => this.createMainWindow());
 
+    // electron close all event
     app.on("window-all-closed", () =>
       process.platform !== "darwin" ? app.quit() : null
     );
 
+    // electron active event
     app.on("activate", () =>
       this.window === null ? this.createMainWindow() : null
     );
 
-    // make raport
+    // make raport event
     ipcMain.on("url", (event, arg) => {
       const validator = new SiteValidate(arg);
 
@@ -62,13 +74,15 @@ class Window {
       }, 5000);
     });
 
-    // next analize
+    // next site analize event
     ipcMain.on("return", () => this.window.loadFile("view/index.html"));
+    // open info view event
     ipcMain.on("info", () => this.createInfoWindow());
   }
 
-  /*
-   * Menu for developers.
+  /**
+   * Menu for developers. Only for dev mode
+   * @returns {void}
    */
   setMenu() {
     const menu = new Menu();
@@ -95,6 +109,10 @@ class Window {
     }
   }
 
+  /**
+   * Create main electron window and set close app event
+   * @returns {void}
+   */
   createMainWindow() {
     this.window = new BrowserWindow({
       width: config.WINDOW_WIDTH,
@@ -107,10 +125,14 @@ class Window {
     this.window.loadFile("view/index.html");
     this.window.on("close", () => {
       this.window = null;
-      app.quit();
+      return process.platform !== "darwin" ? app.quit() : null;
     });
   }
 
+  /**
+   * Create info electron window and set close this window event
+   * @returns {void}
+   */
   createInfoWindow() {
     this.windowInfo = new BrowserWindow({
       width: config.WINDOW_WIDTH,

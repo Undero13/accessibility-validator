@@ -17,6 +17,7 @@
         <li><a href="#par2">Niewidzący/Niedowidzący</a></li>
         <li><a href="#par3">Osoby sparaliżowane</a></li>
         <li><a href="#par4">Migrenicy/Epileptycy</a></li>
+        <li><a href="#par12">Osoby upośledzone/z zaburzeniami rozwoju</a></li>
     </ul>
     <h3 class="title is-3">Standardy tworzenia dostępnych stron</h3>
     <ul>
@@ -37,7 +38,7 @@
 
     <h3 class="title is-4">Podział grup niepełnosprawności</h3>
     <h4 class="title is-5" id="par1">§1.Niesłyszący/Niedosłyszący</h4>
-    <p>Przy wdrażaniu standardów dla tej grupy niepełnosprawności ważne jest aby teksty na stronie były pisane w sposób logiczny i zwięzły. Należy przy tym zachować odpowiedni kontrast koloru czcionki do koloru tła, wielkość liter czy pogrubienia czcionki. Warto zastosować dla mniejszych ekranów (mobilki, tablety) powiększoną czcionkę aby zwiększyć jej czytelność. Dobrą praktyką jest też wykorzystanie własciwości line-height i letter-spacing aby jeszcze bardziej poprawić czytelność tekstu.</p>
+    <p>Przy wdrażaniu standardów dla tej grupy niepełnosprawności ważne jest aby teksty na stronie były pisane w sposób logiczny i zwięzły. Należy przy tym zachować odpowiedni kontrast koloru czcionki do koloru tła, wielkość liter czy pogrubienia czcionki. Warto zastosować dla mniejszych ekranów (mobilki, tablety) powiększoną czcionkę aby zwiększyć jej czytelność. Dobrą praktyką jest też wykorzystanie własciwości line-height i letter-spacing aby jeszcze bardziej poprawić czytelność tekstu. Jeśli na naszej stronie znajdują się elementy  <strong>&#60;video></strong> lub <strong> &#60;audio></strong> należy zadbać o transkrypcję.</p>
     <h4 class="title is-5" id="par2">§2.Niewidzący/Niedowidzący</h4>
     <p>Dla osób niedowidzących przy projektowaniu stron należy zwrócić szczególną uwagę na kontrast wszystkich elementów na stronie. Ważne jest też aby osoby te mogły powiększać tekst na stronie (ctrl+) przy zachowaniu jak najlepszego wyglądu strony. Osoby niedowidzące także mogą korzystać z technologi asystujących dlatego należy spełniać również takie wymagania jak dla niewidomych.</p>
 
@@ -45,9 +46,11 @@
         <li>braki znacznika &#60;label> dla inputów w formularzach</li>
         <li>brak ustawionego atrybytu alt dla obrazków lub atrybuty alt są robione pod SEO</li>
         <li>brak ustawionych atrybutów title w zamian za etykiety</li>
+        <li>błędnie skonstruowane tabele na stronie</li>
+        <li>użycie &#60;svg> bez znacznika &#60;title> wewnątrz</li>
         <li>brak etykiet znaczników interaktywnych np. &#60;button> lub zastąpienie etykiery obrazkiem</li>
         <li>złe wykorzystanie standardu aria</li></ul> Poprawnie ustalone alty dla obrazków to takie, które faktycznie opisują co dany obrazek zawiera, przy czym należy unikać używania w nich sformułowań typu "obrazek, zdjęcie" gdyż technologia asystująca doda je za nas. W przypadku wykresów, diagramów czy grafów można opisać takie elementy przy pomocy znacznika <strong>&#60;p></strong>. Jeśli nie chcemy wyświetlać wizualnie dodatkowych informacji należy ukryć je przy pomocy <strong>position: absolute</strong> a nie display:none.</p>
-    <p class="header-list"><strong>Informacje o ukrywaniu elementów:</strong></p>
+    <p class="header-list"><strong>Informacje o najczęstszych sposobach ukrywania elementów:</strong></p>
     <ul>
         <li>display:none - ukrycie wizualne oraz ukrycie przed technologiami asystującymi</li>
         <li>visibility: hidden - ukrycie wizualne oraz ukrycie przed technologiami asystującymi</li>
@@ -63,6 +66,10 @@
     <p class="mt-10">Ważny jest także atrybut tabindex, ustawienie jego wartości na 0 (domyślnie) powoduje że używanie klawisza tab przeskakuje po elementach interaktywnych zgodnie z kolejnością ich zadeklarowania w HTML. Ustawienie tabindexu na -1 powoduje pomijanie elementu przy nawigacji klawiszem tab. Wykorzystanie dodatniej liczby tabindexu wynosi taki element wyżej w hierarchi (element jest focusowany przed elementami które mają tabindex na 0).</p>
     <h4 class="title is-5" id="par4">§4.Migrenicy/Epileptycy</h4>
     <p>Dostosowanie strony polega na mądrym projektowaniu animacji/efektów na stronie. Według norm przyjmuje się, że dany element na stronie w ciągu sekundy nie powinien migać więcej niż 3 razy. Animacje powinno dać się w prosty sposób <stron>wyłączać.</stron> Ważna jest też szybkość i płynność przesuwania sliderów czy rozwijanych list.</p>
+    <h4 class="title is-5" id="par12">§5.Osoby upośledzone/z zaburzeniami rozwoju</h4>
+    <p>Aby strona była dostępna dla osób z tej grupy, należy umieszczać na stronie teksty napisanie maksymalnie prostym językiem. W razie potrzeby wyjaśniać (np. w pobocznej treści) jakieś bardziej skomplikowane sformułowania. Zasady te tyczą się głównie stron o tematyce technicznej, dydaktycznej lub naukowej.</p>
+
+
     <h3 class="title is-4">Standardy tworzenia dostępnych stron</h3>
     <h4 class="title is-5" id="par5"><a href="http://fdc.org.pl/wcag2/">WCAG 2.0</a></h4>
     <p>Dokument ten opisuje jak należy tworzyć aplikacje (nie tylko strony internetowe) w sposób pozwalający korzystać z nich jak największej grupie odbiorców. WCAG wyróżnia cztery zasady: postrzegalność, funkcjonalność, zrozumiałość, solidność. Standard nie podaje konkretnych rozwiązań technicznych a jedynie pomocne wytyczne, które mogę zostać zaimplementowane na różne sposoby. Dokument określa również stopnie zgodności ze standardem:

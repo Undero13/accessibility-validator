@@ -4,6 +4,11 @@ const Nightmare = require("nightmare");
 const electron = require("../node_modules/electron");
 const AbstractParser = require("./AbstractParser");
 
+/**
+ * AbstractValidator class
+ * @module Parser
+ * @constructor @param {Node} DOM
+ */
 class Parser extends AbstractParser {
   constructor(html) {
     super();
@@ -11,8 +16,10 @@ class Parser extends AbstractParser {
     this.DOM = parser.parseFromString(html);
   }
 
-  /*
+  /**
    * Return element
+   * @param {string} selector
+   * @returns {array<Node>}
    */
   getElements(selector) {
     const elements = this.DOM.getElementsByTagName(selector);
@@ -34,8 +41,9 @@ class Parser extends AbstractParser {
     return elements.length > 0 ? elements : [];
   }
 
-  /*
+  /**
    * Return html title tag
+   * @returns {object}
    */
   getHeadTitle() {
     const head = this.getElements("head");
@@ -44,8 +52,11 @@ class Parser extends AbstractParser {
     return title.length > 0 ? title[0] : null;
   }
 
-  /*
+  /**
    * Return DOM, and tags styles
+   * @param {string} url
+   * @return {object}
+   * @throws {Error} if 404 site or 500 site
    */
   static async getDOMFromURL(url = "") {
     const nightmare = Nightmare({

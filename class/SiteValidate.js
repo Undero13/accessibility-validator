@@ -632,14 +632,21 @@ class SiteValidate extends AbstractValidator {
       const tabindex = el.match(/tabindex=("([^"]|"")*")/i);
       const role = el.match(/role=("([^"]|"")*")/i);
 
-      if (!tabindex || tabindex.index < 0) {
+      if (tabindex) {
+        tabindex[1] = tabindex[1].replace(/"/g, "");
+      }
+
+      if (!tabindex || tabindex[1] < 0) {
         this.setRaport({
           what: "popup",
           category: "devices",
           type: "error",
           message: `Błędny tabindex dla popup. Element: ${el}`
         });
-      } else if (!role || role[1] !== "dialog" || role[1] !== "document") {
+      } else if (
+        !role ||
+        (role[1] !== '"dialog"' && role[1] !== '"document"')
+      ) {
         this.setRaport({
           what: "popup",
           category: "devices",

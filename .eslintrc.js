@@ -22,5 +22,6 @@ module.exports = {
         "getAnimationElement": true,
         "enlargeFonts": true,
         "clearURL": true,
+        "getPotentialModal": true
     }
 };

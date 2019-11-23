@@ -24,7 +24,6 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
  * Cytaty powinny się znajdować w blockquote lub q+ cite jako źródło cytatu ?
  * Ikony powinny mieć aria-label lub title
  * Skip linki
- * Walidacja modali
  * Walidacja aria (Sztuczna inteligencja ???)
  * Pokrycie walidatora testami
  * Dodanie tłumaczenia na język angielski
@@ -35,7 +34,6 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
  * Znalazłem buga w focusie - elementy niewidoczne na stronie, nie mogę złapać focusa przez co ich style były zestawiane z stylami document.body, naprawiłem to ograniczając sprawdzanie focusa na tylko widoczne elementy ale trzeba przemyśleć co zrobić z resztą. BUG#1
  * checkLinksAndButtons - bug wyłapuje z svg znacznik style i twierdzi że to textContent BUG#2
- * checkLinksAndButtons - są sytuacje kiedy tabindex może być zmieniany (np. modale) BUG#3
 
 ### License
 

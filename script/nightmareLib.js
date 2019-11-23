@@ -300,7 +300,42 @@ const clearURL = () => {
   return clearUrl;
 };
 
+const getPotentialModal = () => {
+  const elements = document.body.querySelectorAll(
+    "*:not(script):not(style):not(svg):not(noscript):not(p)"
+  );
+
+  const potentialModal = [];
+
+  elements.forEach(element => {
+    if (
+      checkVisible(element) &&
+      (getStyle(element, "position") === "absolute" ||
+        getStyle(element, "position") === "fixed")
+    ) {
+      potentialModal.push({
+        el: element.outerHTML,
+        zIndex:
+          getStyle(element, "z-index") === "auto"
+            ? 0
+            : parseInt(getStyle(element, "z-index"), 10)
+      });
+    }
+  });
+
+  const max = potentialModal.reduce((prev, current) =>
+    prev.zIndex > current.zIndex ? prev : current
+  );
+
+  if (max.zIndex > 0) {
+    return max;
+  }
+
+  return {};
+};
+
 window.getStyleFormDom = getStyleFormDom;
 window.getAnimationElement = getAnimationElement;
 window.enlargeFonts = enlargeFonts;
 window.clearURL = clearURL;
+window.getPotentialModal = getPotentialModal;

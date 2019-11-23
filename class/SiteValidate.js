@@ -37,7 +37,6 @@ class SiteValidate extends AbstractValidator {
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
-
     // category:general,semantic,image,contrast,animation,devices,aria
 
     this.checkContrast(
@@ -61,6 +60,7 @@ class SiteValidate extends AbstractValidator {
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
     this.checkInputs(html.input);
+    this.checkPopup(html.potentialModal);
     this.checkVideoAndAudio(
       parser.getElements("video"),
       parser.getElements("audio")
@@ -509,7 +509,6 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        //  BUG#3
         if (
           element &&
           element.getAttribute("tabindex") &&
@@ -620,6 +619,34 @@ class SiteValidate extends AbstractValidator {
           });
         }
       });
+    }
+  }
+
+  /**
+   * Check video and audio subtitles and check autoplay
+   * @param {Node} el -- probable popup
+   * @returns {void}
+   */
+  checkPopup({ el = null }) {
+    if (el !== null) {
+      const tabindex = el.match(/tabindex=("([^"]|"")*")/i);
+      const role = el.match(/role=("([^"]|"")*")/i);
+
+      if (!tabindex || tabindex.index < 0) {
+        this.setRaport({
+          what: "popup",
+          category: "devices",
+          type: "error",
+          message: `Błędny tabindex dla popup. Element: ${el}`
+        });
+      } else if (!role || role[1] !== "dialog" || role[1] !== "document") {
+        this.setRaport({
+          what: "popup",
+          category: "devices",
+          type: "error",
+          message: `Popup nie ma ustawionej roli. Element: ${el}`
+        });
+      }
     }
   }
 }

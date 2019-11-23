@@ -1,3 +1,4 @@
+# TEN BRANCH JEST ZAMKNIĘTY I NIE BĘDZIE JUŻ MODYFIKOWANY
 # Walidator Dostępności
 
 Walidator dostępności html dostosowany do stron napisanych w angularze

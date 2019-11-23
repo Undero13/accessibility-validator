@@ -1,29 +1,12 @@
-1. Bardzo trudno będzie mi zwalidować kwestie dostępności wyglądu (wyskakujące modale itd) - może uda się znaleźć jakąś bibliotekę która choć cześciowo to ogarnie
 2.Ciężko będzie też ogarniać czy atrybuty aria są na odpowiednich elementach bo validator musiałby "rozumieć" czemu dany element służy
-3.Wiele kwesti opisanych w specyfikacji jest mocno subiektywnych choć na pewno da się je jakoś uogolnić.
 4.Niestety ze wględu na to że dostępność mimo wszystko jest tematem dość niszowym napisanie walidatora może być niemożliwe dla jednej osoby, już teraz mam wrażenie że ten kod wyglada jak bagno. Co się stanie jeśli będę kombinował z testowaniem kolejnych rzeczy ?
 5. Dalej nie mam pojęcia jak wykrywać skip linki
-6. Dalej nie wiem czy testowanie wielkości czcionki ma sens, to już nie te czasy teraz każdy może powiększyć okno przeklądarki crtl+ 
-7. Tytuły stron powinny być [Tytuł podstrony] – [Nazwa Instytucji]. I znowu skąd uzyskać takie dane ?
 8. Cytaty powinny się znajdować w blokach <blockquote> lub <q> - jak wykrywać co jest cytatem ?
 
 //Potencjalne rozwiązania
 1. Ciekawa biblioteka która mogła by potencjalnie pomóc z aria https://github.com/xi/aria-api, natomiast muszę po czymś "łapać" elementy które potencjalnie mogą być np popupem
-2.Modale można by był spróbować wyłapywać tak:
-- robię w nightmarze zrzuć widocznych elementów html
-- każę czekać nightmarowy powiedzmy 3-5 sekund 
-- robię 2 zrzut 
-- jeśli coś się zmieniło to potencjalnie może to być popup/wysuwany element, dla bezpieczeństwa można by było sprawdzać np jak bardzo taki blok jest rozbudowany i chociaż typować go na potencjalnego kandydata - dużo roboty, czy da się prościej?
-3.Wysywane menu/hamburger menu można wyrywać tak że klikamy w każdy element intereaktywny i patrzymy czy zmieniły się np z-index/właścwości pozycji lub display jakiegos elementu - po za kolejny dużo obliczeń i dużo roboty
 
-4. https://www.geeksforgeeks.org/how-to-center-a-popup-window-on-screen/ Niby KTO ROBI popupy poprzez window.open(), takie było by łatwo wykryć ale popupy robimy przeważnie css 
-5. Modale niby można wykrywać po z-indexe ale to niepewne rozwiazanie https://stackoverflow.com/questions/1118198/how-can-you-figure-out-the-highest-z-index-in-your-document
-6. Potencjalnie rozwiązanie problemu z cytatami https://www.regextester.com/3269
-
-7. Teoretycznie rozwiązanie kwesti cytatów (?<=^"| ").*?(?=" |"$) brakuje tylko definicji ilości znaków 
-8. nazwę domeny można pobierać z url po jego oczyszczeniu, czy można bezpiecznie założyć że nazwa serwisu zawsze jest w url ???
-9. Modale wykrywać można przy pomocy z indexu 
-10. powiększanie czcionek skrypt https://github.com/adactio/FitText.js
+7. Teoretycznie rozwiązanie kwesti cytatów ("([^"]|"")*") brakuje tylko definicji ilości znaków - nope, próbowałem cytatów nie da się wykryć 
 
 //Przydatne
 http://52.91.29.68/foundations/aria/

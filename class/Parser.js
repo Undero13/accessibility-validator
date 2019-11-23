@@ -104,6 +104,7 @@ class Parser extends AbstractParser {
           returnObj.enlargeFonts = enlargeFonts();
           returnObj.animate = getAnimationElement();
           returnObj.DOM = document.querySelector("html").outerHTML;
+          returnObj.siteName = clearURL();
 
           return returnObj;
         })

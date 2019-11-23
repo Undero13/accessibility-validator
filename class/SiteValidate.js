@@ -47,7 +47,7 @@ class SiteValidate extends AbstractValidator {
     this.checkLetter(html.enlargeFonts);
     this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
-    this.checkTitle(parser.getHeadTitle());
+    this.checkTitle(parser.getHeadTitle(), html.siteName);
     this.checkNav(parser.getElements("nav"));
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
@@ -163,13 +163,20 @@ class SiteValidate extends AbstractValidator {
    * @param {string} textContent
    * @returns {void}
    */
-  checkTitle({ textContent }) {
+  checkTitle({ textContent }, siteName) {
     if (!textContent) {
       this.setRaport({
         what: "tytuł",
         category: "general",
         type: "error",
         message: "Pusty tag <title>"
+      });
+    } else if (!textContent.includes(siteName)) {
+      this.setRaport({
+        what: "tytuł",
+        category: "general",
+        type: "warning",
+        message: "<title> powinien zawierać nazwę serwisu!"
       });
     }
   }

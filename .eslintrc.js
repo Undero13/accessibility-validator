@@ -13,12 +13,14 @@ module.exports = {
         'class-methods-use-this':'off',
         'consistent-return':'off',
         'no-param-reassign':'off',
-        'no-console':'off'
+        'no-console':'off',
+        'no-restricted-globals':'off'
     },
 
     "globals": {
         "getStyleFormDom": true,
         "getAnimationElement": true,
-        "enlargeFonts": true
+        "enlargeFonts": true,
+        "clearURL": true,
     }
 };

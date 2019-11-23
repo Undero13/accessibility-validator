@@ -1,10 +1,7 @@
 1. Bardzo trudno będzie mi zwalidować kwestie dostępności wyglądu (wyskakujące modale itd) - może uda się znaleźć jakąś bibliotekę która choć cześciowo to ogarnie
 2.Ciężko będzie też ogarniać czy atrybuty aria są na odpowiednich elementach bo validator musiałby "rozumieć" czemu dany element służy
-3.Wiele kwesti opisanych w specyfikacji jest mocno subiektywnych choć na pewno da się je jakoś uogolnić.
 4.Niestety ze wględu na to że dostępność mimo wszystko jest tematem dość niszowym napisanie walidatora może być niemożliwe dla jednej osoby, już teraz mam wrażenie że ten kod wyglada jak bagno. Co się stanie jeśli będę kombinował z testowaniem kolejnych rzeczy ?
 5. Dalej nie mam pojęcia jak wykrywać skip linki
-6. Dalej nie wiem czy testowanie wielkości czcionki ma sens, to już nie te czasy teraz każdy może powiększyć okno przeklądarki crtl+ 
-7. Tytuły stron powinny być [Tytuł podstrony] – [Nazwa Instytucji]. I znowu skąd uzyskać takie dane ?
 8. Cytaty powinny się znajdować w blokach <blockquote> lub <q> - jak wykrywać co jest cytatem ?
 
 //Potencjalne rozwiązania
@@ -20,7 +17,7 @@
 5. Modale niby można wykrywać po z-indexe ale to niepewne rozwiazanie https://stackoverflow.com/questions/1118198/how-can-you-figure-out-the-highest-z-index-in-your-document
 6. Potencjalnie rozwiązanie problemu z cytatami https://www.regextester.com/3269
 
-7. Teoretycznie rozwiązanie kwesti cytatów (?<=^"| ").*?(?=" |"$) brakuje tylko definicji ilości znaków 
+7. Teoretycznie rozwiązanie kwesti cytatów ("([^"]|"")*") brakuje tylko definicji ilości znaków 
 8. nazwę domeny można pobierać z url po jego oczyszczeniu, czy można bezpiecznie założyć że nazwa serwisu zawsze jest w url ???
 9. Modale wykrywać można przy pomocy z indexu 
 10. powiększanie czcionek skrypt https://github.com/adactio/FitText.js

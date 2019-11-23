@@ -5,11 +5,11 @@
  * @param {HTMLElement} element
  * @returns {boolean}
  */
-const checkVisible = element =>
-  element.offsetWidth > 0 && element.offsetHeight > 0;
+const checkVisible = ({ offsetWidth, offsetHeight }) =>
+  offsetWidth > 0 && offsetHeight > 0;
 
 /**
- *
+ * Get getBoundingClientRect for overlap
  * @param {HTMLElement} element
  * @returns {Array<object>}
  */
@@ -147,7 +147,7 @@ const getAnimation = name => {
  * @param {number} counter
  * @returns {boolean}
  */
-function checkAnimation(rule, time, counter) {
+const checkAnimation = (rule, time, counter) => {
   const subject = {
     opacity: 0,
     color: 0,
@@ -177,7 +177,7 @@ function checkAnimation(rule, time, counter) {
   }
 
   return true;
-}
+};
 
 /**
  * Get background,color and font-size and few others
@@ -185,7 +185,7 @@ function checkAnimation(rule, time, counter) {
  * @param {boolean} interactive
  * @returns {object|null}
  */
-function getStyleFormDom(elements, interactive = false) {
+const getStyleFormDom = (elements, interactive = false) => {
   if (elements.length < 1) return [];
 
   const properties = [];
@@ -226,14 +226,14 @@ function getStyleFormDom(elements, interactive = false) {
     });
   });
   return properties;
-}
+};
 
 /**
  * Return invalid animated element
  * @throws {Error} if site block analize css
  * @returns {array<object>}
  */
-function getAnimationElement() {
+const getAnimationElement = () => {
   const elements = [...document.body.getElementsByTagName("*")];
   const notValidElements = [];
 
@@ -260,13 +260,13 @@ function getAnimationElement() {
   }
 
   return notValidElements;
-}
+};
 
 /**
  * Enlarge fonts 2 times and check overlap
  * @returns {function}
  */
-function enlargeFonts() {
+const enlargeFonts = () => {
   const elements = document.querySelectorAll(
     "p,a,button,input,h1,h2,h3,h4,h5,h6,span"
   );
@@ -284,8 +284,23 @@ function enlargeFonts() {
   });
 
   return checkOverlap(enlargeElements);
-}
+};
+
+const clearURL = () => {
+  const url = location.origin;
+  const urlWithoutHttp = url.replace(/^(?:https?:\/\/)?(?:www\.)?/gi, "");
+  const urlWithoutSlash = urlWithoutHttp.replace("/", "");
+  const test = urlWithoutSlash.split(".").length;
+  let clearUrl = urlWithoutSlash;
+
+  for (let i = 1; i < test; i++) {
+    clearUrl = clearUrl.replace(/([.]\w+)$/, "");
+  }
+
+  return clearUrl;
+};
 
 window.getStyleFormDom = getStyleFormDom;
 window.getAnimationElement = getAnimationElement;
 window.enlargeFonts = enlargeFonts;
+window.clearURL = clearURL;

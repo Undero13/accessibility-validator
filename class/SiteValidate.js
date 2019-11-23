@@ -54,6 +54,7 @@ class SiteValidate extends AbstractValidator {
     this.checkNav(parser.getElements("nav"));
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
+    this.checkTable(parser.getElements("table"));
     this.checkFigure(parser.getElements("figure"));
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
@@ -127,7 +128,7 @@ class SiteValidate extends AbstractValidator {
         what: "animacja",
         category: "animation",
         type: "error",
-        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić autytu.`
+        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić audytu.`
       });
     } else if (elements.length > 0) {
       elements.forEach(element =>
@@ -241,6 +242,29 @@ class SiteValidate extends AbstractValidator {
               message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
             });
           }
+        }
+      });
+    }
+  }
+
+  /**
+   * Table should have thead and tbody
+   * @param {Array<Node>} elements
+   * @returns {void}
+   */
+  checkTable(elements) {
+    if (elements.length > 0) {
+      elements.forEach(table => {
+        const thead = table.getElementsByTagName("thead");
+        const tbody = table.getElementsByTagName("tbody");
+
+        if (tbody.length > 0 && thead.length < 1) {
+          this.setRaport({
+            what: "tabela nie ma thead",
+            category: "semantic",
+            type: "error",
+            message: `Każda tabela musi mieć thead oraz tbody. Element: ${table.outerHTML}`
+          });
         }
       });
     }
@@ -529,25 +553,27 @@ class SiteValidate extends AbstractValidator {
    * @returns {void}
    */
   checkInputs(inputs) {
-    inputs.forEach(input => {
-      if (input && !input.inputLabel) {
-        this.setRaport({
-          what: "brak etykiety",
-          category: "devices",
-          type: "error",
-          message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
-        });
-
-        if (!input.correctFocus) {
+    if (inputs.length > 0) {
+      inputs.forEach(input => {
+        if (input && !input.inputLabel) {
           this.setRaport({
-            what: "brak focusa",
+            what: "brak etykiety",
             category: "devices",
-            type: "warning",
-            message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            type: "error",
+            message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
           });
+
+          if (!input.correctFocus) {
+            this.setRaport({
+              what: "brak focusa",
+              category: "devices",
+              type: "warning",
+              message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            });
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   /**

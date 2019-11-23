@@ -18,6 +18,8 @@ module.exports = {
 
     "globals": {
         "getStyleFormDom": true,
-        "getAnimationElement":true
+        "getAnimationElement": true,
+        "fitText": true,
+        "testFonts": true
     }
 };

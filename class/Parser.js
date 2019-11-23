@@ -67,7 +67,7 @@ class Parser extends AbstractParser {
     try {
       const result = await nightmare
         .goto(url)
-        .inject("js", `${__dirname}/nightmareLib.js`)
+        .inject("js", `${process.cwd()}/script/nightmareLib.js`)
         .wait(config.SITE_LOADING_TIMEOUT * 1)
         .evaluate(() =>
           document.body.scrollIntoView({ behavior: "smooth", block: "end" })
@@ -101,6 +101,7 @@ class Parser extends AbstractParser {
           returnObj.h5 = getStyleFormDom(h5);
           returnObj.h6 = getStyleFormDom(h6);
 
+          returnObj.enlargeFonts = enlargeFonts();
           returnObj.animate = getAnimationElement();
           returnObj.DOM = document.querySelector("html").outerHTML;
 

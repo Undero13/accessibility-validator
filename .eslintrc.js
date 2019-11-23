@@ -19,7 +19,6 @@ module.exports = {
     "globals": {
         "getStyleFormDom": true,
         "getAnimationElement": true,
-        "fitText": true,
-        "testFonts": true
+        "enlargeFonts": true
     }
 };

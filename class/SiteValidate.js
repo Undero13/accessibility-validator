@@ -44,10 +44,7 @@ class SiteValidate extends AbstractValidator {
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
-    this.checkLetter(
-      [html.p, html.span, html.link, html.button],
-      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
-    );
+    this.checkLetter(html.enlargeFonts);
     this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
@@ -105,16 +102,17 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @todo
    */
-  checkLetter(...elements) {
-    const elementsFlat = elements.flat(2);
-
-    elementsFlat.forEach(element => {
-      if (element) {
-        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
-        // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
-        // ponadto na różnych urządeniach (desktopy, mobilki i tablety) wielkość fontów powinna być różna
-      }
-    });
+  checkLetter(elements) {
+    if (elements.length > 0) {
+      elements.forEach(overlapElm => {
+        this.setRaport({
+          what: "elementy nachodzą na siebie",
+          category: "general",
+          type: "warning",
+          message: `Po dwukrotnym powiększeniu czcionki elementy nachodzą na siebie. Element1:${overlapElm[0]}, Element2:${overlapElm[1]}`
+        });
+      });
+    }
   }
 
   /**

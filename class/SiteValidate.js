@@ -44,16 +44,14 @@ class SiteValidate extends AbstractValidator {
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
-    this.checkLetter(
-      [html.p, html.span, html.link, html.button],
-      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
-    );
+    this.checkLetter(html.enlargeFonts);
     this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
     this.checkTitle(parser.getHeadTitle());
     this.checkNav(parser.getElements("nav"));
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
+    this.checkTable(parser.getElements("table"));
     this.checkFigure(parser.getElements("figure"));
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
@@ -104,16 +102,17 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @todo
    */
-  checkLetter(...elements) {
-    const elementsFlat = elements.flat(2);
-
-    elementsFlat.forEach(element => {
-      if (element) {
-        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
-        // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
-        // ponadto na różnych urządeniach (desktopy, mobilki i tablety) wielkość fontów powinna być różna
-      }
-    });
+  checkLetter(elements) {
+    if (elements.length > 0) {
+      elements.forEach(overlapElm => {
+        this.setRaport({
+          what: "elementy nachodzą na siebie",
+          category: "general",
+          type: "warning",
+          message: `Po dwukrotnym powiększeniu czcionki elementy nachodzą na siebie. Element1:${overlapElm[0]}, Element2:${overlapElm[1]}`
+        });
+      });
+    }
   }
 
   /**
@@ -127,7 +126,7 @@ class SiteValidate extends AbstractValidator {
         what: "animacja",
         category: "animation",
         type: "error",
-        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić autytu.`
+        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić audytu.`
       });
     } else if (elements.length > 0) {
       elements.forEach(element =>
@@ -241,6 +240,29 @@ class SiteValidate extends AbstractValidator {
               message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
             });
           }
+        }
+      });
+    }
+  }
+
+  /**
+   * Table should have thead and tbody
+   * @param {Array<Node>} elements
+   * @returns {void}
+   */
+  checkTable(elements) {
+    if (elements.length > 0) {
+      elements.forEach(table => {
+        const thead = table.getElementsByTagName("thead");
+        const tbody = table.getElementsByTagName("tbody");
+
+        if (tbody.length > 0 && thead.length < 1) {
+          this.setRaport({
+            what: "tabela nie ma thead",
+            category: "semantic",
+            type: "error",
+            message: `Każda tabela musi mieć thead oraz tbody. Element: ${table.outerHTML}`
+          });
         }
       });
     }
@@ -529,25 +551,27 @@ class SiteValidate extends AbstractValidator {
    * @returns {void}
    */
   checkInputs(inputs) {
-    inputs.forEach(input => {
-      if (input && !input.inputLabel) {
-        this.setRaport({
-          what: "brak etykiety",
-          category: "devices",
-          type: "error",
-          message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
-        });
-
-        if (!input.correctFocus) {
+    if (inputs.length > 0) {
+      inputs.forEach(input => {
+        if (input && !input.inputLabel) {
           this.setRaport({
-            what: "brak focusa",
+            what: "brak etykiety",
             category: "devices",
-            type: "warning",
-            message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            type: "error",
+            message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
           });
+
+          if (!input.correctFocus) {
+            this.setRaport({
+              what: "brak focusa",
+              category: "devices",
+              type: "warning",
+              message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            });
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   /**

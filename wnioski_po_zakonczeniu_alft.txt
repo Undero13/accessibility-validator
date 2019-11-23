@@ -20,6 +20,11 @@
 5. Modale niby można wykrywać po z-indexe ale to niepewne rozwiazanie https://stackoverflow.com/questions/1118198/how-can-you-figure-out-the-highest-z-index-in-your-document
 6. Potencjalnie rozwiązanie problemu z cytatami https://www.regextester.com/3269
 
+7. Teoretycznie rozwiązanie kwesti cytatów (?<=^"| ").*?(?=" |"$) brakuje tylko definicji ilości znaków 
+8. nazwę domeny można pobierać z url po jego oczyszczeniu, czy można bezpiecznie założyć że nazwa serwisu zawsze jest w url ???
+9. Modale wykrywać można przy pomocy z indexu 
+10. powiększanie czcionek skrypt https://github.com/adactio/FitText.js
+
 //Przydatne
 http://52.91.29.68/foundations/aria/
 http://niepelnosprawni.pl/ledge/x/261310

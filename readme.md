@@ -21,8 +21,7 @@ Walidator dostępności html dostosowany do stron napisanych w angularze
 
 ### Todos
 
- * Cytaty powinny się znajdować w blockquote lub q
- * Tabele powinny zawierać co najmniej sekcję thead i tbody
+ * Cytaty powinny się znajdować w blockquote lub q+ cite jako źródło cytatu ?
  * Tytuły stron (nazwa podstrony - nazwa serwisu)
  * Wielkość czcionek ???
  * Ikony powinny mieć aria-label lub title

@@ -1,8 +1,9 @@
 const DomParser = require("dom-parser");
-const { parsed: config } = require("dotenv").config();
 const Nightmare = require("nightmare");
-// eslint-disable-next-line import/no-dynamic-require
-const electron = require(`${process.cwd()}/node_modules/electron`);
+const { parsed: config } = require("dotenv").config({
+  path: `${__dirname}/../.env`
+});
+const electron = require("electron").app.getPath("exe");
 const AbstractParser = require("./AbstractParser");
 
 /**
@@ -70,7 +71,7 @@ class Parser extends AbstractParser {
     try {
       const result = await nightmare
         .goto(url)
-        .inject("js", `${process.cwd()}/script/nightmareLib.js`)
+        .inject("js", `${__dirname}/../script/nightmareLib.js`)
         .wait(config.SITE_LOADING_TIMEOUT * 1)
         .evaluate(() =>
           document.body.scrollIntoView({ behavior: "smooth", block: "end" })

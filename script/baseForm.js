@@ -1,7 +1,7 @@
+/* eslint-disable import/no-dynamic-require */
 const { ipcRenderer } = require("electron");
-// eslint-disable-next-line import/no-dynamic-require
-const serializeForm = require(`${process.cwd()}/script/serialize`);
 
+const serializeForm = require(`${__dirname}/../script/serialize`);
 const form = document.querySelector("#form_url");
 const alert = document.querySelector("#alert");
 const { body } = document;

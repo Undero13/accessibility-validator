@@ -9,9 +9,9 @@
     "eslint": "eslint --fix **/**.js",
     "eslint-nofix": "eslint **/**.js",
     "test": "jest",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Accessibility validator\"",    
-    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+    "package-mac": "electron-packager . wd --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=builds",
+    "package-win": "electron-packager . wd --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Accessibility validator\"",
+    "package-linux": "electron-packager . wd --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=builds"
   },
   "author": "Patryk Loter",
   "license": "MIT",
@@ -30,9 +30,9 @@
   "dependencies": {
     "color": "^3.1.2",
     "css": "^2.2.4",
+    "electron": "^7.0.0",
     "dom-parser": "^0.1.6",
     "dotenv": "^8.2.0",
-    "electron": "^7.0.0",
     "electron-localizer": "^0.1.1",
     "nightmare": "^3.0.2"
   }

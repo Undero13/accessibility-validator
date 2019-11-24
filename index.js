@@ -4,7 +4,9 @@
  * class for dynamic main window(create,close,menu,event)
  */
 
-const { parsed: config } = require("dotenv").config();
+const { parsed: config } = require("dotenv").config({
+  path: `${__dirname}/.env`
+});
 const {
   app,
   BrowserWindow,

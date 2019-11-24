@@ -1,5 +1,7 @@
 const Color = require("color");
-const { parsed: config } = require("dotenv").config();
+const { parsed: config } = require("dotenv").config({
+  path: `${__dirname}/../.env`
+});
 const AbstractValidator = require("./AbstractValidator");
 const Parser = require("./Parser");
 /**

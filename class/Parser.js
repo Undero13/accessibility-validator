@@ -58,10 +58,12 @@ class Parser extends AbstractParser {
    * @return {object}
    * @throws {Error} if 404 site or 500 site
    */
-  static async getDOMFromURL(url = "") {
+  static async getDOMFromURL(url = "", device = "desktop") {
     const nightmare = Nightmare({
       electronPath: electron,
-      show: config.DEV_ENV
+      show: config.DEV_ENV,
+      width: config[`${device}_WIDTH`] * 1,
+      height: config[`${device}HEIGHT`] * 1
     });
 
     try {

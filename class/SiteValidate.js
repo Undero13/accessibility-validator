@@ -9,15 +9,17 @@ const Parser = require("./Parser");
  * @constructor @param {boolean} test - only for jest tests
  */
 class SiteValidate extends AbstractValidator {
-  constructor(url, test = false) {
+  constructor(param, test = false) {
     super();
-    this.url = url;
+
+    this.url = param.url;
+    this.device = param.device;
     this.finish = false;
     this.error = false;
     this.raport = [];
 
     if (!test) {
-      Parser.getDOMFromURL(this.url)
+      Parser.getDOMFromURL(this.url, this.device)
         .then(data => this.processDOM(data))
         .catch(e => {
           if (config.DEV_ENV) {

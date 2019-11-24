@@ -50,7 +50,10 @@ const getURL = e => {
   );
 
   if (validURL) {
-    ipcRenderer.send("url", data.url);
+    ipcRenderer.send("url", {
+      url: data.url,
+      device: data.device.toUpperCase()
+    });
     appendSpinner();
   } else {
     alert.classList.remove("is-invisible");

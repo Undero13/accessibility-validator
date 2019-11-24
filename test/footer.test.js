@@ -8,17 +8,8 @@ describe("footer", () => {
       "<html><head><title>Title</title></head><body></body></html>"
     );
 
-    const expectObj = [
-      {
-        what: "stopka",
-        category: "semantic",
-        type: "warning",
-        message: "Brak semantycznej tagu <footer>"
-      }
-    ];
-
     validator.checkFooter(html.getElements("footer"));
-    expect(validator.raport).toEqual(expectObj);
+    expect(validator.raport).toHaveLength(1);
   });
 
   test("footer valid", () => {
@@ -26,9 +17,8 @@ describe("footer", () => {
     const html = new Parser(
       "<html lang='es'><head><title>Title</title></head><body><footer>aaa</footer></body></html>"
     );
-    const expectObj = [];
 
     validator.checkFooter(html.getElements("footer"));
-    expect(validator.raport).toEqual(expectObj);
+    expect(validator.raport).toHaveLength(0);
   });
 });

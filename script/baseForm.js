@@ -4,7 +4,6 @@ const serializeForm = require(`${process.cwd()}/script/serialize`);
 
 const form = document.querySelector("#form_url");
 const alert = document.querySelector("#alert");
-const footer = document.querySelector(".footer");
 const { body } = document;
 
 /*
@@ -61,4 +60,3 @@ const getURL = e => {
 };
 
 form.addEventListener("submit", getURL);
-footer.addEventListener("click", () => ipcRenderer.send("info", null));

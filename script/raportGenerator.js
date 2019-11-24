@@ -8,7 +8,6 @@ const contrastTable = document.querySelector("#contrast");
 const animationTable = document.querySelector("#animation");
 const devicesTable = document.querySelector("#devices");
 const returnButton = document.querySelector("#return-btn");
-const footer = document.querySelector(".footer");
 
 class Raport {
   constructor() {
@@ -58,11 +57,17 @@ class Raport {
           table.querySelector("button").classList.remove("d-none");
         }
 
-        tr.innerHTML = `<td>${row.what}</td><td>${
+        tr.innerHTML = `
+        <td><localized-text>${row.what}</localized-text></td><td>${
           row.type === "error"
             ? `<p class="has-text-weight-bold has-text-danger">${row.type}</p>`
             : `<p class="has-text-weight-bold has-text-warning">${row.type}</p>`
-        }</td><td>${this.shorten(this.escape(row.message))}</td>`;
+        }</td><td>
+            <localized-text>${row.code}</localized-text> 
+            <localized-text>${this.shorten(
+              this.escape(row.message)
+            )}</localized-text> 
+            </td>`;
         tbody.append(tr);
       });
     } else {
@@ -139,5 +144,3 @@ setTimeout(() => {
 returnButton.addEventListener("click", () => {
   ipcRenderer.send("return", null);
 });
-
-footer.addEventListener("click", () => ipcRenderer.send("info", null));

@@ -1,7 +1,8 @@
 const DomParser = require("dom-parser");
 const { parsed: config } = require("dotenv").config();
 const Nightmare = require("nightmare");
-const electron = require("../node_modules/electron");
+// eslint-disable-next-line import/no-dynamic-require
+const electron = require(`${process.cwd()}/node_modules/electron`);
 const AbstractParser = require("./AbstractParser");
 
 /**

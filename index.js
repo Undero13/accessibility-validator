@@ -1,6 +1,6 @@
 /**
  * @author Patryk Undero Loter <patryk.loter@gmail.com>
- * @version 1.5.0
+ * @version 2.0.0
  * class for dynamic main window(create,close,menu,event)
  */
 

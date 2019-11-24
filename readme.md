@@ -1,3 +1,4 @@
+# This branch is close 
 # Accessibility validator
 
 HTML accessibility validator adapted to pages dynamically rendered by JS

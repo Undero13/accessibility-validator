@@ -50,6 +50,11 @@ body{
     cursor: pointer;
 }
 
+footer a {
+    color:#fff;
+    cursor: pointer;
+}
+
 .mr-10{
     margin-right:10px;
 }

@@ -58,16 +58,18 @@ class Parser extends AbstractParser {
    * @return {object}
    * @throws {Error} if 404 site or 500 site
    */
-  static async getDOMFromURL(url = "") {
+  static async getDOMFromURL(url = "", device = "desktop") {
     const nightmare = Nightmare({
       electronPath: electron,
-      show: config.DEV_ENV
+      show: config.DEV_ENV,
+      width: config[`${device}_WIDTH`] * 1,
+      height: config[`${device}HEIGHT`] * 1
     });
 
     try {
       const result = await nightmare
         .goto(url)
-        .inject("js", `${__dirname}/nightmareLib.js`)
+        .inject("js", `${process.cwd()}/script/nightmareLib.js`)
         .wait(config.SITE_LOADING_TIMEOUT * 1)
         .evaluate(() =>
           document.body.scrollIntoView({ behavior: "smooth", block: "end" })
@@ -101,8 +103,11 @@ class Parser extends AbstractParser {
           returnObj.h5 = getStyleFormDom(h5);
           returnObj.h6 = getStyleFormDom(h6);
 
+          returnObj.enlargeFonts = enlargeFonts();
           returnObj.animate = getAnimationElement();
+          returnObj.potentialModal = getPotentialModal();
           returnObj.DOM = document.querySelector("html").outerHTML;
+          returnObj.siteName = clearURL();
 
           return returnObj;
         })

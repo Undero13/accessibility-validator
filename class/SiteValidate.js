@@ -9,15 +9,17 @@ const Parser = require("./Parser");
  * @constructor @param {boolean} test - only for jest tests
  */
 class SiteValidate extends AbstractValidator {
-  constructor(url, test = false) {
+  constructor(param, test = false) {
     super();
-    this.url = url;
+
+    this.url = param.url;
+    this.device = param.device;
     this.finish = false;
     this.error = false;
     this.raport = [];
 
     if (!test) {
-      Parser.getDOMFromURL(this.url)
+      Parser.getDOMFromURL(this.url, this.device)
         .then(data => this.processDOM(data))
         .catch(e => {
           if (config.DEV_ENV) {
@@ -37,23 +39,20 @@ class SiteValidate extends AbstractValidator {
    */
   processDOM(html) {
     const parser = new Parser(html.DOM);
-
     // category:general,semantic,image,contrast,animation,devices,aria
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
       [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
     );
-    this.checkLetter(
-      [html.p, html.span, html.link, html.button],
-      [html.h1, html.h2, html.h3, html.h4, html.h5, html.h6]
-    );
+    this.checkLetter(html.enlargeFonts);
     this.checkAnimation(html.animate);
     this.checkLang(parser.getElements("html"));
-    this.checkTitle(parser.getHeadTitle());
+    this.checkTitle(parser.getHeadTitle(), html.siteName);
     this.checkNav(parser.getElements("nav"));
     this.checkFooter(parser.getElements("footer"));
     this.checkSection(parser.getElements("section"));
+    this.checkTable(parser.getElements("table"));
     this.checkFigure(parser.getElements("figure"));
     this.checkIcon(parser.getElements("i"));
     this.checkMain(parser.getElements("main"));
@@ -63,6 +62,7 @@ class SiteValidate extends AbstractValidator {
     this.checkHeaders(html.h1, html.h2, html.h3, html.h4, html.h5, html.h6);
     this.checkLinksAndButtons([html.link, html.button]);
     this.checkInputs(html.input);
+    this.checkPopup(html.potentialModal);
     this.checkVideoAndAudio(
       parser.getElements("video"),
       parser.getElements("audio")
@@ -104,16 +104,17 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @todo
    */
-  checkLetter(...elements) {
-    const elementsFlat = elements.flat(2);
-
-    elementsFlat.forEach(element => {
-      if (element) {
-        // trzeba przemyśleć czy ta funkcja w ogóle ma sens bo czytelność czcionki na serwisie jest kwestią bardzo umowną i subiektywną oraz zależną od wielu czynników nie tylko technologicznych ale i personalnych
-        // według standardów tekst powiększony do 200% nie powinien rozwalać strony i dalej być czytelny
-        // ponadto na różnych urządeniach (desktopy, mobilki i tablety) wielkość fontów powinna być różna
-      }
-    });
+  checkLetter(elements) {
+    if (elements.length > 0) {
+      elements.forEach(overlapElm => {
+        this.setRaport({
+          what: "elementy nachodzą na siebie",
+          category: "general",
+          type: "warning",
+          message: `Po dwukrotnym powiększeniu czcionki elementy nachodzą na siebie. Element1:${overlapElm[0]}, Element2:${overlapElm[1]}`
+        });
+      });
+    }
   }
 
   /**
@@ -127,7 +128,7 @@ class SiteValidate extends AbstractValidator {
         what: "animacja",
         category: "animation",
         type: "error",
-        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić autytu.`
+        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić audytu.`
       });
     } else if (elements.length > 0) {
       elements.forEach(element =>
@@ -164,13 +165,20 @@ class SiteValidate extends AbstractValidator {
    * @param {string} textContent
    * @returns {void}
    */
-  checkTitle({ textContent }) {
+  checkTitle({ textContent }, siteName) {
     if (!textContent) {
       this.setRaport({
         what: "tytuł",
         category: "general",
         type: "error",
         message: "Pusty tag <title>"
+      });
+    } else if (!textContent.includes(siteName)) {
+      this.setRaport({
+        what: "tytuł",
+        category: "general",
+        type: "warning",
+        message: "<title> powinien zawierać nazwę serwisu!"
       });
     }
   }
@@ -241,6 +249,29 @@ class SiteValidate extends AbstractValidator {
               message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
             });
           }
+        }
+      });
+    }
+  }
+
+  /**
+   * Table should have thead and tbody
+   * @param {Array<Node>} elements
+   * @returns {void}
+   */
+  checkTable(elements) {
+    if (elements.length > 0) {
+      elements.forEach(table => {
+        const thead = table.getElementsByTagName("thead");
+        const tbody = table.getElementsByTagName("tbody");
+
+        if (tbody.length > 0 && thead.length < 1) {
+          this.setRaport({
+            what: "tabela nie ma thead",
+            category: "semantic",
+            type: "error",
+            message: `Każda tabela musi mieć thead oraz tbody. Element: ${table.outerHTML}`
+          });
         }
       });
     }
@@ -480,7 +511,6 @@ class SiteValidate extends AbstractValidator {
           });
         }
 
-        //  BUG#3
         if (
           element &&
           element.getAttribute("tabindex") &&
@@ -529,25 +559,27 @@ class SiteValidate extends AbstractValidator {
    * @returns {void}
    */
   checkInputs(inputs) {
-    inputs.forEach(input => {
-      if (input && !input.inputLabel) {
-        this.setRaport({
-          what: "brak etykiety",
-          category: "devices",
-          type: "error",
-          message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
-        });
-
-        if (!input.correctFocus) {
+    if (inputs.length > 0) {
+      inputs.forEach(input => {
+        if (input && !input.inputLabel) {
           this.setRaport({
-            what: "brak focusa",
+            what: "brak etykiety",
             category: "devices",
-            type: "warning",
-            message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            type: "error",
+            message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
           });
+
+          if (!input.correctFocus) {
+            this.setRaport({
+              what: "brak focusa",
+              category: "devices",
+              type: "warning",
+              message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+            });
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   /**
@@ -589,6 +621,41 @@ class SiteValidate extends AbstractValidator {
           });
         }
       });
+    }
+  }
+
+  /**
+   * Check video and audio subtitles and check autoplay
+   * @param {Node} el -- probable popup
+   * @returns {void}
+   */
+  checkPopup({ el = null }) {
+    if (el !== null) {
+      const tabindex = el.match(/tabindex=("([^"]|"")*")/i);
+      const role = el.match(/role=("([^"]|"")*")/i);
+
+      if (tabindex) {
+        tabindex[1] = tabindex[1].replace(/"/g, "");
+      }
+
+      if (!tabindex || tabindex[1] < 0) {
+        this.setRaport({
+          what: "popup",
+          category: "devices",
+          type: "error",
+          message: `Błędny tabindex dla popup. Element: ${el}`
+        });
+      } else if (
+        !role ||
+        (role[1] !== '"dialog"' && role[1] !== '"document"')
+      ) {
+        this.setRaport({
+          what: "popup",
+          category: "devices",
+          type: "error",
+          message: `Popup nie ma ustawionej roli. Element: ${el}`
+        });
+      }
     }
   }
 }

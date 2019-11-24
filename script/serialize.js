@@ -11,7 +11,11 @@ function serializeForm(formElement = null) {
 
   inputs.forEach(input => {
     if (input.name !== "") {
-      formData[input.name] = input.value;
+      if (input.type === "text") {
+        formData[input.name] = input.value;
+      } else if (input.type === "radio" && input.checked) {
+        formData[input.name] = input.value;
+      }
     }
   });
 

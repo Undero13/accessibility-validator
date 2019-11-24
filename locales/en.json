@@ -1,0 +1,23 @@
+{
+    "Walidator Dostępności by Patyk \"Undero\" Loter":"Accessibility validator by Patyk \"Undero\" Loter",
+    "Nieprawidłowy URL. Proszę podać poprawny adres strony!": "Invalid URL. Please enter a valid website address!",
+    "Walidator dostepności stron internetowych":"Website accessibility validator",
+    "Podaj adres strony":"Get site URL",
+    "Jakie urządzenie chcesz testować?":"What device do you want to test?",
+    "Analizuj":"Analyze",
+    "Ogólnie o dostępności":"Accessibility docs",
+    "Proszę czekać...":"Please wait...",
+    "Analizuj kolejną stronę":"Analyze the next page",
+    "Pokaż więcej":"Show more",
+    "Element":"Element",
+    "Typ błędu":"Error type",
+    "Wiadomość":"Message",
+    "Ogólne":"General",
+    "Semantyczny HTML":"Semantic HTML",
+    "Standard Aria": "Aria standard",
+    "Dostępność obrazków":"Image accessibility",
+    "Kontrast Strony":"Page Contrast",
+    "Animacje":"Animations",
+    "Dostępność dla urządzeń":"Accessibility for devices",
+    "Wszystkie testy przeszły pomyślnie!": "All tests passed!"
+}

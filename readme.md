@@ -1,44 +1,43 @@
-# Walidator Dostępności
+# Accessibility validator
 
-Walidator dostępności html dostosowany do stron napisanych w angularze
+HTML accessibility validator adapted to pages dynamically rendered by JS
 
 # Start
-- pobierz projekt git clone
-- w konsoli wpisz npm install
-- wpisz npm start
+- git clone
+- npm install
+- npm start
 
 ## Script
-  - npm start - uruchamianie projektu
+  - npm start - starting the project
   - npm run lint - eslinter(airbnb) + prettier
-  - npm run test - uruchamianie testów
+  - npm run test - running tests
 
 ### Tech
 
-* Electron - Aplikacje desktopowe w JavaScript
-* Nightmare - Pozwala na zdalną pracę na wygenerowanym DOM
-* dom-parser - Zarządzanie wirtualnym DOM z poziomu node.js
-* color - Porównywanie kontraksu na stronie
+* Electron - Desktop applications in JavaScript
+* Nightmare - Allows remote work on the site DOM
+* dom-parser - Virtual DOM management from node.js
+* color - Comparing the contrast on the page
+* electron-localizer - For translation
+
+### ENV
+* DEV_ENV - dev mode
+* WINDOW_WIDTH - width of electron window
+* WINDOW_HEIGHT- height of electron window
+* SITE_LOADING_TIMEOUT - waiting time for page loading
+* SITE_SCROLLING_TIMEOUT - scroll time
+* {DEVICE}_WIDTH - analize site window width
+* {DEVICE}_Height - analize site window height
+* LANG - app lang
 
 ### Todos
 
- * Cytaty powinny się znajdować w blockquote lub q
- * Tabele powinny zawierać co najmniej sekcję thead i tbody
- * Tytuły stron (nazwa podstrony - nazwa serwisu)
- * Wielkość czcionek ???
- * Ikony powinny mieć aria-label lub title
- * Skip linki
- * Walidacja modali
- * Walidacja aria (Sztuczna inteligencja ???)
- * Pokrycie walidatora testami
- * Dodanie tłumaczenia na język angielski
- * Dodanie rozwiązań problemów w tabelkach
- * Napisanie rozwiązań problmów
+ * Better information in the report
 
 ### Bugs
 
- * Znalazłem buga w focusie - elementy niewidoczne na stronie, nie mogę złapać focusa przez co ich style były zestawiane z stylami document.body, naprawiłem to ograniczając sprawdzanie focusa na tylko widoczne elementy ale trzeba przemyśleć co zrobić z resztą. BUG#1
- * checkLinksAndButtons - bug wyłapuje z svg znacznik style i twierdzi że to textContent BUG#2
- * checkLinksAndButtons - są sytuacje kiedy tabindex może być zmieniany (np. modale) BUG#3
+ * checkLinksAndButtons - bug picks up the style tag from svg and put it in textContent BUG#2
+ * Problems downloading css on some pages
 
 ### License
 

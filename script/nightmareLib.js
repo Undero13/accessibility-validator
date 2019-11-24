@@ -1,6 +1,64 @@
 /** @module nightmareLib */
 
 /**
+ * Check element is visible
+ * @param {HTMLElement} element
+ * @returns {boolean}
+ */
+const checkVisible = ({ offsetWidth, offsetHeight }) =>
+  offsetWidth > 0 && offsetHeight > 0;
+
+/**
+ * Get getBoundingClientRect for overlap
+ * @param {HTMLElement} element
+ * @returns {Array<object>}
+ */
+const getPositions = element => {
+  const clientRect = element.getBoundingClientRect();
+  return [
+    [clientRect.left, clientRect.left + clientRect.width],
+    [clientRect.top, clientRect.top + clientRect.height]
+  ];
+};
+
+/**
+ * The elements do not overlap
+ * @param {HTMLCollection} elements
+ * @returns {Array<string>}
+ */
+const checkOverlap = elements => {
+  const lenght = elements.length;
+  const overlap = [];
+
+  for (let i = 0; i < lenght; i++) {
+    if (i + 1 === lenght) break;
+
+    if (!elements[i].contains(elements[i + 1])) {
+      const posA = getPositions(elements[i]);
+      const posB = getPositions(elements[i + 1]);
+
+      if (
+        posA[0][0] < posB[0][1] &&
+        posA[0][1] > posB[0][0] &&
+        posA[1][0] < posB[1][1] &&
+        posA[1][1] > posB[1][0]
+      ) {
+        const identifier1 =
+          elements[i].className || elements[i].id || elements[i].textContent;
+        const identifier2 =
+          elements[i + 1].className ||
+          elements[i + 1].id ||
+          elements[i + 1].textContent;
+
+        overlap.push([identifier1, identifier2]);
+      }
+    }
+  }
+
+  return overlap;
+};
+
+/**
  * Get background from element
  * @param {HTMLElement} element
  * @param {string} attr
@@ -8,14 +66,6 @@
  */
 const getStyle = (element, attr) =>
   window.getComputedStyle(element, null).getPropertyValue(attr);
-
-/**
- * Check element is visible
- * @param {HTMLElement} element
- * @returns {boolean}
- */
-const checkVisible = element =>
-  element.offsetWidth > 0 && element.offsetHeight > 0;
 
 /**
  * If element don't have backgroung get it from parent
@@ -97,7 +147,7 @@ const getAnimation = name => {
  * @param {number} counter
  * @returns {boolean}
  */
-function checkAnimation(rule, time, counter) {
+const checkAnimation = (rule, time, counter) => {
   const subject = {
     opacity: 0,
     color: 0,
@@ -127,7 +177,7 @@ function checkAnimation(rule, time, counter) {
   }
 
   return true;
-}
+};
 
 /**
  * Get background,color and font-size and few others
@@ -135,8 +185,8 @@ function checkAnimation(rule, time, counter) {
  * @param {boolean} interactive
  * @returns {object|null}
  */
-function getStyleFormDom(elements, interactive = false) {
-  if (elements.length < 1) return;
+const getStyleFormDom = (elements, interactive = false) => {
+  if (elements.length < 1) return [];
 
   const properties = [];
 
@@ -148,7 +198,6 @@ function getStyleFormDom(elements, interactive = false) {
     let styleAfterFocus;
 
     if (interactive && checkVisible(elm)) {
-      // BUG#1
       styleBefore = getAllStyles(elm);
       elm.focus();
       styleAfterFocus = getAllStyles(document.activeElement);
@@ -176,14 +225,14 @@ function getStyleFormDom(elements, interactive = false) {
     });
   });
   return properties;
-}
+};
 
 /**
  * Return invalid animated element
  * @throws {Error} if site block analize css
  * @returns {array<object>}
  */
-function getAnimationElement() {
+const getAnimationElement = () => {
   const elements = [...document.body.getElementsByTagName("*")];
   const notValidElements = [];
 
@@ -210,7 +259,82 @@ function getAnimationElement() {
   }
 
   return notValidElements;
-}
+};
+
+/**
+ * Enlarge fonts 2 times and check overlap
+ * @returns {function}
+ */
+const enlargeFonts = () => {
+  const elements = document.querySelectorAll(
+    "p,a,button,input,h1,h2,h3,h4,h5,h6,span"
+  );
+
+  const enlargeElements = [];
+
+  elements.forEach(element => {
+    if (element.textContent) {
+      const fontSize = getStyle(element, "font-size");
+      const currentSize = parseFloat(fontSize);
+      element.style.fontSize = `${currentSize * 2}px`;
+
+      enlargeElements.push(element);
+    }
+  });
+
+  return checkOverlap(enlargeElements);
+};
+
+const clearURL = () => {
+  const url = location.origin;
+  const urlWithoutHttp = url.replace(/^(?:https?:\/\/)?(?:www\.)?/gi, "");
+  const urlWithoutSlash = urlWithoutHttp.replace("/", "");
+  const test = urlWithoutSlash.split(".").length;
+  let clearUrl = urlWithoutSlash;
+
+  for (let i = 1; i < test; i++) {
+    clearUrl = clearUrl.replace(/([.]\w+)$/, "");
+  }
+
+  return clearUrl;
+};
+
+const getPotentialModal = () => {
+  const elements = document.body.querySelectorAll(
+    "*:not(script):not(style):not(svg):not(noscript):not(p)"
+  );
+
+  const potentialModal = [];
+
+  elements.forEach(element => {
+    if (
+      checkVisible(element) &&
+      (getStyle(element, "position") === "absolute" ||
+        getStyle(element, "position") === "fixed")
+    ) {
+      potentialModal.push({
+        el: element.outerHTML,
+        zIndex:
+          getStyle(element, "z-index") === "auto"
+            ? 0
+            : parseInt(getStyle(element, "z-index"), 10)
+      });
+    }
+  });
+
+  const max = potentialModal.reduce((prev, current) =>
+    prev.zIndex > current.zIndex ? prev : current
+  );
+
+  if (max.zIndex > 0) {
+    return max;
+  }
+
+  return {};
+};
 
 window.getStyleFormDom = getStyleFormDom;
 window.getAnimationElement = getAnimationElement;
+window.enlargeFonts = enlargeFonts;
+window.clearURL = clearURL;
+window.getPotentialModal = getPotentialModal;

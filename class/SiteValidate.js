@@ -90,9 +90,8 @@ class SiteValidate extends AbstractValidator {
             what: "kontrast",
             category: "contrast",
             type: "warning",
-            message: `Zalecany kontrast dla elementów to powyżej 4.5. Wykryto ${contrast.toFixed(
-              2
-            )} dla ${el}`
+            code: "K1",
+            message: `${contrast.toFixed(2)} - ${el}`
           });
         }
       }
@@ -111,7 +110,8 @@ class SiteValidate extends AbstractValidator {
           what: "elementy nachodzą na siebie",
           category: "general",
           type: "warning",
-          message: `Po dwukrotnym powiększeniu czcionki elementy nachodzą na siebie. Element1:${overlapElm[0]}, Element2:${overlapElm[1]}`
+          code: "L1",
+          message: `Element1:${overlapElm[0]}, Element2:${overlapElm[1]}`
         });
       });
     }
@@ -128,7 +128,8 @@ class SiteValidate extends AbstractValidator {
         what: "animacja",
         category: "animation",
         type: "error",
-        message: `Strona blokuje dostęp do CSS. Nie mogę przeprowadzić audytu.`
+        code: "A1",
+        message: ""
       });
     } else if (elements.length > 0) {
       elements.forEach(element =>
@@ -136,7 +137,8 @@ class SiteValidate extends AbstractValidator {
           what: "animacja",
           category: "animation",
           type: "error",
-          message: `Nieprawidłowa animacja dla elementu: ${element}`
+          code: "A2",
+          message: `${element}`
         })
       );
     }
@@ -155,7 +157,8 @@ class SiteValidate extends AbstractValidator {
         what: "język",
         category: "general",
         type: "error",
-        message: "Brak określonego atrybutu lang"
+        code: "L2",
+        message: ""
       });
     }
   }
@@ -171,14 +174,16 @@ class SiteValidate extends AbstractValidator {
         what: "tytuł",
         category: "general",
         type: "error",
-        message: "Pusty tag <title>"
+        code: "T1",
+        message: ""
       });
     } else if (!textContent.includes(siteName)) {
       this.setRaport({
         what: "tytuł",
         category: "general",
         type: "warning",
-        message: "<title> powinien zawierać nazwę serwisu!"
+        code: "T2",
+        message: ""
       });
     }
   }
@@ -194,7 +199,8 @@ class SiteValidate extends AbstractValidator {
         what: "nawigacja",
         category: "semantic",
         type: "warning",
-        message: "Brak semantycznego tagu <nav> na stronie!"
+        code: "N1",
+        message: ""
       });
 
       return false;
@@ -204,10 +210,11 @@ class SiteValidate extends AbstractValidator {
 
     if (list.length < 1) {
       this.setRaport({
-        what: "nawigacja lista",
+        what: "nawigacja",
         category: "semantic",
         type: "warning",
-        message: "Elementy w navbarze powinny być listą"
+        code: "N2",
+        message: ""
       });
     }
   }
@@ -223,7 +230,8 @@ class SiteValidate extends AbstractValidator {
         what: "stopka",
         category: "semantic",
         type: "warning",
-        message: "Brak semantycznej tagu <footer>"
+        code: "F1",
+        message: ""
       });
     }
   }
@@ -246,7 +254,8 @@ class SiteValidate extends AbstractValidator {
               what: "sekcja nie ma headera",
               category: "semantic",
               type: "error",
-              message: `Każda sekcja musi mieć header. Element: ${item.outerHTML}`
+              code: "H1",
+              message: `Element: ${item.outerHTML}`
             });
           }
         }
@@ -270,7 +279,8 @@ class SiteValidate extends AbstractValidator {
             what: "tabela nie ma thead",
             category: "semantic",
             type: "error",
-            message: `Każda tabela musi mieć thead oraz tbody. Element: ${table.outerHTML}`
+            code: "T3",
+            message: `Element: ${table.outerHTML}`
           });
         }
       });
@@ -292,7 +302,8 @@ class SiteValidate extends AbstractValidator {
             what: "brak figcaption",
             category: "semantic",
             type: "warning",
-            message: `Element <figure> nie ma tagu <figcaption> ${figure.outerHTML} `
+            code: "F2",
+            message: `Element:${figure.outerHTML} `
           });
         }
       });
@@ -325,7 +336,8 @@ class SiteValidate extends AbstractValidator {
             what: "ikona",
             category: "semantic",
             type: "error",
-            message: `Znacznik <i> nie służy do osadzania ikon! Element ${icon.outerHTML}`
+            code: "I1",
+            message: `Element ${icon.outerHTML}`
           });
         }
       });
@@ -343,7 +355,8 @@ class SiteValidate extends AbstractValidator {
         what: "main",
         category: "semantic",
         type: "error",
-        message: `Każda podstrona powinna mieć 1 znacznik <main>. Znaleziono:${length}`
+        code: "M1",
+        message: `${length}`
       });
     }
   }
@@ -379,7 +392,8 @@ class SiteValidate extends AbstractValidator {
         what: "nagłówki",
         category: "semantic",
         type: "error",
-        message: `Każda podstrona powinna mieć 1 znacznik <h1>. Znaleziono:${h1}`
+        code: "H2",
+        message: `${h1}`
       });
     }
 
@@ -394,7 +408,8 @@ class SiteValidate extends AbstractValidator {
         what: "nagłówki",
         category: "semantic",
         type: "error",
-        message: `Zachwiana hierarchia nagłówków na stronie`
+        code: "H3",
+        message: ""
       });
     }
   }
@@ -412,7 +427,8 @@ class SiteValidate extends AbstractValidator {
             what: "title w iframe",
             category: "semantic",
             type: "error",
-            message: `Brak atrybutu title dla <iframe>. Element: ${iframe.outerHTML}`
+            code: "I2",
+            message: `Element: ${iframe.outerHTML}`
           });
         }
       });
@@ -434,9 +450,8 @@ class SiteValidate extends AbstractValidator {
             what: "opis obrazka",
             category: "image",
             type: "error",
-            message: `Pusty alt obrazka. Ścieżka obrazka: ${img.getAttribute(
-              "src"
-            )}`
+            code: "I3",
+            message: `${img.getAttribute("src")}`
           });
         }
       });
@@ -456,10 +471,11 @@ class SiteValidate extends AbstractValidator {
 
         if (title.length < 1) {
           this.setRaport({
-            what: "title w svg",
+            what: "tytuł w svg",
             category: "image",
             type: "error",
-            message: `Pusty <title> dla <svg>. Element: ${svg.outerHTML}`
+            code: "S1",
+            message: `Element: ${svg.outerHTML}`
           });
         }
       });
@@ -484,7 +500,8 @@ class SiteValidate extends AbstractValidator {
               what: "uszkodzony href",
               category: "general",
               type: "error",
-              message: `Element <a> ma uszkodzony atrybut href! Element: ${link.outerHTML}`
+              code: "A3",
+              message: `Element: ${link.outerHTML}`
             });
           }
         }
@@ -507,7 +524,8 @@ class SiteValidate extends AbstractValidator {
             what: "pusty aria-label",
             category: "aria",
             type: "warning",
-            message: `Element ma pusty atrybut aria-label! Element: ${element.outerHTML}`
+            code: "A4",
+            message: `Element: ${element.outerHTML}`
           });
         }
 
@@ -520,7 +538,8 @@ class SiteValidate extends AbstractValidator {
             what: "tabindex",
             category: "devices",
             type: "warning",
-            message: `Element ma zmienioną wartość tabindex! Element: ${element.outerHTML}`
+            code: "A5",
+            message: `Element: ${element.outerHTML}`
           });
         }
 
@@ -537,7 +556,8 @@ class SiteValidate extends AbstractValidator {
             what: "brak etykiety",
             category: "general",
             type: "error",
-            message: `Element nie ma etykiety! Element: ${item.el}`
+            code: "A6",
+            message: `Element: ${item.el}`
           });
         }
 
@@ -546,7 +566,8 @@ class SiteValidate extends AbstractValidator {
             what: "brak focusa",
             category: "devices",
             type: "warning",
-            message: `Element nie ma widocznego focusa! Element: ${item.el}`
+            code: "A7",
+            message: `Element: ${item.el}`
           });
         }
       }
@@ -566,7 +587,8 @@ class SiteValidate extends AbstractValidator {
             what: "brak etykiety",
             category: "devices",
             type: "error",
-            message: `Input nie ma etykiety lub ma więcej niż 1! Element: ${input.el}`
+            code: "A8",
+            message: `Element: ${input.el}`
           });
 
           if (!input.correctFocus) {
@@ -574,7 +596,8 @@ class SiteValidate extends AbstractValidator {
               what: "brak focusa",
               category: "devices",
               type: "warning",
-              message: `Element nie ma widocznego focusa! Element: ${input.outerHTML}`
+              code: "A9",
+              message: `Element: ${input.outerHTML}`
             });
           }
         }
@@ -601,14 +624,16 @@ class SiteValidate extends AbstractValidator {
             what: "brak transkrypcji",
             category: "devices",
             type: "error",
-            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+            code: "V1",
+            message: ` ${element.outerHTML}`
           });
         } else if (track && !kindValid) {
           this.setRaport({
             what: "brak transkrypcji",
             category: "devices",
             type: "error",
-            message: `Brak traansktypcji dla elementu: ${element.outerHTML}`
+            code: "V2",
+            message: `${element.outerHTML}`
           });
         }
 
@@ -617,7 +642,8 @@ class SiteValidate extends AbstractValidator {
             what: "video autoplay",
             category: "devices",
             type: "warning",
-            message: `Autoplay nie powinien być właczony. Element: ${element.outerHTML}`
+            code: "V3",
+            message: `Element: ${element.outerHTML}`
           });
         }
       });
@@ -643,7 +669,8 @@ class SiteValidate extends AbstractValidator {
           what: "popup",
           category: "devices",
           type: "error",
-          message: `Błędny tabindex dla popup. Element: ${el}`
+          code: "P1",
+          message: `Element: ${el}`
         });
       } else if (
         !role ||
@@ -653,7 +680,8 @@ class SiteValidate extends AbstractValidator {
           what: "popup",
           category: "devices",
           type: "error",
-          message: `Popup nie ma ustawionej roli. Element: ${el}`
+          code: "P2",
+          message: `Element: ${el}`
         });
       }
     }

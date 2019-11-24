@@ -68,7 +68,7 @@ class Raport {
     } else {
       const tr = document.createElement("tr");
       tr.classList.add("has-background-success");
-      tr.innerHTML = `<td colspan="3">Wszystkie testy przeszły pomyślnie!</td>`;
+      tr.innerHTML = `<td colspan="3"><localized-text>Wszystkie testy przeszły pomyślnie!</localized-text></td>`;
       tbody.append(tr);
     }
     table.append(tbody);

@@ -18,7 +18,7 @@ const appendSpinner = () => {
 
   spinner.classList.add("spinner");
   info.classList.add("has-text-white");
-  info.textContent = "Proszę czekać...";
+  info.innerHTML = "<localized-text>Proszę czekać...</localized-text>";
 
   wrapper.append(spinner);
   wrapper.append(info);
@@ -61,5 +61,4 @@ const getURL = e => {
 };
 
 form.addEventListener("submit", getURL);
-
 footer.addEventListener("click", () => ipcRenderer.send("info", null));

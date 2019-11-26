@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 const { ipcRenderer } = require("electron");
 
 const serializeForm = require(`${__dirname}/../script/serialize`);

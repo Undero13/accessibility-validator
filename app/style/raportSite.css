@@ -1,0 +1,57 @@
+html{
+    background: #34495E;
+}
+
+body{
+    margin:0;
+    min-height: 100vh;
+}
+
+.table{
+    width: 80%;
+    margin:40px auto 0;
+
+}
+
+.table tr td, .table tr th{
+    text-align: center !important;
+}
+
+caption{
+    color:white;
+    font-weight: 700;
+    font-size:20px;
+}
+
+.table.is-striped tbody tr:not(.is-selected):nth-child(even){
+    background-color: #eee;
+}
+
+.d-none{
+    display:none;
+}
+
+.button{
+    margin-left: 20px;
+}
+
+.has-text-warning {
+    color: #f3c307!important;
+}
+
+.footer{
+    background: #34495E;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color:#fff;
+    cursor: pointer;
+}
+
+footer a {
+    color:#fff;
+    cursor: pointer;
+}

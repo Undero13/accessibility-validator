@@ -690,4 +690,4 @@ class SiteValidate extends AbstractValidator {
   }
 }
 
-module.exports = SiteValidate;
+export default SiteValidate;

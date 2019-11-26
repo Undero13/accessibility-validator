@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "sourceMap": true,
+      "outDir": "compile",
+      "baseUrl": ".",
+      "paths": {
+        "*": ["node_modules/*"]
+      }
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "node_modules/**/*.{j,t}s"
+    ],
+    "linterOptions": {
+        "exclude": [
+          "node_modules/**/*.{j,t}s"
+        ]
+    }
+  }

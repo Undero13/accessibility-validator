@@ -9,7 +9,7 @@ HTML accessibility validator adapted to pages dynamically rendered by JS
 
 ## Script
   - npm start - starting the project
-  - npm run lint - eslinter(airbnb) + prettier
+  - npm run lint - tslint
   - npm run test - running tests
 
 ### Tech

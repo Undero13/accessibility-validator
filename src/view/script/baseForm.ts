@@ -2,7 +2,7 @@ const { ipcRenderer } = require("electron");
 
 const serializeForm = require(`${__dirname}/../script/serialize`);
 const form = document.querySelector("#form_url");
-const alert = document.querySelector("#alert");
+const alert1 = document.querySelector("#alert");
 const { body } = document;
 
 /*
@@ -27,12 +27,12 @@ const appendSpinner = () => {
 /*
  * Validate data from form and send to electron class
  */
-const getURL = e => {
+const getURL = (e: { preventDefault: () => void }) => {
   e.preventDefault();
   const data = serializeForm(form);
 
   if (!data) {
-    return alert.classList.remove("is-invisible");
+    return alert1.classList.remove("is-invisible");
   }
 
   if (!/(http(s?)):\/\//gi.test(data.url)) {
@@ -54,7 +54,7 @@ const getURL = e => {
     });
     appendSpinner();
   } else {
-    alert.classList.remove("is-invisible");
+    alert1.classList.remove("is-invisible");
   }
 };
 

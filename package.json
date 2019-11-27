@@ -9,8 +9,8 @@
     "start": "(npm run tsc && electron ./compile)",
     "start2": "electron ./compile",
     "lint": "nodemon --exec \"npm run eslint\"",
-    "eslint": "tslint --fix **/**.ts",
-    "eslint-nofix": "tslint **/**.ts",
+    "eslint": "eslint src/**/*.ts --fix **/**.ts",
+    "tslint-nofix": "tslint **/**.ts",
     "test": "jest",
     "pack": "(npm run tsc && electron-builder --dir)",
     "unpackage-asar": "(cd dist/win-unpacked/resources/ && asar extract app.asar app)",
@@ -18,6 +18,7 @@
     "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile)",
     "tsc": "tsc && npm run copy-static"
   },
+  "typings": "types/types",
   "build": {
     "extraResources": [
       {
@@ -33,19 +34,30 @@
       "category": "accessibility validator"
     },
     "files": [
-        "./compile/**/*"
+      "./compile/**/*"
     ]
   },
   "devDependencies": {
-    "@types/node": "^12.12.7",
+    "@types/nightmare": "^2.10.4",
+    "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
     "copyfiles": "^2.1.1",
     "electron": "^7.0.0",
     "electron-builder": "^19.0.0",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
     "fs-extra": "^8.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
-    "tslint": "^5.20.1",
-    "tslint-eslint-rules-recommended": "^1.2.2",
+    "prettier": "^1.19.1",
     "typescript": "^3.7.2"
   },
   "dependencies": {

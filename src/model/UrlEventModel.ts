@@ -1,4 +1,4 @@
 export default interface UrlEventModel {
-    url: string,
-    device: string
-}
+  url: string;
+  device: string;
+};

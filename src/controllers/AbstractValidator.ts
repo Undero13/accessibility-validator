@@ -1,51 +1,29 @@
-/**
- * AbstractValidator class
- * @module AbstractValidator
- * @throws {Error} if not override
- */
+import RaportModel from '../model/RaportModel'
 
-class AbstractValidator {
-  constructor() {
-    if (new.target === AbstractValidator) {
-      throw new TypeError(
-        'Abstract class "AbstractValidator" cannot be instantiated directly.'
-      );
-    }
+abstract class AbstractValidator {
+  private url: string
+  private devices: string
+  private raport: Array<RaportModel>
+
+  constructor(url: string, devices: string) {
+    this.url = url
+    this.devices = devices
+    this.raport = []
   }
 
-  /**
-   * processDOM abstract method
-   * @throws {Error} if not override
-   * @returns {void}
-   */
-  processDOM() {
-    throw new Error("You have to implement the method processDOM");
-  }
+  abstract processDOM(): void
 
-  /**
-   * Get url property
-   * @returns {string}
-   */
-  getURL() {
+  getURL(): string {
     return this.url;
   }
 
-  /**
-   * Get raport property
-   *  @returns {Array<object>}
-   */
-  getRaport() {
+  getRaport(): Array<RaportModel> {
     return this.raport;
   }
 
-  /**
-   * Push new raport object
-   * @param {object} data
-   * @returns {void}
-   */
-  setRaport(data) {
+  setRaport(data: RaportModel): void {
     this.raport.push(data);
   }
 }
 
-module.exports = AbstractValidator;
+export default AbstractValidator;

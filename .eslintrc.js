@@ -32,6 +32,17 @@ module.exports = {
     "lines-between-class-members":"off",
     "no-extra-semi":"off",
     "semi":"off",
-    "linebreak-style":"off"
+    "linebreak-style":"off",
+    "@typescript-eslint/interface-name-prefix":"off",
+    "global-require":"off",
+    "@typescript-eslint/no-var-requires":"off",
+    "import/no-dynamic-require":"off"
+  },
+  "globals":{
+    "getStyleFormDom": true,
+    "getAnimationElement": true,
+    "enlargeFonts": true,
+    "clearURL": true,
+    "getPotentialModal": true
   }
 };

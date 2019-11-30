@@ -27,6 +27,26 @@ class MainWindow {
     this.setMenu();
   }
 
+  observable(validator: SiteValidate): void {
+    const id = setInterval(() => {
+      if (validator.getFinish()) {
+        if (validator.getError()) {
+          this.window.loadFile('view/template/index.html');
+
+          const response = dialog.showMessageBox({
+            message: `Podałeś błedny URL: ${validator.getURL()}`,
+            buttons: ['OK'],
+          });
+
+          console.log(response);
+        } else {
+          this.window.loadFile('view/template/raport.html');
+        }
+        clearInterval(id);
+      }
+    }, 500)
+  }
+
   setWinListeners(): void {
     // electron start event
     app.on('ready', () => this.createMainWindow());
@@ -39,32 +59,8 @@ class MainWindow {
   }
 
   setOutsiteListeners(): void {
-    // make raport event
-    ipcMain.on('url', (event: IpcMainEvent, arg: UrlEventModel) => {
-      const validator = new SiteValidate(arg);
-
-      const id = setInterval(() => {
-        if (validator.finish && !validator.error) {
-          this.window.loadFile('view/template/raport.html');
-
-          setTimeout(() => {
-            this.window.webContents.send('raport', validator.getRaport());
-          }, 500);
-
-          clearInterval(id);
-        } else if (validator.error) {
-          this.window.loadFile('view/template/index.html');
-
-          const response = dialog.showMessageBox({
-            message: `Podałeś błedny URL: ${arg.url}`,
-            buttons: ['OK'],
-          });
-
-          console.log(response);
-          clearInterval(id);
-        }
-      }, 5000);
-    });
+    // Start validate site
+    ipcMain.on('url', (event: IpcMainEvent, arg: UrlEventModel) => this.observable(new SiteValidate(arg)));
 
     // next site analize event
     ipcMain.on('return', () => this.window.loadFile('./View/template/index.html'));

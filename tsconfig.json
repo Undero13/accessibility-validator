@@ -8,7 +8,8 @@
     "paths": {
       "*": ["node_modules/*"]
     },
-    "typeRoots": ["./src/typings"]
+    "typeRoots": ["./src/typings"],
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "node_modules/**/*.{j,t}s"],

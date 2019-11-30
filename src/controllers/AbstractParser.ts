@@ -1,12 +1,12 @@
 abstract class AbstractParser {
-  public DOM: FakeDOMDocument;
+  protected DOM: FakeDOMDocument;
 
   constructor(DOM: FakeDOMDocument) {
     this.DOM = DOM
   }
 
-  abstract getElements(selector: string): Array<FakeElement>
-  abstract getHeadTitle(): FakeElement
+  abstract getElements(selector: string): Array<FakeDOMElement>
+  abstract getHeadTitle(): FakeDOMElement
 
   getDOM(): FakeDOMDocument {
     return this.DOM;

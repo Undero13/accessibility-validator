@@ -27,6 +27,9 @@ class MainWindow {
     this.setMenu();
   }
 
+  /**
+   * Wait for validator finish
+   */
   observable(validator: SiteValidate): void {
     const id = setInterval(() => {
       if (validator.getFinish()) {
@@ -116,6 +119,7 @@ class MainWindow {
       height: parseInt(process.env.WINDOW_HEIGHT, 10),
       webPreferences: {
         nodeIntegration: true,
+        preload: './preload.js',
       },
     });
 

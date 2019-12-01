@@ -4,7 +4,6 @@ import RaportModel from '../model/RaportModel'
 abstract class AbstractValidator {
   protected url: string
   protected device: string
-  protected raport: Array<RaportModel>
   protected test = false;
   protected error = false;
   protected finish = false;
@@ -13,7 +12,6 @@ abstract class AbstractValidator {
     this.url = url;
     this.device = device;
     this.test = test;
-    this.raport = [];
   }
 
   abstract processDOM(): void
@@ -21,14 +19,6 @@ abstract class AbstractValidator {
 
   getURL(): string {
     return this.url;
-  }
-
-  getRaport(): Array<RaportModel> {
-    return this.raport;
-  }
-
-  setRaport(data: RaportModel): void {
-    this.raport.push(data);
   }
 
   getError(): boolean {

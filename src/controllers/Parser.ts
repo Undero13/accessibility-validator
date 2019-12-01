@@ -6,7 +6,6 @@ import Nightmare = require('nightmare');
 /**
  * AbstractValidator class
  * @module Parser
- * @constructor @param {Node} DOM
  */
 class Parser extends AbstractParser {
   constructor(html: string) {

@@ -1,10 +1,8 @@
-/* eslint-disable no-underscore-dangle */
-const LocalizerModule = require("electron-localizer");
-const { parsed: config } = require("dotenv").config({
-  path: `${__dirname}/../.env`
-});
+/* eslint-disable @typescript-eslint/camelcase */
+const LocalizerModule = require('electron-localizer');
+const { parsed: config } = require('dotenv').config();
 
 new LocalizerModule({
-  locales_directory: `${__dirname}/../locales`,
-  locale: config.LANG
+  locales_directory: `${__dirname}/../../../locales`,
+  locale: config.LANG,
 });

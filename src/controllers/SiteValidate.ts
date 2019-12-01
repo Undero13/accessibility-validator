@@ -1,5 +1,6 @@
 import AbstractValidator from './AbstractValidator';
 import Parser from './Parser';
+import Raport from './Raport'
 
 import Color = require('color');
 
@@ -8,8 +9,13 @@ import Color = require('color');
  * @module SiteValidate
  */
 class SiteValidate extends AbstractValidator {
+  private raport: Raport;
+
   constructor(param: MainFormData, test = false) {
     super(param.url, param.device, test);
+
+    this.raport = new Raport();
+    this.raport.clearStore();
 
     if (!this.test) {
       this.getDOM();
@@ -28,8 +34,7 @@ class SiteValidate extends AbstractValidator {
   }
 
   processDOM(html: NightmareReturnObject) {
-    this.setFinish(true)
-    /* const parser = new Parser(html.DOM);
+    const parser = new Parser(html.DOM);
 
     this.checkContrast(
       [html.p, html.span, html.link, html.button],
@@ -56,7 +61,9 @@ class SiteValidate extends AbstractValidator {
     this.checkVideoAndAudio(
       parser.getElements('video'),
       parser.getElements('audio'),
-    ); */
+    );
+
+    this.setFinish(true)
   }
 
   /**
@@ -64,7 +71,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @returns {void}
    */
-  /* checkContrast(...elements) {
+  checkContrast(...elements) {
     const elementsFlat = elements.flat(2);
 
     elementsFlat.forEach((element) => {
@@ -74,7 +81,7 @@ class SiteValidate extends AbstractValidator {
         const contrast = colorFirst.contrast(Color(color));
 
         if (contrast < 4.5) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'kontrast',
             category: 'contrast',
             type: 'warning',
@@ -91,10 +98,10 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @todo
    */
-  /* checkLetter(elements) {
+  checkLetter(elements) {
     if (elements.length > 0) {
       elements.forEach((overlapElm) => {
-        this.setRaport({
+        this.raport.addNewRaport({
           what: 'elementy nachodzą na siebie',
           category: 'general',
           type: 'warning',
@@ -110,9 +117,9 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @returns {void}
    */
-  /* checkAnimation(elements) {
+  checkAnimation(elements) {
     if (elements[0] === 'blocker') {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'animacja',
         category: 'animation',
         type: 'error',
@@ -120,7 +127,7 @@ class SiteValidate extends AbstractValidator {
         message: '',
       });
     } else if (elements.length > 0) {
-      elements.forEach((element) => this.setRaport({
+      elements.forEach((element) => this.raport.addNewRaport({
         what: 'animacja',
         category: 'animation',
         type: 'error',
@@ -135,11 +142,11 @@ class SiteValidate extends AbstractValidator {
    * @param {Node} html
    * @returns {void}
    */
-  /* checkLang([html]) {
+  checkLang([html]) {
     const lang = html.getAttribute('lang');
 
     if (!lang) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'język',
         category: 'general',
         type: 'error',
@@ -154,9 +161,9 @@ class SiteValidate extends AbstractValidator {
    * @param {string} textContent
    * @returns {void}
    */
-  /* checkTitle({ textContent }, siteName) {
+  checkTitle({ textContent }, siteName) {
     if (!textContent) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'tytuł',
         category: 'general',
         type: 'error',
@@ -164,7 +171,7 @@ class SiteValidate extends AbstractValidator {
         message: '',
       });
     } else if (!textContent.includes(siteName)) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'tytuł',
         category: 'general',
         type: 'warning',
@@ -179,9 +186,9 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} nav
    * @returns {void|boolean}
    */
-  /* checkNav(nav) {
+  checkNav(nav) {
     if (nav.length < 1) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'nawigacja',
         category: 'semantic',
         type: 'warning',
@@ -195,7 +202,7 @@ class SiteValidate extends AbstractValidator {
     const list = nav[0].getElementsByTagName('ul');
 
     if (list.length < 1) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'nawigacja',
         category: 'semantic',
         type: 'warning',
@@ -210,9 +217,9 @@ class SiteValidate extends AbstractValidator {
    * @param {number} length
    * @returns {void}
    */
-  /* checkFooter({ length }) {
+  checkFooter({ length }) {
     if (length < 1) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'stopka',
         category: 'semantic',
         type: 'warning',
@@ -227,7 +234,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} section
    * @returns {void}
    */
-  /* checkSection(section) {
+  checkSection(section) {
     if (section.length > 0) {
       section.forEach((item) => {
         for (let i = 0; i < 6; i++) {
@@ -236,7 +243,7 @@ class SiteValidate extends AbstractValidator {
           if (header.length > 0) {
             break;
           } else if (header.length < 1 && i === 5) {
-            this.setRaport({
+            this.raport.addNewRaport({
               what: 'sekcja nie ma headera',
               category: 'semantic',
               type: 'error',
@@ -254,14 +261,14 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @returns {void}
    */
-  /* checkTable(elements) {
+  checkTable(elements) {
     if (elements.length > 0) {
       elements.forEach((table) => {
         const thead = table.getElementsByTagName('thead');
         const tbody = table.getElementsByTagName('tbody');
 
         if (tbody.length > 0 && thead.length < 1) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'tabela nie ma thead',
             category: 'semantic',
             type: 'error',
@@ -278,13 +285,13 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} figures
    * @returns {void}
    */
-  /* checkFigure(figures) {
+  checkFigure(figures) {
     if (figures.length > 0) {
       figures.forEach((figure) => {
         const caption = figure.getElementsByTagName('figcaption');
 
         if (caption.length < 1) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak figcaption',
             category: 'semantic',
             type: 'warning',
@@ -301,7 +308,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} icons
    * @returns {void}
    */
-  /* checkIcon(icons) {
+  checkIcon(icons) {
     if (icons.length > 0) {
       icons.forEach((icon) => {
         const classIcon = icon.getAttribute('class')
@@ -318,7 +325,7 @@ class SiteValidate extends AbstractValidator {
           || classIcon.includes('fab')
           || haveSVG
         ) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'ikona',
             category: 'semantic',
             type: 'error',
@@ -335,9 +342,9 @@ class SiteValidate extends AbstractValidator {
    * @param {number} length
    * @returns {void}
    */
-  /* checkMain({ length }) {
+  checkMain({ length }) {
     if (length < 1 || length > 1) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'main',
         category: 'semantic',
         type: 'error',
@@ -352,7 +359,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} headers
    * @returns {void}
    */
-  /* checkHeaders(...headers) {
+  checkHeaders(...headers) {
     const headersArr = headers.flat(3);
     let h1 = 0;
     let h2 = 0;
@@ -374,7 +381,7 @@ class SiteValidate extends AbstractValidator {
     });
 
     if (h1 > 1 || h1 < 1) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'nagłówki',
         category: 'semantic',
         type: 'error',
@@ -390,7 +397,7 @@ class SiteValidate extends AbstractValidator {
       || (h5 > 0 && h4 < 1)
       || (h6 > 0 && h5 < 1)
     ) {
-      this.setRaport({
+      this.raport.addNewRaport({
         what: 'nagłówki',
         category: 'semantic',
         type: 'error',
@@ -405,11 +412,11 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} iframeArr
    * @returns {void}
    */
-  /* checkIframe(iframeArr) {
+  checkIframe(iframeArr) {
     if (iframeArr.length > 0) {
       iframeArr.forEach((iframe) => {
         if (iframe && !iframe.getAttribute('title')) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'title w iframe',
             category: 'semantic',
             type: 'error',
@@ -426,13 +433,13 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} images
    * @returns {void}
    */
-  /* checkImages(images) {
+  checkImages(images) {
     if (images.length > 0) {
       images.forEach((img) => {
         const alt = img.getAttribute('alt') ? img.getAttribute('alt') : '';
 
         if (alt.length < 1) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'opis obrazka',
             category: 'image',
             type: 'error',
@@ -449,14 +456,14 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} svgArr
    * @returns {void}
    */
-  /* checkSVG(svgArr) {
+  checkSVG(svgArr) {
     if (svgArr.length > 0) {
       svgArr.forEach((svg) => {
         const parser = new Parser(svg.outerHTML);
         const title = parser.getElements('title');
 
         if (title.length < 1) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'tytuł w svg',
             category: 'image',
             type: 'error',
@@ -473,7 +480,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elementsArr
    * @returns {void}
    */
-  /* checkLinksAndButtons(elementsArr) {
+  checkLinksAndButtons(elementsArr) {
     // links href
     if (elementsArr[0].length > 0) {
       elementsArr[0].forEach((element) => {
@@ -482,7 +489,7 @@ class SiteValidate extends AbstractValidator {
           const [link] = parser.getElements('a');
 
           if (link && !link.getAttribute('href')) {
-            this.setRaport({
+            this.raport.addNewRaport({
               what: 'uszkodzony href',
               category: 'general',
               type: 'error',
@@ -505,7 +512,7 @@ class SiteValidate extends AbstractValidator {
           : parser.getElements('button');
 
         if (element && element.getAttribute('aria-label') === '') {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'pusty aria-label',
             category: 'aria',
             type: 'warning',
@@ -519,7 +526,7 @@ class SiteValidate extends AbstractValidator {
           && element.getAttribute('tabindex')
           && element.getAttribute('tabindex') * 1 !== 0
         ) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'tabindex',
             category: 'devices',
             type: 'warning',
@@ -536,7 +543,7 @@ class SiteValidate extends AbstractValidator {
 
         // BUG #2
         if (!item.textContent && !title && !image) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak etykiety',
             category: 'general',
             type: 'error',
@@ -546,7 +553,7 @@ class SiteValidate extends AbstractValidator {
         }
 
         if (!item.correctFocus) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak focusa',
             category: 'devices',
             type: 'warning',
@@ -563,11 +570,11 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} inputs
    * @returns {void}
    */
-  /* checkInputs(inputs) {
+  checkInputs(inputs) {
     if (inputs.length > 0) {
       inputs.forEach((input) => {
         if (input && !input.inputLabel) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak etykiety',
             category: 'devices',
             type: 'error',
@@ -576,7 +583,7 @@ class SiteValidate extends AbstractValidator {
           });
 
           if (!input.correctFocus) {
-            this.setRaport({
+            this.raport.addNewRaport({
               what: 'brak focusa',
               category: 'devices',
               type: 'warning',
@@ -594,7 +601,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Array<Node>} elements
    * @returns {void}
    */
-  /* checkVideoAndAudio(...elements) {
+  checkVideoAndAudio(...elements) {
     const flatArr = elements.flat();
 
     if (flatArr.length > 0) {
@@ -604,7 +611,7 @@ class SiteValidate extends AbstractValidator {
         const autoplay = element.outerHTML.includes('autoplay');
 
         if (!track) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak transkrypcji',
             category: 'devices',
             type: 'error',
@@ -612,7 +619,7 @@ class SiteValidate extends AbstractValidator {
             message: ` ${element.outerHTML}`,
           });
         } else if (track && !kindValid) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'brak transkrypcji',
             category: 'devices',
             type: 'error',
@@ -622,7 +629,7 @@ class SiteValidate extends AbstractValidator {
         }
 
         if (autoplay) {
-          this.setRaport({
+          this.raport.addNewRaport({
             what: 'video autoplay',
             category: 'devices',
             type: 'warning',
@@ -639,7 +646,7 @@ class SiteValidate extends AbstractValidator {
    * @param {Node} el -- probable popup
    * @returns {void}
    */
-  /* checkPopup({ el = null }) {
+  checkPopup({ el = null }) {
     if (el !== null) {
       const tabindex = el.match(/tabindex=("([^"]|"")*")/i);
       const role = el.match(/role=("([^"]|"")*")/i);
@@ -649,7 +656,7 @@ class SiteValidate extends AbstractValidator {
       }
 
       if (!tabindex || tabindex[1] < 0) {
-        this.setRaport({
+        this.raport.addNewRaport({
           what: 'popup',
           category: 'devices',
           type: 'error',
@@ -660,7 +667,7 @@ class SiteValidate extends AbstractValidator {
         !role
         || (role[1] !== '"dialog"' && role[1] !== '"document"')
       ) {
-        this.setRaport({
+        this.raport.addNewRaport({
           what: 'popup',
           category: 'devices',
           type: 'error',
@@ -669,7 +676,7 @@ class SiteValidate extends AbstractValidator {
         });
       }
     }
-  } */
+  }
 }
 
 export default SiteValidate;

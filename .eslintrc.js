@@ -36,7 +36,9 @@ module.exports = {
     "@typescript-eslint/interface-name-prefix":"off",
     "global-require":"off",
     "@typescript-eslint/no-var-requires":"off",
-    "import/no-dynamic-require":"off"
+    "import/no-dynamic-require":"off",
+    "import/no-useless-path-segments":"off",
+    "class-methods-use-this":"off"
   },
   "globals":{
     "getStyleFormDom": true,

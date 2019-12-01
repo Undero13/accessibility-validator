@@ -1,20 +1,22 @@
+import InputModel from '../../model/InputModel'
+
 /*
  * Get data from form inputs and make object
  */
-function serializeForm(formElement = null) {
+function serializeForm(formElement: HTMLFormElement = null): InputModel {
   if (!formElement) {
     return null;
   }
 
-  const formData = {};
-  const inputs = [...formElement.elements];
+  const formData: InputModel = {};
+  const inputs = Array.from(formElement.elements);
 
-  inputs.forEach(input => {
-    if (input.name !== "") {
-      if (input.type === "text") {
-        formData[input.name] = input.value;
-      } else if (input.type === "radio" && input.checked) {
-        formData[input.name] = input.value;
+  inputs.forEach((input: HTMLInputElement) => {
+    if (input.name !== '') {
+      if (input.type === 'text') {
+        formData.url = input.value;
+      } else if (input.type === 'radio' && input.checked) {
+        formData.device = input.value;
       }
     }
   });
@@ -22,4 +24,4 @@ function serializeForm(formElement = null) {
   return formData;
 }
 
-module.exports = serializeForm;
+export default serializeForm;

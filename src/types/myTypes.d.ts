@@ -1,8 +1,8 @@
 declare module 'dom-parser';
+declare module 'electron-localizer';
 
 type forEach = (arg: string) => string
 type getElementsByTagName = (arg: string) => Array<FakeDOMElement>
-
 
 interface FakeDOMElement{
   getElementsByTagName: getElementsByTagName;

@@ -10,11 +10,11 @@
     "start2": "electron ./compile",
     "lint": "nodemon --exec \"npm run eslint\"",
     "eslint": "eslint src/**/*.ts --fix **/**.ts",
-    "tslint-nofix": "tslint **/**.ts",
+    "eslint-nofix": "eslint **/**.ts",
     "test": "jest",
     "pack": "(npm run tsc && electron-builder --dir)",
     "unpackage-asar": "(cd dist/win-unpacked/resources/ && asar extract app.asar app)",
-    "build": "(npm run pack && npm run unpackage-asar && node fixed.js)",
+    "build": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
     "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile && copyfiles -u 1 ./src/controllers/nightmareLib.js ./compile)",
     "tsc": "tsc && npm run copy-static"
   },
@@ -66,6 +66,7 @@
     "dom-parser": "^0.1.6",
     "dotenv": "^8.2.0",
     "electron-localizer": "^0.1.1",
+    "electron-store": "^5.1.0",
     "nightmare": "^3.0.2"
   }
 }

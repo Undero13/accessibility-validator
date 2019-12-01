@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Walidator Dostępności by Patyk "Undero" Loter</title>
+    <link rel="stylesheet" href="../style/bulma.min.css" />
+    <link rel="stylesheet" href="../style/formSite.css" />
+    <script src="../script/preload.js"></script>
+    <script src="../script/translation.js"></script>
+  </head>
+  <body>
+    <div id="alert" class="notification is-danger is-invisible">
+      <localized-text
+        >Nieprawidłowy URL. Proszę podać poprawny adres strony!</localized-text
+      >
+    </div>
+    <h1 class="title has-text-white">
+      <localized-text>Walidator dostepności stron internetowych</localized-text>
+    </h1>
+    <form id="form_url" class="form">
+      <div class="field">
+        <label class="label has-text-white" for="url"
+          ><localized-text>Podaj adres strony</localized-text></label
+        >
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            name="url"
+            id="url"
+            value="https://www.bytom.com.pl/"
+            placeholder="https://google.pl/"
+          />
+        </div>
+      </div>
+      <div class="field">
+        <p class="label has-text-white">
+          <localized-text>Jakie urządzenie chcesz testować?</localized-text>
+        </p>
+        <div class="control">
+          <label class="label has-text-white"
+            ><input
+              class="mr-10"
+              name="device"
+              value="desktop"
+              type="radio"
+              checked
+            />Desktop(1270x720)</label
+          >
+          <label class="label has-text-white"
+            ><input
+              class="mr-10"
+              name="device"
+              value="tablet"
+              type="radio"
+            />Tablet(768x1024)</label
+          >
+          <label class="label has-text-white"
+            ><input
+              class="mr-10"
+              name="device"
+              value="mobile"
+              type="radio"
+            />Mobile(375x812)</label
+          >
+        </div>
+      </div>
+
+      <button class="button is-success" type="submit">
+        <localized-text>Analizuj</localized-text>
+      </button>
+    </form>
+    <footer class="footer">
+      <a
+        href="https://docs.google.com/document/d/1FDt-eeilCVKKnUEDsExL3gvPNeqQN7W_jFYYtSBEbGQ/edit?usp=sharing"
+      >
+        <localized-text>Ogólnie o dostępności</localized-text>
+      </a>
+    </footer>
+    <script src="../script/baseForm.js"></script>
+  </body>
+</html>

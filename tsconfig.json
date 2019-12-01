@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "compile",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "typeRoots": ["./src/typings"],
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "node_modules/**/*.{j,t}s"],
+  "linterOptions": {
+    "exclude": ["node_modules/**/*.{j,t}s"]
+  }
+}

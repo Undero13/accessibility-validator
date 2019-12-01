@@ -1,4 +1,6 @@
 node_modules
 dist
 builds
+compile
 logs
+.vscode

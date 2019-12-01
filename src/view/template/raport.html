@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../style/bulma.min.css" />
+    <link rel="stylesheet" href="../style/raportSite.css" />
+    <title>Raport - Walidator Dostępności</title>
+    <script src="../script/preload.js"></script>
+    <script src="../script/translation.js"></script>
+  </head>
+  <body>
+    <button id="return-btn" class="button is-success">
+      <localized-text>Analizuj kolejną stronę</localized-text>
+    </button>
+    <table id="general" class="table is-striped">
+      <caption>
+        <localized-text>Ogólne</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="semantic" class="table is-striped">
+      <caption>
+        <localized-text>Semantyczny HTML</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="aria" class="table is-striped" class="button is-warning">
+      <caption>
+        <localized-text>Standard Aria</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="image" class="table is-striped">
+      <caption>
+        <localized-text>Dostępność obrazków</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="contrast" class="table is-striped">
+      <caption>
+        <localized-text>Kontrast Strony</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="animation" class="table is-striped">
+      <caption>
+        <localized-text>Animacje</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <table id="devices" class="table is-striped">
+      <caption>
+        <localized-text>Dostępność dla urządzeń</localized-text
+        ><button class="button is-warning d-none">
+          <localized-text>Pokaż więcej</localized-text>
+        </button>
+      </caption>
+      <thead>
+        <th><localized-text>Element</localized-text></th>
+        <th><localized-text>Typ błędu</localized-text></th>
+        <th><localized-text>Wiadomość</localized-text></th>
+      </thead>
+    </table>
+
+    <br /><br />
+
+    <footer class="footer">
+      <a
+        href="https://docs.google.com/document/d/1FDt-eeilCVKKnUEDsExL3gvPNeqQN7W_jFYYtSBEbGQ/edit?usp=sharing"
+      >
+        <localized-text>Ogólnie o dostępności</localized-text>
+      </a>
+    </footer>
+    <script src="../script/raportGenerator.js"></script>
+  </body>
+</html>

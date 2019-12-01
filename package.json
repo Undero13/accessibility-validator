@@ -3,16 +3,21 @@
   "version": "1.0.0",
   "description": "HTML accessibility validator adapted to pages dynamically rendered by JS",
   "main": "index.js",
+  "author": "Patryk Loter",
+  "license": "MIT",
   "scripts": {
-    "start": "electron .",
+    "start": "(npm run tsc && electron ./compile)",
     "lint": "nodemon --exec \"npm run eslint\"",
-    "eslint": "eslint --fix **/**.js",
-    "eslint-nofix": "eslint **/**.js",
+    "eslint": "eslint src/**/*.ts --fix **/**.ts",
+    "eslint-nofix": "eslint **/**.ts",
     "test": "jest",
-    "pack": "electron-builder --dir",
+    "pack": "(npm run tsc && electron-builder --dir)",
     "unpackage-asar": "(cd dist/win-unpacked/resources/ && asar extract app.asar app)",
-    "build": "(npm run pack && npm run unpackage-asar && node fixed.js)"
+    "build": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
+    "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile && copyfiles -u 1 ./src/controllers/nightmareLib.js ./compile)",
+    "tsc": "tsc && npm run copy-static"
   },
+  "typings": "types/types",
   "build": {
     "extraResources": [
       {
@@ -26,29 +31,41 @@
     "appId": "WD",
     "mac": {
       "category": "accessibility validator"
-    }
+    },
+    "files": [
+      "./compile/**/*"
+    ]
   },
-  "author": "Patryk Loter",
-  "license": "MIT",
   "devDependencies": {
+    "@types/color": "^3.0.0",
+    "@types/nightmare": "^2.10.4",
+    "@types/node": "^12.12.14",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "copyfiles": "^2.1.1",
     "electron": "^7.0.0",
     "electron-builder": "^19.0.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.1",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
     "fs-extra": "^8.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
-    "prettier-eslint": "^9.0.0"
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.2"
   },
   "dependencies": {
     "color": "^3.1.2",
     "dom-parser": "^0.1.6",
     "dotenv": "^8.2.0",
     "electron-localizer": "^0.1.1",
+    "electron-store": "^5.1.0",
     "nightmare": "^3.0.2"
   }
 }

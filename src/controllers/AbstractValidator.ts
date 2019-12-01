@@ -1,6 +1,3 @@
-import RaportModel from '../model/RaportModel'
-
-
 abstract class AbstractValidator {
   protected url: string
   protected device: string
@@ -14,7 +11,7 @@ abstract class AbstractValidator {
     this.test = test;
   }
 
-  abstract processDOM(): void
+  abstract processDOM(html: NightmareReturnObject): void
   abstract getDOM(): void
 
   getURL(): string {

@@ -24,7 +24,7 @@ const getPositions = (element) => {
 /**
  * The elements do not overlap
  * @param {HTMLCollection} elements
- * @returns {Array<string>}
+ * @returns {Array<Array<string>>}
  */
 const checkOverlap = (elements) => {
   const lenght = elements.length;

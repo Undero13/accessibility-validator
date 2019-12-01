@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
 import RaportStore from '../../controllers/Raport'
-import RaportModel from '../../model/RaportModel'
 
 const generalTable: HTMLTableElement = document.querySelector('#general');
 const semanticTable: HTMLTableElement = document.querySelector('#semantic');

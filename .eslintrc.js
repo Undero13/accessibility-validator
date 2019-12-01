@@ -38,7 +38,9 @@ module.exports = {
     "@typescript-eslint/no-var-requires":"off",
     "import/no-dynamic-require":"off",
     "import/no-useless-path-segments":"off",
-    "class-methods-use-this":"off"
+    "class-methods-use-this":"off",
+    "no-plusplus":"off",
+    "max-len":"off"
   },
   "globals":{
     "getStyleFormDom": true,

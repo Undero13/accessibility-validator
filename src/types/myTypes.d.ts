@@ -3,15 +3,37 @@ declare module 'electron-localizer';
 
 type forEach = (arg: string) => string
 type getElementsByTagName = (arg: string) => Array<FakeDOMElement>
+type getAttribute = (arg: string) => string;
+type getHeadTitle = (arg: string) => string;
 
 interface FakeDOMElement{
   getElementsByTagName: getElementsByTagName;
   outerHTML: string;
+  getAttribute: getAttribute;
+  textContent: string;
 }
 
 interface FakeDOMDocument{
   forEach: forEach;
   getElementsByTagName: getElementsByTagName;
+}
+
+interface InputModel {
+  url?: string;
+  device?: string;
+}
+
+interface UrlEventModel {
+  url: string;
+  device: string;
+}
+
+interface RaportModel {
+  what: string;
+  category: string;
+  type: string;
+  code: string;
+  message: string;
 }
 
 /**
@@ -25,6 +47,7 @@ interface StyleObject {
   background: string;
   inputLabel: boolean;
   correctFocus: boolean;
+  outerHTML:string;
 }
 
 interface PotentialModalObject{
@@ -35,7 +58,7 @@ interface PotentialModalObject{
 interface NightmareReturnObject{
   link?: Array<StyleObject>;
   button?: Array<StyleObject>;
-  input?: Array<StyleObject>;
+  inputs?: Array<StyleObject>;
   p?: Array<StyleObject>;
   span?: Array<StyleObject>;
   h1?: Array<StyleObject>;
@@ -54,6 +77,11 @@ interface NightmareReturnObject{
 interface MainFormData{
   url: string;
   device: string;
+}
+
+interface PotentialModal {
+    el:string;
+    zIndex:number;
 }
 
 declare function getStyleFormDom(selector: NodeList, param?: boolean): Array<StyleObject>

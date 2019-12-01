@@ -1,19 +1,16 @@
-import RaportModel from '../model/RaportModel';
-
-import Store = require('electron-store');
-
+import Store from 'electron-store';
 
 class Raport {
   private raportList: Array<RaportModel> = [];
   private store = new Store();
 
-  addNewRaport(raport: RaportModel): void{
-    this.raportList.push(raport)
+  addNewRaport(raports: Array<RaportModel>): void{
+    raports.forEach((raport) => this.raportList.push(raport))
     this.saveRaportList();
   }
 
   getRaport(): Array<RaportModel> {
-    const rawJson = this.store.get('raport')
+    const rawJson = this.store.get('raport') || '[]'
     this.raportList = JSON.parse(rawJson)
     return this.raportList;
   }

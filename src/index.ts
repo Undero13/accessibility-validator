@@ -7,7 +7,6 @@
 import {
   app, IpcMainEvent, BrowserWindow, Menu, MenuItem, ipcMain, dialog,
 } from 'electron';
-import UrlEventModel from './model/urlEventModel';
 import SiteValidate from './controllers/SiteValidate';
 
 import dotenv = require('dotenv')

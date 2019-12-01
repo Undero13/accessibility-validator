@@ -7,7 +7,6 @@
   "license": "MIT",
   "scripts": {
     "start": "(npm run tsc && electron ./compile)",
-    "start2": "electron ./compile",
     "lint": "nodemon --exec \"npm run eslint\"",
     "eslint": "eslint src/**/*.ts --fix **/**.ts",
     "eslint-nofix": "eslint **/**.ts",

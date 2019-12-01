@@ -79,7 +79,7 @@ class Parser extends AbstractParser {
 
           returnObj.link = getStyleFormDom(links, true);
           returnObj.button = getStyleFormDom(buttons, true);
-          returnObj.input = getStyleFormDom(inputs, true);
+          returnObj.inputs = getStyleFormDom(inputs, true);
           returnObj.p = getStyleFormDom(paragraphs);
           returnObj.span = getStyleFormDom(spans);
           returnObj.h1 = getStyleFormDom(h1);

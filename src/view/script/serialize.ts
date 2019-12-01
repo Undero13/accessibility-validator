@@ -1,5 +1,3 @@
-import InputModel from '../../model/InputModel'
-
 /*
  * Get data from form inputs and make object
  */

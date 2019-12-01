@@ -33,7 +33,7 @@ HTML accessibility validator adapted to pages dynamically rendered by JS
 - SITE_SCROLLING_TIMEOUT - scroll time
 - {DEVICE}\_WIDTH - analize site window width
 - {DEVICE}\_Height - analize site window height
-- LANG - app lang
+- APPLANG - app lang
 
 ### Todos
 

@@ -2,6 +2,6 @@ language: node_js
 node_js:
   - 12
 script:
-  - npm run tsc
+  - npm run tsc-travis
   - npm run eslint-nofix
   - npm run test

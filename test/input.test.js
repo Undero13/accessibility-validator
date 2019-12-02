@@ -1,25 +1,25 @@
-const SiteValidate = require("../class/SiteValidate");
+const checkInputs = require('../compile/controllers/checkers/inputChecker')
 
-describe("input", () => {
-  test("missing input label and missing focus", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
+describe('input', () => {
+  test('missing input label and missing focus', () => {
     const input = {
-      inputLabel: false,
-      correctFocus: false
+      inputs: [{
+        inputLabel: false,
+        correctFocus: false,
+      }],
     };
 
-    validator.checkInputs([input]);
-    expect(validator.raport).toHaveLength(2);
+    expect(checkInputs.default(input)).toHaveLength(2);
   });
 
-  test("input valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
+  test('input valid', () => {
     const input = {
-      inputLabel: true,
-      correctFocus: true
+      inputs: {
+        inputLabel: true,
+        correctFocus: true,
+      },
     };
 
-    validator.checkInputs([input]);
-    expect(validator.raport).toHaveLength(0);
+    expect(checkInputs.default(input)).toHaveLength(0);
   });
 });

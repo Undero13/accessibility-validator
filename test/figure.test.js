@@ -1,24 +1,15 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkFigure = require('../compile/controllers/checkers/figureChecker')
 
-describe("figure", () => {
-  test("figure dont have figcaption", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body><figure></figue></body></html>"
-    );
+describe('figure', () => {
+  test('figure dont have figcaption', () => {
+    const html = { DOM: '<html><head><title>Title</title></head><body><figure></figue></body></html>' };
 
-    validator.checkFigure(html.getElements("figure"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkFigure.default(html)).toHaveLength(1);
   });
 
-  test("figure valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><figure><figcaption>dada</figcaption></figue></body></html>"
-    );
+  test('figure valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><figure><figcaption>dada</figcaption></figue></body></html>" };
 
-    validator.checkFigure(html.getElements("figure"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkFigure.default(html)).toHaveLength(0);
   });
 });

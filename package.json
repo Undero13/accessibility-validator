@@ -16,7 +16,7 @@
     "build": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
     "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile && copyfiles -u 1 ./src/controllers/nightmareLib.js ./compile)",
     "tsc": "tsc && npm run copy-static",
-    "tsc-travis": "tsc --noEmit=true --noErrorTruncation=true && npm run copy-static"
+    "tsc-travis": "tsc --noEmit --noErrorTruncation && npm run copy-static"
   },
   "typings": "types/types",
   "build": {

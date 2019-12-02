@@ -2,5 +2,6 @@ language: node_js
 node_js:
   - 12
 script:
-  - npm run test
+  - npm run tsc
   - npm run eslint-nofix
+  - npm run test

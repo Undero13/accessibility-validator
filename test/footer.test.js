@@ -1,24 +1,15 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkFooter = require('../compile/controllers/checkers/footerChecker')
 
-describe("footer", () => {
-  test("semantic footer not exist", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body></body></html>"
-    );
+describe('footer', () => {
+  test('semantic footer not exist', () => {
+    const html = { DOM: '<html><head><title>Title</title></head><body></body></html>' };
 
-    validator.checkFooter(html.getElements("footer"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkFooter.default(html)).toHaveLength(1);
   });
 
-  test("footer valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><footer>aaa</footer></body></html>"
-    );
+  test('footer valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><footer>aaa</footer></body></html>" }
 
-    validator.checkFooter(html.getElements("footer"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkFooter.default(html)).toHaveLength(0);
   });
 });

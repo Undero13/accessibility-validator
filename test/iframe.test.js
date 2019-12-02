@@ -1,24 +1,13 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkIframe = require('../compile/controllers/checkers/iframeChecker')
 
-test("iframe not valid", () => {
-  const html = new Parser(
-    "<html lang='es'><head></head><iframe></iframe></html>"
-  );
+test('iframe not valid', () => {
+  const html = { DOM: "<html lang='es'><head></head><iframe></iframe></html>" };
 
-  const validator = new SiteValidate("www.fakesite.com", true);
-
-  validator.checkIframe(html.getElements("iframe"));
-  expect(validator.raport).toHaveLength(1);
+  expect(checkIframe.default(html)).toHaveLength(1);
 });
 
-test("iframe title valid", () => {
-  const html = new Parser(
-    "<html lang='es'><head></head><iframe title='test'></iframe></html>"
-  );
+test('iframe title valid', () => {
+  const html = { DOM: "<html lang='es'><head></head><iframe title='test'></iframe></html>" };
 
-  const validator = new SiteValidate("www.fakesite.com", true);
-
-  validator.checkIframe(html.getElements("iframe"));
-  expect(validator.raport).toHaveLength(0);
+  expect(checkIframe.default(html)).toHaveLength(0);
 });

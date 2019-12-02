@@ -1,22 +1,16 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkLang = require('../compile/controllers/checkers/langChecker')
 
-describe("lang", () => {
-  test("not valid lang", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser("<html><head><title>Title</title></head></html>");
+describe('lang', () => {
+  test('not valid lang', () => {
+    const html = { DOM: '<html><head><title>Title</title></head></html>' };
 
-    validator.checkLang(html.getElements("html"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkLang.default(html)).toHaveLength(1);
   });
 
-  test("valid lang", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head></html>"
-    );
+  test('valid lang', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head></html>" }
 
-    validator.checkLang(html.getElements("html"));
-    expect(validator.raport).toHaveLength(0);
+
+    expect(checkLang.default(html)).toHaveLength(0);
   });
 });

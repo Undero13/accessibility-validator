@@ -1,34 +1,21 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkNav = require('../compile/controllers/checkers/navChecker')
 
-describe("navbar", () => {
-  test("semantic nav not exist", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body></body></html>"
-    );
+describe('navbar', () => {
+  test('semantic nav not exist', () => {
+    const html = { DOM: '<html><head><title>Title</title></head><body></body></html>' };
 
-    validator.checkNav(html.getElements("nav"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkNav.default(html)).toHaveLength(1);
   });
 
-  test("nav exist but elements is not list", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body><nav></nav></body></html>"
-    );
+  test('nav exist but elements is not list', () => {
+    const html = { DOM: '<html><head><title>Title</title></head><body><nav></nav></body></html>' };
 
-    validator.checkNav(html.getElements("nav"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkNav.default(html)).toHaveLength(1);
   });
 
-  test("nav valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><nav><ul><li>item1</li></ul></nav></body></html>"
-    );
+  test('nav valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><nav><ul><li>item1</li></ul></nav></body></html>" }
 
-    validator.checkNav(html.getElements("nav"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkNav.default(html)).toHaveLength(0);
   });
 });

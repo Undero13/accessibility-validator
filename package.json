@@ -1,8 +1,8 @@
 {
   "name": "wd",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "HTML accessibility validator adapted to pages dynamically rendered by JS",
-  "main": "index.js",
+  "main": "./compile/index.js",
   "author": "Patryk Loter",
   "license": "MIT",
   "scripts": {
@@ -16,7 +16,8 @@
     "build": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
     "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile && copyfiles -u 1 ./src/controllers/nightmareLib.js ./compile)",
     "tsc": "tsc && npm run copy-static",
-    "tsc-travis": "tsc-silent -p tsconfig.json --suppress 2345@src && npm run copy-static"
+    "tsc-travis": "tsc-silent -p tsconfig.json --suppress 2345@src && npm run copy-static",
+    "build-all": "electron-builder --dir --linux"
   },
   "typings": "types/types",
   "build": {
@@ -32,10 +33,7 @@
     "appId": "WD",
     "mac": {
       "category": "accessibility validator"
-    },
-    "files": [
-      "./compile/**/*"
-    ]
+    }
   },
   "devDependencies": {
     "@types/color": "^3.0.0",

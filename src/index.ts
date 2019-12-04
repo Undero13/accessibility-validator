@@ -10,7 +10,7 @@ import {
 import SiteValidate from './controllers/SiteValidate';
 
 import dotenv = require('dotenv')
-dotenv.config()
+dotenv.config({ path: `${__dirname}/../.env` });
 
 
 class MainWindow {
@@ -33,7 +33,7 @@ class MainWindow {
     const id = setInterval(() => {
       if (validator.getFinish()) {
         if (validator.getError()) {
-          this.window.loadFile('view/template/index.html');
+          this.window.loadFile(`${__dirname}/view/template/index.html`);
 
           const response = dialog.showMessageBox({
             message: `Podałeś błedny URL: ${validator.getURL()}`,
@@ -42,7 +42,7 @@ class MainWindow {
 
           console.log(response);
         } else {
-          this.window.loadFile('view/template/raport.html');
+          this.window.loadFile(`${__dirname}/view/template/raport.html`);
         }
         clearInterval(id);
       }
@@ -65,7 +65,7 @@ class MainWindow {
     ipcMain.on('url', (event: IpcMainEvent, arg: UrlEventModel) => this.observable(new SiteValidate(arg)));
 
     // next site analize event
-    ipcMain.on('return', () => this.window.loadFile('./View/template/index.html'));
+    ipcMain.on('return', () => this.window.loadFile(`${__dirname}/view/template/index.html`));
   }
 
   /**
@@ -105,7 +105,8 @@ class MainWindow {
       },
     });
 
-    this.window.loadFile('view/template/index.html');
+    this.window.loadFile(`${__dirname}/view/template/index.html`);
+
     this.window.on('close', () => {
       this.window = null;
       return process.platform !== 'darwin' ? app.quit() : null;
@@ -122,7 +123,7 @@ class MainWindow {
       },
     });
 
-    this.windowInfo.loadFile('view/info.html');
+    this.windowInfo.loadFile(`${__dirname}/view/info.html`);
     this.windowInfo.on('close', () => {
       this.windowInfo = null;
     });

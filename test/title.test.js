@@ -1,20 +1,14 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkTitle = require('../compile/controllers/checkers/titleChecker')
 
-const validator = new SiteValidate("www.fakesite.com", true);
 
-test("valid title", () => {
-  const html = new Parser(
-    "<html lang='es'><head><title>title-fakesite</title></head></html>"
-  );
-  validator.checkTitle(html.getHeadTitle(), "fakesite");
-  expect(validator.raport).toHaveLength(0);
+test('valid title', () => {
+  const html = { DOM: "<html lang='es'><head><title>title-fakesite</title></head></html>", siteName: 'fakesite' };
+
+  expect(checkTitle.default(html)).toHaveLength(0);
 });
 
-test("invalid title", () => {
-  const html = new Parser(
-    "<html lang='es'><head><title>title</title></head></html>"
-  );
-  validator.checkTitle(html.getHeadTitle(), "fakesite");
-  expect(validator.raport).toHaveLength(1);
+test('invalid title', () => {
+  const html = { DOM: "<html lang='es'><head><title>title</title></head></html>", siteName: 'fakesite' };
+
+  expect(checkTitle.default(html)).toHaveLength(1);
 });

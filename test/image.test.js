@@ -1,24 +1,15 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkImages = require('../compile/controllers/checkers/imageChecker')
 
-describe("image", () => {
-  test("missing alt", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body><img src='image.jpg'></body></html>"
-    );
+describe('image', () => {
+  test('missing alt', () => {
+    const html = { DOM: "<html><head><title>Title</title></head><body><img src='image.jpg'></body></html>" };
 
-    validator.checkImages(html.getElements("img"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkImages.default(html)).toHaveLength(1);
   });
 
-  test("image valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><img src='image.jpg' alt='image'></body></html>"
-    );
+  test('image valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><img src='image.jpg' alt='image'></body></html>"  };
 
-    validator.checkImages(html.getElements("img"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkImages.default(html)).toHaveLength(0);
   });
 });

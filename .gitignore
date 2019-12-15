@@ -1,3 +1,6 @@
 node_modules
-build/*
+dist
+builds
+compile
 logs
+.vscode

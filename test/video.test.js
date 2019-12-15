@@ -1,34 +1,21 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkVideoAndAudio = require('../compile/controllers/checkers/videoChecker')
 
-describe("video", () => {
-  test("video track not exist", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'></video></body></html>"
-    );
+describe('video', () => {
+  test('video track not exist', () => {
+    const html = { DOM: "<html><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'></video></body></html>" };
 
-    validator.checkVideoAndAudio(html.getElements("video"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkVideoAndAudio.default(html)).toHaveLength(1);
   });
 
-  test("video track is empty", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'><track kind='' src='subtitles_en.vtt' srclang='en'></video></body></html>"
-    );
+  test('video track is empty', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'><track kind='' src='subtitles_en.vtt' srclang='en'></video></body></html>" };
 
-    validator.checkVideoAndAudio(html.getElements("video"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkVideoAndAudio.default(html)).toHaveLength(1);
   });
 
-  test("video is valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'><track kind='subtitles' src='subtitles_en.vtt' srclang='en'></video></body></html>"
-    );
+  test('video is valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><video><source src='example.mp4' type='video/mp4'><track kind='subtitles' src='subtitles_en.vtt' srclang='en'></video></body></html>" };
 
-    validator.checkVideoAndAudio(html.getElements("video"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkVideoAndAudio.default(html)).toHaveLength(0);
   });
 });

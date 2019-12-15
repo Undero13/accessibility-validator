@@ -1,43 +1,33 @@
-const SiteValidate = require("../class/SiteValidate");
+const checkPopup = require('../compile/controllers/checkers/popupChecker')
 
-describe("popup", () => {
-  test("popup dont have tabindex", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = '<div role="dialog">I am modal!</div>';
+describe('popup', () => {
+  test('popup dont have tabindex', () => {
+    const html = { potentialModal: { el: '<div role="dialog">I am modal!</div>' } };
 
-    validator.checkPopup({ el: html });
-    expect(validator.raport).toHaveLength(1);
+    expect(checkPopup.default(html)).toHaveLength(1);
   });
 
-  test("popup have invalid tabindex", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = '<div tabindex="-1" role="dialog">I am modal!</div>';
+  test('popup have invalid tabindex', () => {
+    const html = { potentialModal: { el: '<div tabindex="-1" role="dialog">I am modal!</div>' } };
 
-    validator.checkPopup({ el: html });
-    expect(validator.raport).toHaveLength(1);
+    expect(checkPopup.default(html)).toHaveLength(1);
   });
 
-  test("popup dont have role", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = '<div tabindex="5">I am modal!</div>';
+  test('popup dont have role', () => {
+    const html = { potentialModal: { el: '<div tabindex="5">I am modal!</div>' } };
 
-    validator.checkPopup({ el: html });
-    expect(validator.raport).toHaveLength(1);
+    expect(checkPopup.default(html)).toHaveLength(1);
   });
 
-  test("popup have invalid role", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = '<div role="alert" tabindex="5">I am modal!</div>';
+  test('popup have invalid role', () => {
+    const html = { potentialModal: { el: '<div role="alert" tabindex="5">I am modal!</div>' } };
 
-    validator.checkPopup({ el: html });
-    expect(validator.raport).toHaveLength(1);
+    expect(checkPopup.default(html)).toHaveLength(1);
   });
 
-  test("popup valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = '<div role="document" tabindex="5">I am modal!</div>';
+  test('popup valid', () => {
+    const html = { potentialModal: { el: '<div role="document" tabindex="5">I am modal!</div>' } };
 
-    validator.checkPopup({ el: html });
-    expect(validator.raport).toHaveLength(0);
+    expect(checkPopup.default(html)).toHaveLength(0);
   });
 });

@@ -1,24 +1,15 @@
-const SiteValidate = require("../class/SiteValidate");
-const Parser = require("../class/Parser");
+const checkIcon = require('../compile/controllers/checkers/iconChecker')
 
-describe("icon", () => {
-  test("wrong tag", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html><head><title>Title</title></head><body><i class='icon'></i></body></html>"
-    );
+describe('icon', () => {
+  test('wrong tag', () => {
+    const html = { DOM: "<html><head><title>Title</title></head><body><i class='icon'></i></body></html>" }
 
-    validator.checkIcon(html.getElements("i"));
-    expect(validator.raport).toHaveLength(1);
+    expect(checkIcon.default(html)).toHaveLength(1);
   });
 
-  test("figure valid", () => {
-    const validator = new SiteValidate("www.fakesite.com", true);
-    const html = new Parser(
-      "<html lang='es'><head><title>Title</title></head><body><span class='icon'></span></body></html>"
-    );
+  test('figure valid', () => {
+    const html = { DOM: "<html lang='es'><head><title>Title</title></head><body><span class='icon'></span></body></html>" }
 
-    validator.checkIcon(html.getElements("i"));
-    expect(validator.raport).toHaveLength(0);
+    expect(checkIcon.default(html)).toHaveLength(0);
   });
 });

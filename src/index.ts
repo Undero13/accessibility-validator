@@ -8,9 +8,7 @@ import { app, IpcMainEvent, BrowserWindow, Menu, MenuItem, ipcMain, dialog } fro
 import dotenv from 'dotenv';
 import SiteValidate from './controllers/SiteValidate';
 
-dotenv.config({
-  path: `${__dirname}/../.env`,
-});
+dotenv.config({ path: `${__dirname}/../.env` });
 
 class MainWindow {
   private window: BrowserWindow;
@@ -69,9 +67,7 @@ class MainWindow {
     this.window = new BrowserWindow({
       width: parseInt(process.env.WINDOW_WIDTH, 10),
       height: parseInt(process.env.WINDOW_HEIGHT, 10),
-      webPreferences: {
-        nodeIntegration: true,
-      },
+      webPreferences: { nodeIntegration: true },
     });
 
     this.window.loadFile(`${__dirname}/view/template/index.html`)

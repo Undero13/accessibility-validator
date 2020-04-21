@@ -1,62 +1,31 @@
 /**
  * @author Patryk Undero Loter <patryk.loter@gmail.com>
- * @version 2.0.0
+ * @version 3.0.0
  * class for dynamic main window(create,close,menu,event)
  */
 
-import {
-  app, IpcMainEvent, BrowserWindow, Menu, MenuItem, ipcMain, dialog,
-} from 'electron';
+import { app, IpcMainEvent, BrowserWindow, Menu, MenuItem, ipcMain, dialog } from 'electron';
+import dotenv from 'dotenv';
 import SiteValidate from './controllers/SiteValidate';
 
-import dotenv = require('dotenv')
-dotenv.config({ path: `${__dirname}/../.env` });
-
+dotenv.config({
+  path: `${__dirname}/../.env`,
+});
 
 class MainWindow {
   private window: BrowserWindow;
-  private windowInfo: BrowserWindow;
 
   constructor() {
     this.window = null;
-    this.windowInfo = null;
 
     this.setWinListeners();
     this.setOutsiteListeners();
     this.setMenu();
   }
 
-  /**
-   * Wait for validator finish
-   */
-  observable(validator: SiteValidate): void {
-    const id = setInterval(() => {
-      if (validator.getFinish()) {
-        if (validator.getError()) {
-          this.window.loadFile(`${__dirname}/view/template/index.html`);
-
-          const response = dialog.showMessageBox({
-            message: `Podałeś błedny URL: ${validator.getURL()}`,
-            buttons: ['OK'],
-          });
-
-          console.log(response);
-        } else {
-          this.window.loadFile(`${__dirname}/view/template/raport.html`);
-        }
-        clearInterval(id);
-      }
-    }, 500)
-  }
-
   setWinListeners(): void {
-    // electron start event
     app.on('ready', () => this.createMainWindow());
-
-    // electron close all event
     app.on('window-all-closed', () => (process.platform !== 'darwin' ? app.quit() : null));
-
-    // electron active event
     app.on('activate', () => (this.window === null ? this.createMainWindow() : null));
   }
 
@@ -105,7 +74,7 @@ class MainWindow {
       },
     });
 
-    this.window.loadFile(`${__dirname}/view/template/index.html`);
+    this.window.loadFile(`${__dirname}/view/template/index.html`)
 
     this.window.on('close', () => {
       this.window = null;
@@ -113,20 +82,27 @@ class MainWindow {
     });
   }
 
-  createInfoWindow(): void {
-    this.windowInfo = new BrowserWindow({
-      width: parseInt(process.env.WINDOW_WIDTH, 10),
-      height: parseInt(process.env.WINDOW_HEIGHT, 10),
-      webPreferences: {
-        nodeIntegration: true,
-        preload: './preload.js',
-      },
-    });
+  /**
+   * Wait for validator finish
+   */
+  observable(validator: SiteValidate): void {
+    const id = setInterval(() => {
+      if (validator.getFinish()) {
+        if (validator.getError()) {
+          this.window.loadFile(`${__dirname}/view/template/index.html`);
 
-    this.windowInfo.loadFile(`${__dirname}/view/info.html`);
-    this.windowInfo.on('close', () => {
-      this.windowInfo = null;
-    });
+          const response = dialog.showMessageBox({
+            message: `Podałeś błedny URL: ${validator.getURL()}`,
+            buttons: ['OK'],
+          });
+
+          console.log(response);
+        } else {
+          this.window.loadFile(`${__dirname}/view/template/raport.html`);
+        }
+        clearInterval(id);
+      }
+    }, 500)
   }
 }
 

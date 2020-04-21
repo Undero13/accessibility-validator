@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import serializeForm from '../script/serialize'
 
 const form: HTMLFormElement = document.querySelector('#form_url');
-const alert1 = document.querySelector('#alert');
+const alert = document.querySelector('#alert');
 const { body } = document;
 
 /*
@@ -10,6 +10,7 @@ const { body } = document;
  */
 const appendSpinner = (): void => {
   body.innerHTML = '';
+
   const spinner = document.createElement('div');
   const info = document.createElement('p');
   const wrapper = document.createDocumentFragment();
@@ -32,7 +33,7 @@ const getURL = (e: Event): void => {
   const data = serializeForm(form);
 
   if (!data) {
-    alert1.classList.remove('is-invisible');
+    alert.classList.remove('is-invisible');
     return;
   }
 
@@ -55,7 +56,7 @@ const getURL = (e: Event): void => {
     });
     appendSpinner();
   } else {
-    alert1.classList.remove('is-invisible');
+    alert.classList.remove('is-invisible');
   }
 };
 

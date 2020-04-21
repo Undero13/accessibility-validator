@@ -4,9 +4,7 @@ import Color from 'color';
 * Check element/backgroung contrast. Good contrast is greater than 4.5.
 */
 function checkContrast(html: NightmareReturnObject): Array<RaportModel> {
-  const {
-    p, span, link, button, h1, h2, h3, h4, h5, h6,
-  } = html;
+  const { p, span, link, button, h1, h2, h3, h4, h5, h6 } = html;
   const elements = [p, span, link, button, h1, h2, h3, h4, h5, h6].flat();
   const checkerResult: Array<RaportModel> = [];
 

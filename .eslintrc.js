@@ -40,7 +40,15 @@ module.exports = {
     "import/no-useless-path-segments":"off",
     "class-methods-use-this":"off",
     "no-plusplus":"off",
-    "max-len":"off"
+    "max-len":"off",
+    "object-curly-newline": [
+      "error", {
+        "ObjectExpression": { "multiline": true, "minProperties": 3 },
+        "ObjectPattern": { "multiline": true },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+      }
+    ],
   },
   "globals":{
     "getStyleFormDom": true,

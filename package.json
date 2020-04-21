@@ -13,11 +13,13 @@
     "test": "jest",
     "pack": "(npm run tsc && electron-builder --dir)",
     "unpackage-asar": "(cd dist/win-unpacked/resources/ && asar extract app.asar app)",
-    "build": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
+    "build-win": "(npm run pack && npm run unpackage-asar && node package-builder.js)",
     "copy-static": "(copyfiles -u 1 ./src/**/*.html ./compile && copyfiles -u 1 ./src/**/*.css ./compile && copyfiles -u 1 ./src/controllers/nightmareLib.js ./compile)",
     "tsc": "tsc && npm run copy-static",
     "tsc-travis": "tsc-silent -p tsconfig.json --suppress 2345@src && npm run copy-static",
     "build-all": "electron-builder --dir"
+    "build-linux": "(npm run tsc-travis && electron-builder --dir --linux)",
+    "build-mac": "(npm run tsc-travis && electron-builder --dir --mac)"
   },
   "typings": "types/types",
   "build": {
@@ -32,7 +34,12 @@
     ],
     "appId": "WD",
     "mac": {
-      "category": "accessibility validator"
+      "category": "accessibility validator",
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "snap",
+      "desktop": "start"
     }
   },
   "devDependencies": {

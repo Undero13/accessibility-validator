@@ -1,6 +1,6 @@
 /**
-   * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
-   */
+ * Check animation gleam (no more than 3 times per 1 sec) - nightmareLib
+ */
 function checkAnimation({ animate }: {animate: Array<string>}): Array<RaportModel> {
   const checkerResult: Array<RaportModel> = [];
 

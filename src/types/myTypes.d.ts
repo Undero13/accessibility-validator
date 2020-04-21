@@ -47,7 +47,7 @@ interface StyleObject {
   background: string;
   inputLabel: boolean;
   correctFocus: boolean;
-  outerHTML:string;
+  outerHTML: string;
 }
 
 interface PotentialModalObject{
@@ -80,8 +80,8 @@ interface MainFormData{
 }
 
 interface PotentialModal {
-    el:string;
-    zIndex:number;
+  el: string;
+  zIndex: number;
 }
 
 declare function getStyleFormDom(selector: NodeList, param?: boolean): Array<StyleObject>

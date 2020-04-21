@@ -24,6 +24,16 @@ module.exports = {
       2,
       { devDependencies: ["**/test.tsx", "**/test.ts"] }
     ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ],
     "@typescript-eslint/indent": [2, 2],
     "import/no-extraneous-dependencies":"off",
     "import/no-unresolved":"off",
@@ -34,6 +44,7 @@ module.exports = {
     "semi":"off",
     "linebreak-style":"off",
     "@typescript-eslint/interface-name-prefix":"off",
+    "@typescript-eslint/no-explicit-any": "off",
     "global-require":"off",
     "@typescript-eslint/no-var-requires":"off",
     "import/no-dynamic-require":"off",

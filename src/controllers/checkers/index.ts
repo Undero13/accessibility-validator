@@ -39,7 +39,7 @@ const checkers: any = {
   checkLinksAndButtons,
   checkInputs,
   checkPopup,
-  checkVideoAndAudio
+  checkVideoAndAudio,
 }
 
 export default checkers

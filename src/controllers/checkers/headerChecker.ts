@@ -1,9 +1,7 @@
 /**
 * Check headers hierarchy,repeatability
 */
-function checkHeaders({
-  h1, h2, h3, h4, h5, h6,
-}: {
+function checkHeaders({ h1, h2, h3, h4, h5, h6 }: {
   h1: Array<string>;
   h2: Array<string>;
   h3: Array<string>;
